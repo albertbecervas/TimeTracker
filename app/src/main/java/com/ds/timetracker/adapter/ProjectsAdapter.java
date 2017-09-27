@@ -8,15 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
+import com.ds.timetracker.model.Project;
 
 import java.util.List;
 
 public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<String> projectsList;
+    private List<Project> projectsList;
 
-    public ProjectsAdapter(Context context, List<String> projectsList) {
+    public ProjectsAdapter(Context context, List<Project> projectsList) {
         this.mContext = context;
         this.projectsList = projectsList;
     }
@@ -28,7 +29,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.title.setText(projectsList.get(position));
+        holder.title.setText(projectsList.get(position).getName());
     }
 
     @Override
