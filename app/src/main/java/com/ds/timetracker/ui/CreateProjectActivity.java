@@ -1,16 +1,14 @@
-package com.ds.timetracker;
+package com.ds.timetracker.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.ds.timetracker.R;
+import com.ds.timetracker.helpers.ProjectHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,7 +16,6 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
-    private Button createProject;
     private EditText name;
     private EditText description;
 
@@ -32,29 +29,37 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        createProject = findViewById(R.id.create_project);
+        Button createProject = findViewById(R.id.create_project);
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
+
         createProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String nameText = name.getText().toString();
                 String descriptionText = description.getText().toString();
+                if (isEmpty(nameText, descriptionText)) return;
 
-                if (nameText.equals("")) {
-                    name.setError("empty field");
-                    return;
-                }
-
-                if (descriptionText.equals("")) {
-                    description.setError("empty field");
-                    return;
-                }
-
-                String key = mDatabase.child("Projects").push().getKey();
-                mDatabase.child("Projects").child(key).child("name").setValue(nameText);
-                mDatabase.child("Projects").child(key).child("description").setValue(descriptionText);
+                setProject(nameText, descriptionText);
             }
         });
+    }
+
+    private void setProject(String nameText, String descriptionText) {
+        new ProjectHelper(this, mDatabase).setProject(nameText, descriptionText);
+        finish();
+    }
+
+    private boolean isEmpty(String nameText, String descriptionText) {
+        if (nameText.equals("")) {
+            name.setError("empty field");
+            return true;
+        }
+
+        if (descriptionText.equals("")) {
+            description.setError("empty field");
+            return true;
+        }
+        return false;
     }
 }

@@ -11,26 +11,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.ds.timetracker.adapter.ProjectsAdapter;
+import com.ds.timetracker.callback.ProjectCallback;
+import com.ds.timetracker.helpers.ProjectHelper;
 import com.ds.timetracker.model.Project;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.ds.timetracker.ui.CreateProjectActivity;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class MainActivity extends AppCompatActivity{
-
-    private DatabaseReference mDatabase;
+public class MainActivity extends AppCompatActivity implements ProjectCallback {
 
     private RecyclerView mRecyclerView;
-    private FloatingActionButton addProject;
     private ProjectsAdapter mAdapter;
 
-    private List<Project> projectsList;
+    private ProjectHelper mProjects;
+
+    private CircularProgressView mProgressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,36 +37,25 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         setViews();
-//        setProjectsList();
         setAdapter();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("Projects").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mProjects = new ProjectHelper(this, mDatabase);
+    }
 
-                String key = dataSnapshot.getKey();
-                String name = dataSnapshot.child("name").getValue(String.class);
-
-                Project project = new Project();
-                project.setName(name);
-                project.setKey(key);
-
-                projectsList.add(project);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.clearAdapter();
+        mProjects.getProjects();
     }
 
     private void setViews() {
+        mProgressBar = findViewById(R.id.progressBar);
+        mProgressBar.startAnimation();
+
         mRecyclerView = findViewById(R.id.projectsRV);
-        addProject = findViewById(R.id.add_project);
+        FloatingActionButton addProject = findViewById(R.id.add_project);
 
         addProject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,17 +65,18 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-//    private void setProjectsList(){
-//        projectsList = new ArrayList<>();
-//        projectsList.add("Project 1");
-//        projectsList.add("Project 2");
-//    }
-
-    private void setAdapter(){
+    private void setAdapter() {
+        List<Project> projectsList = new ArrayList<>();
         mAdapter = new ProjectsAdapter(this, projectsList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void onProjectsLoaded(ArrayList<Project> projects) {
+        mAdapter.setProjectsList(projects);
         mRecyclerView.setAdapter(mAdapter);
+        mProgressBar.setVisibility(View.GONE);
     }
 }

@@ -2,9 +2,9 @@ package com.ds.timetracker.model;
 
 public class Project {
 
-    String name;
-    String key;
-    String description;
+    private String name;
+    private String key;
+    private String description;
 
     public String getName() {
         return name;
