@@ -10,50 +10,51 @@ import android.widget.TextView;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Project;
+import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.TasksActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyViewHolder> {
+public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Project> projectsList;
+    private List<Task> tasksList;
 
-    public ProjectsAdapter(Context context, List<Project> projectsList) {
+    public TasksAdapter(Context context, List<Task> projectsList) {
         this.mContext = context;
-        this.projectsList = projectsList;
+        this.tasksList = projectsList;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_project, parent, false));
+    public TasksAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new TasksAdapter.MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_project, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.setItem(projectsList.get(position));
-        holder.title.setText(projectsList.get(position).getName());
+    public void onBindViewHolder(TasksAdapter.MyViewHolder holder, int position) {
+        holder.setItem(tasksList.get(position));
+        holder.title.setText(tasksList.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return projectsList.size();
+        return tasksList.size();
     }
 
     public void clearAdapter() {
-        int size = this.projectsList.size();
-        this.projectsList.clear();
+        int size = this.tasksList.size();
+        this.tasksList.clear();
         notifyItemRangeRemoved(0, size);
     }
 
-    public void setProjectsList(ArrayList<Project> projects) {
-        projectsList = projects;
+    public void setTasksList(ArrayList<Task> tasks) {
+        tasksList = tasks;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private Project mProject;
+        private Task mProject;
         public TextView title;
 
         MyViewHolder(View view) {
@@ -70,9 +71,8 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyView
             title = view.findViewById(R.id.project_title);
         }
 
-        void setItem(Project project) {
-            mProject = project;
+        void setItem(Task task) {
+            mProject = task;
         }
     }
-
 }

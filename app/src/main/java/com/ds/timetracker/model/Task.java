@@ -4,11 +4,20 @@ import java.util.ArrayList;
 
 public class Task {
 
+    private String key;
     private String name;
     private String description;
     private String initialWorkingDate;
     private String finalWorkingDate;
     private ArrayList<TaskLog> taskLogs;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getName() {
         return name;

@@ -19,7 +19,6 @@ public class ProjectHelper {
     private ArrayList<Project> projectsList;
 
     public ProjectHelper(Context context, DatabaseReference database) {
-
         mProjectCallback = (ProjectCallback) context;
         mDatabase = database;
         projectsList = new ArrayList<>();
