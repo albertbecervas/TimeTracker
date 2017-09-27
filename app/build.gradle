@@ -33,6 +33,10 @@ dependencies {
     })
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
+
     compile 'com.firebase:firebase-client-jvm:2.5.2'
     compile 'com.google.firebase:firebase-core:11.4.0'
     compile 'com.google.firebase:firebase-database:11.4.0'
