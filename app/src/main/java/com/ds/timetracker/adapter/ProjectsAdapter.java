@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.ui.TasksActivity;
+import com.ds.timetracker.ui.tasks.TasksActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.setItem(projectsList.get(position));
         holder.title.setText(projectsList.get(position).getName());
     }
 
@@ -51,6 +52,8 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyView
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+
+        private Project mProject;
         public TextView title;
 
         MyViewHolder(View view) {
@@ -58,11 +61,17 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyView
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mContext.startActivity(new Intent(mContext, TasksActivity.class));
+                    Intent intent = new Intent(mContext, TasksActivity.class);
+                    intent.putExtra("projectID", mProject.getKey());
+                    mContext.startActivity(intent);
                 }
             });
 
             title = view.findViewById(R.id.project_title);
+        }
+
+        void setItem(Project project) {
+            mProject = project;
         }
     }
 

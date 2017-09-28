@@ -1,18 +1,23 @@
-package com.ds.timetracker.ui;
+package com.ds.timetracker.ui.tasks;
 
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ds.timetracker.R;
+import com.ds.timetracker.callback.TasksCallback;
 import com.ds.timetracker.helpers.ProjectHelper;
+import com.ds.timetracker.helpers.TasksHelper;
+import com.ds.timetracker.model.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CreateProjectActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class CreateTaskActivity extends AppCompatActivity implements TasksCallback {
 
     private DatabaseReference mDatabase;
 
@@ -46,7 +51,7 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void setProject(String nameText, String descriptionText) {
-        new ProjectHelper(mDatabase).setProject(nameText, descriptionText);
+        new TasksHelper(mDatabase, getIntent().getStringExtra("projectID")).setTasks(nameText, descriptionText);
         finish();
     }
 
@@ -61,5 +66,10 @@ public class CreateProjectActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onTasksLoaded(ArrayList<Task> tasks) {
+
     }
 }
