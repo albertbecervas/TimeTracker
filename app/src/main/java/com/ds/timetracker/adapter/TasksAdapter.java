@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
-import com.ds.timetracker.ui.TasksActivity;
+import com.ds.timetracker.ui.tasks.TaskDetailActivity;
+import com.ds.timetracker.ui.tasks.TasksActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private Task mProject;
+        private Task mTask;
         public TextView title;
 
         MyViewHolder(View view) {
@@ -62,8 +62,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mContext, TasksActivity.class);
-                    intent.putExtra("projectID", mProject.getKey());
+                    Intent intent = new Intent(mContext, TaskDetailActivity.class);
+                    intent.putExtra("taskID", mTask.getKey());
                     mContext.startActivity(intent);
                 }
             });
@@ -72,7 +72,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
         }
 
         void setItem(Task task) {
-            mProject = task;
+            mTask = task;
         }
     }
 }

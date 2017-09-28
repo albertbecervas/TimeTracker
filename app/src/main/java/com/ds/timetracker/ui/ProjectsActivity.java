@@ -1,4 +1,4 @@
-package com.ds.timetracker;
+package com.ds.timetracker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ProjectsAdapter;
 import com.ds.timetracker.callback.ProjectCallback;
 import com.ds.timetracker.helpers.ProjectHelper;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.ui.CreateProjectActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ProjectCallback {
+public class ProjectsActivity extends AppCompatActivity implements ProjectCallback {
 
     private RecyclerView mRecyclerView;
     private ProjectsAdapter mAdapter;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ProjectCallback {
         addProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CreateProjectActivity.class));
+                startActivity(new Intent(ProjectsActivity.this, CreateProjectActivity.class));
             }
         });
     }

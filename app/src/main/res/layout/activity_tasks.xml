@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ds.timetracker.ui.TasksActivity">
+    tools:context="com.ds.timetracker.ui.tasks.TasksActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tasksRV"
@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_task"
+        android:id="@+id/add_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

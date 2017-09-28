@@ -24,6 +24,11 @@ public class ProjectHelper {
         projectsList = new ArrayList<>();
     }
 
+    public ProjectHelper(DatabaseReference database){
+        mDatabase = database;
+        projectsList = new ArrayList<>();
+    }
+
     public void getProjects() {
 
         mDatabase.child("Projects").addValueEventListener(new ValueEventListener() {

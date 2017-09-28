@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.ui.TasksActivity;
+import com.ds.timetracker.ui.tasks.TasksActivity;
 
 import java.util.ArrayList;
 import java.util.List;

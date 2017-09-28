@@ -27,6 +27,13 @@ public class TasksHelper {
         this.mProjectID = projectID;
         mCallback = (TasksCallback) context;
         mDatabase = databaseReference;
+        tasksList = new ArrayList<>();
+    }
+
+    public TasksHelper(DatabaseReference databaseReference, String projectID){
+        mDatabase = databaseReference;
+        this.mProjectID = projectID;
+        tasksList = new ArrayList<>();
     }
 
     public void getTasks(){
