@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ds.timetracker.ui.CreateProjectActivity">
+    tools:context="com.ds.timetracker.ui.projects.CreateProjectActivity">
 
     <EditText
         android:id="@+id/name"
@@ -14,8 +14,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="132dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Name"
+        android:inputType="textPersonName"
         android:textColorHint="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -30,8 +30,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="64dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Description"
+        android:inputType="textPersonName"
         android:textColorHint="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"

@@ -6,19 +6,23 @@
     android:layout_height="match_parent"
     tools:context="com.ds.timetracker.ui.tasks.TaskDetailActivity">
 
+    <include
+        android:id="@+id/toolbar_include"
+        layout="@layout/toolbar_layout" />
+
     <TextView
         android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="52dp"
         android:text="TextView"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_include" />
 
     <TextView
         android:id="@+id/description"

@@ -1,34 +1,33 @@
 package com.ds.timetracker.ui.tasks;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.callback.TasksCallback;
-import com.ds.timetracker.helpers.ProjectHelper;
-import com.ds.timetracker.helpers.TasksHelper;
-import com.ds.timetracker.model.Task;
+import com.ds.timetracker.helpers.FirebaseHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-
-public class CreateTaskActivity extends AppCompatActivity implements TasksCallback {
+public class CreateTaskActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
     private EditText name;
     private EditText description;
 
+    private String reference = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_project);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        if (getIntent().hasExtra("reference"))
+            reference = getIntent().getStringExtra("reference");
+        mDatabase = FirebaseDatabase.getInstance().getReference(reference);
 
         setViews();
     }
@@ -51,8 +50,7 @@ public class CreateTaskActivity extends AppCompatActivity implements TasksCallba
     }
 
     private void setProject(String nameText, String descriptionText) {
-        new TasksHelper(mDatabase, getIntent().getStringExtra("projectID")).setTasks(nameText, descriptionText);
-        finish();
+        new FirebaseHelper(mDatabase).setTasks(nameText, descriptionText);
     }
 
     private boolean isEmpty(String nameText, String descriptionText) {
@@ -66,10 +64,5 @@ public class CreateTaskActivity extends AppCompatActivity implements TasksCallba
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onTasksLoaded(ArrayList<Task> tasks) {
-
     }
 }

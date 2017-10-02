@@ -1,4 +1,4 @@
-package com.ds.timetracker.ui;
+package com.ds.timetracker.ui.projects;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.helpers.ProjectHelper;
+import com.ds.timetracker.helpers.FirebaseHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -19,11 +19,15 @@ public class CreateProjectActivity extends AppCompatActivity {
     private EditText name;
     private EditText description;
 
+    private String reference = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_project);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        if (getIntent().hasExtra("reference"))
+            reference = getIntent().getStringExtra("reference");
+        mDatabase = FirebaseDatabase.getInstance().getReference(reference);
 
         setViews();
     }
@@ -46,8 +50,7 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void setProject(String nameText, String descriptionText) {
-        new ProjectHelper(mDatabase).setProject(nameText, descriptionText);
-        finish();
+        new FirebaseHelper(mDatabase).setProject(nameText, descriptionText);
     }
 
     private boolean isEmpty(String nameText, String descriptionText) {
