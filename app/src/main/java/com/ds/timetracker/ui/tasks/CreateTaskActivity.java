@@ -51,6 +51,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private void setProject(String nameText, String descriptionText) {
         new FirebaseHelper(mDatabase).setTasks(nameText, descriptionText);
+        finish();
     }
 
     private boolean isEmpty(String nameText, String descriptionText) {

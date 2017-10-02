@@ -23,11 +23,11 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         Button start = findViewById(R.id.start);
         Button stop = findViewById(R.id.stop);
-        TextView name = findViewById(R.id.name);
+        TextView name = findViewById(R.id.taskName);
         TextView description = findViewById(R.id.description);
 
         name.setText(getIntent().getStringExtra("taskName"));
-        description.setText(getIntent().getStringExtra("decription"));
+        description.setText(getIntent().getStringExtra("taskDescription"));
 
         final Chronometer chronometer = findViewById(R.id.chrono);
         chronometer.setFormat("time - %s");

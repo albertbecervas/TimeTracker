@@ -51,6 +51,7 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     private void setProject(String nameText, String descriptionText) {
         new FirebaseHelper(mDatabase).setProject(nameText, descriptionText);
+        finish();
     }
 
     private boolean isEmpty(String nameText, String descriptionText) {
