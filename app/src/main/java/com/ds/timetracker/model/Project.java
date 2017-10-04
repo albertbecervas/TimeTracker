@@ -9,6 +9,7 @@ public class Project {
     private String description;
     private String mDatabase;
     private ArrayList<Project> subProjects;
+    private ArrayList<Task> tasks;
 
     public String getName() {
         return name;
@@ -48,6 +49,14 @@ public class Project {
 
     public void setmDatabase(String mDatabase) {
         this.mDatabase = mDatabase;
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 
     //methods
