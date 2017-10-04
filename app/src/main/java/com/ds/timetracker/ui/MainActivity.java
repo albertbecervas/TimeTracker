@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        InitClass initClass = new InitClass();
-
         setViews();
         setAdapter();
 

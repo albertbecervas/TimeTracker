@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,8 @@
         <activity android:name=".ui.projects.CreateProjectActivity" />
         <activity android:name=".ui.tasks.CreateTaskActivity" />
         <activity android:name=".ui.tasks.TaskDetailActivity" />
-        <activity android:name=".ui.projects.ProjectDetailActivity"></activity>
+        <activity android:name=".ui.projects.ProjectDetailActivity" />
+        <activity android:name=".ui.MainActivity"/>
     </application>
 
 </manifest>
