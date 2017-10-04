@@ -5,7 +5,7 @@ import com.ds.timetracker.model.Task;
 
 public class InitClass {
 
-    public InitClass() {
+    InitClass() {
         Project project = new Project();
         project.setName("1");
         project.setDescription("vnfds");

@@ -10,8 +10,7 @@ public class Timer {
 
     private TimeCallback timeCallback;
 
-    Timer() {
-        Task task = new Task();
+    Timer(Task task) {
         timeCallback = task;
 
         for (int i = 0; i < 10; i++) {

@@ -66,7 +66,7 @@ public class Task implements TimeCallback{
 
     //methods
     public void start(){
-        Timer timer = new Timer();
+        new Timer(this);
     }
 
     public void stop(){
