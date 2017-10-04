@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.helpers.FirebaseHelper;
+import com.ds.timetracker.model.Project;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -50,6 +51,9 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void setProject(String nameText, String descriptionText) {
+        Project project = new Project();
+        project.setProject();
+
         new FirebaseHelper(mDatabase).setProject(nameText, descriptionText);
         finish();
     }

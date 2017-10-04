@@ -49,4 +49,9 @@ public class Project {
     public void setmDatabase(String mDatabase) {
         this.mDatabase = mDatabase;
     }
+
+    //methods
+    public void setProject(){
+
+    }
 }

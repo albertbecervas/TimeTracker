@@ -1,8 +1,12 @@
 package com.ds.timetracker.model;
 
+import android.util.Log;
+
+import com.ds.timetracker.callback.TimeCallback;
+
 import java.util.ArrayList;
 
-public class Task {
+public class Task implements TimeCallback{
 
     private String key;
     private String name;
@@ -57,5 +61,20 @@ public class Task {
 
     public void setTaskLogs(ArrayList<TaskLog> taskLogs) {
         this.taskLogs = taskLogs;
+    }
+
+
+    //methods
+    public void start(){
+        Timer timer = new Timer();
+    }
+
+    public void stop(){
+
+    }
+
+    @Override
+    public void newSecond(int i) {
+        Log.d("task--->" + getName(), "newSecond: " + i);
     }
 }
