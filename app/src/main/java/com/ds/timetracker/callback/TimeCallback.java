@@ -1,7 +1,9 @@
 package com.ds.timetracker.callback;
 
+import java.util.Date;
+
 public interface TimeCallback {
 
-    void newSecond(int i);
+    void newSecond(Date date);
 
 }

@@ -1,80 +1,71 @@
 package com.ds.timetracker.model;
 
-import android.util.Log;
-
 import com.ds.timetracker.callback.TimeCallback;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class Task implements TimeCallback{
+public class Task extends Item {
 
-    private String key;
-    private String name;
-    private String description;
-    private String initialWorkingDate;
-    private String finalWorkingDate;
-    private ArrayList<TaskLog> taskLogs;
+    private Date initialWorkingDate;
+    private Date finalWorkingDate;
+    private ArrayList<Interval> taskLogs;
+    private Boolean isStarted;
+    private int time;
 
-    public String getKey() {
-        return key;
+    public Task() {
+        time = 0;
+        initialWorkingDate = new Date();
+        finalWorkingDate = new Date();
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getInitialWorkingDate() {
+    public Date getInitialWorkingDate() {
         return initialWorkingDate;
     }
 
-    public void setInitialWorkingDate(String initialWorkingDate) {
+    public void setInitialWorkingDate(Date initialWorkingDate) {
         this.initialWorkingDate = initialWorkingDate;
     }
 
-    public String getFinalWorkingDate() {
+    public Date getFinalWorkingDate() {
         return finalWorkingDate;
     }
 
-    public void setFinalWorkingDate(String finalWorkingDate) {
+    public void setFinalWorkingDate(Date finalWorkingDate) {
         this.finalWorkingDate = finalWorkingDate;
     }
 
-    public ArrayList<TaskLog> getTaskLogs() {
+    public ArrayList<Interval> getTaskLogs() {
         return taskLogs;
     }
 
-    public void setTaskLogs(ArrayList<TaskLog> taskLogs) {
+    public void setTaskLogs(ArrayList<Interval> taskLogs) {
         this.taskLogs = taskLogs;
     }
 
+    public Boolean getStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(Boolean started) {
+        isStarted = started;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 
     //methods
-    public void start(){
-        new Timer(this);
+    public void start(Timer timer) {
+//        timer.startTimer();
     }
 
-    public void stop(){
+    public void stop() {
 
     }
 
-    @Override
-    public void newSecond(int i) {
-        Log.d("task--->" + getName(), "newSecond: " + i);
-    }
 }

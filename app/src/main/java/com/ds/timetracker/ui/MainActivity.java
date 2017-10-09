@@ -2,6 +2,7 @@ package com.ds.timetracker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -10,17 +11,22 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ds.timetracker.InitClass;
 import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
+import com.ds.timetracker.adapter.viewholder.TaskViewHolder;
 import com.ds.timetracker.callback.FirebaseCallback;
+import com.ds.timetracker.callback.ItemStarted;
+import com.ds.timetracker.callback.TimeCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
+import com.ds.timetracker.model.Task;
+import com.ds.timetracker.model.Timer;
 import com.ds.timetracker.ui.projects.CreateProjectActivity;
 import com.ds.timetracker.ui.tasks.CreateTaskActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -28,8 +34,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements FirebaseCallback {
+public class MainActivity extends AppCompatActivity implements FirebaseCallback, TimeCallback, ItemStarted {
 
     private RecyclerView mRecyclerView;
     private ViewTypeAdapter mAdapter;
@@ -38,10 +45,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
 
     private CircularProgressView mProgressBar;
 
+    private ArrayList<Integer> activeTasks;
+    private ArrayList<Object> tasks;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Timer timer = new Timer(this);
+
+        activeTasks = new ArrayList<>();
 
         setViews();
         setAdapter();
@@ -91,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         addProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this, CreateProjectActivity.class));
                 Toast.makeText(MainActivity.this, "I want to be a menu :(", Toast.LENGTH_SHORT).show();
             }
         });
@@ -107,8 +120,41 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
 
     @Override
     public void onProjectsLoaded(ArrayList<Object> items) {
+        tasks = items;
         mAdapter.setItemsList(items);
         mRecyclerView.setAdapter(mAdapter);
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void newSecond(Date date) {
+        for (final int task : activeTasks) {
+            final Task task1 =(Task) tasks.get(task);
+            task1.setFinalWorkingDate(date);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.setItemsList(tasks);
+                    mAdapter.notifyItemChanged(task);
+                }
+            });
+        }
+    }
+
+    private int getIndex(String task) {
+        int index = 0;
+        if (task.equals("first")) index = 0;
+        if (task.equals("second")) index = 1;
+        return index;
+    }
+
+    @Override
+    public void onItemStarted(String name, Integer position, Task task, TaskViewHolder holder) {
+        activeTasks.add(position);
+    }
+
+    @Override
+    public void onItemRemoved() {
+
     }
 }

@@ -51,9 +51,6 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void setProject(String nameText, String descriptionText) {
-        Project project = new Project();
-        project.setProject();
-
         new FirebaseHelper(mDatabase).setProject(nameText, descriptionText);
         finish();
     }

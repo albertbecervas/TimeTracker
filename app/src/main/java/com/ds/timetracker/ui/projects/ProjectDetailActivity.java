@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
 import com.ds.timetracker.callback.FirebaseCallback;
+import com.ds.timetracker.callback.TimeCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.ui.tasks.CreateTaskActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -26,8 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class ProjectDetailActivity extends AppCompatActivity implements FirebaseCallback {
+public class ProjectDetailActivity extends AppCompatActivity implements FirebaseCallback, TimeCallback {
 
     private RecyclerView mRecyclerView;
     private ViewTypeAdapter mAdapter;
@@ -119,5 +121,10 @@ public class ProjectDetailActivity extends AppCompatActivity implements Firebase
         mAdapter.setItemsList(items);
         mRecyclerView.setAdapter(mAdapter);
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void newSecond(Date date) {
+
     }
 }

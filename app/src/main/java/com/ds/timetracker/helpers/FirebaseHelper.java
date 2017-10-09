@@ -48,12 +48,7 @@ public class FirebaseHelper {
                     if (itemType == 0) {
                         String aux = mDatabase.child("projects").child(key).getRef().toString();
                         String[] reference = aux.split(".com/");
-                        Project project = new Project();
-                        project.setName(name);
-                        project.setKey(key);
-                        project.setDescription(description);
-                        project.setmDatabase(reference[1]);
-//                        project.setSubProjects(projects);
+                        Project project = new Project(name, description, reference[1], key);
                         projectsList.add(project);
                     }
 
