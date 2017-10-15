@@ -12,7 +12,7 @@ public class Task extends Item implements Serializable {
     private ArrayList<Interval> intervals;
     private long durada;
 
-    public Task(){
+    public Task() {
         initialWorkingDate = new Date();
         finalWorkingDate = new Date();
         intervals = new ArrayList<>();
@@ -61,7 +61,7 @@ public class Task extends Item implements Serializable {
         interval.setEndWorkingLogDatee(endDate);
     }
 
-    public void closeInterval(Date endDate){
+    public void closeInterval(Date endDate) {
         Interval interval = intervals.get(intervals.size() - 1);
         interval.setEndWorkingLogDatee(endDate);
         setDurada(interval.getDuration());

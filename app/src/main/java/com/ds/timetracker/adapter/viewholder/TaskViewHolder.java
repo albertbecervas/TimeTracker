@@ -51,11 +51,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 if (mTask.getStarted()) {
-                    Toast.makeText(mContext,"Task already started",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Task already started", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mTask.setStarted(true);
-                mTask.setInterval(new Date(),new Date());
+                mTask.setInterval(new Date(), new Date());
                 mCallback.onItemStarted(getAdapterPosition());
             }
         });
@@ -63,8 +63,8 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mTask.getStarted()){
-                    Toast.makeText(mContext,"Task already stopped",Toast.LENGTH_SHORT).show();
+                if (!mTask.getStarted()) {
+                    Toast.makeText(mContext, "Task already stopped", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mCallback.onItemRemoved(getAdapterPosition());
@@ -87,7 +87,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         int segonsPerMinut = 60;
 
         if (mTask.getIntervals().size() == 0) return;
-        Interval interval = mTask.getIntervals().get(mTask.getIntervals().size()-1);
+        Interval interval = mTask.getIntervals().get(mTask.getIntervals().size() - 1);
 
 
         long durada = mTask.getDurada();

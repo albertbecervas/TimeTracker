@@ -24,9 +24,9 @@ public class TaskDetailActivity extends AppCompatActivity implements FirebaseCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail_aux);
 
-        setViews();
-
         ArrayList<Interval> intervals = new ArrayList<>();
+
+        setViews();
 
         setAdapter(intervals);
 

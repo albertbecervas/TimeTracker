@@ -96,12 +96,8 @@ public class FirebaseHelper {
         });
     }
 
-    public void setProject(Object project) {
+    public void setItem(Object project) {
         mDatabase.child("items").push().setValue(project);
-    }
-
-    public void setTasks(Task task) {
-        mDatabase.child("items").push().setValue(task);
     }
 
     public void setInterval(Task task) {

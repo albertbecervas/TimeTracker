@@ -58,9 +58,9 @@ public class CreateItemActivity extends AppCompatActivity {
 
     private void setProject(String nameText, String descriptionText) {
         if (itemType.equals("0")) {
-            new FirebaseHelper(mDatabase).setProject(new Project(nameText, descriptionText));
+            new FirebaseHelper(mDatabase).setItem(new Project(nameText, descriptionText));
         } else {
-            new FirebaseHelper(mDatabase).setProject(new Task(nameText, descriptionText));
+            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText));
         }
         finish();
     }

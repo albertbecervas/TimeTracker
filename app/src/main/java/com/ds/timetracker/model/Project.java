@@ -3,12 +3,12 @@ package com.ds.timetracker.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Project extends Item implements Serializable{
+public class Project extends Item implements Serializable {
 
     private ArrayList<Project> subProjects;
     private ArrayList<Task> tasks;
 
-    public Project(){
+    public Project() {
         itemType = "0";
     }
 

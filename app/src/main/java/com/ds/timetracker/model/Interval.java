@@ -10,7 +10,7 @@ public class Interval implements Serializable {
     private long duration;
     private boolean isOpen;
 
-    public Interval(){
+    public Interval() {
         //empty constructor
     }
 
@@ -28,7 +28,7 @@ public class Interval implements Serializable {
         return endWorkingLogDate;
     }
 
-    public void setEndWorkingLogDate(Date endWorkingLogDate){
+    public void setEndWorkingLogDate(Date endWorkingLogDate) {
         this.endWorkingLogDate = endWorkingLogDate;
     }
 
@@ -37,11 +37,11 @@ public class Interval implements Serializable {
         duration = ((getEndWorkingLogDate().getTime() - getStartWorkingLogDate().getTime()) / 1000);
     }
 
-    public void setOpen(boolean open){
+    public void setOpen(boolean open) {
         this.isOpen = open;
     }
 
-    public boolean isOpen(){
+    public boolean isOpen() {
         return isOpen;
     }
 
@@ -49,7 +49,7 @@ public class Interval implements Serializable {
         return duration;
     }
 
-    public String getFormattedDuration(){
+    public String getFormattedDuration() {
         int segonsPerHora = 3600;
         int segonsPerMinut = 60;
 

@@ -20,7 +20,6 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
 import com.ds.timetracker.callback.FirebaseCallback;
 import com.ds.timetracker.callback.ItemStarted;
-import com.ds.timetracker.helpers.AppSharedPreferences;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Task;
@@ -35,9 +34,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer, FirebaseCallback, ItemStarted {
-
-    private static boolean isInDebug = false;
-    private AppSharedPreferences mPrefs;
 
     private RecyclerView mRecyclerView;
     private ViewTypeAdapter mAdapter;
@@ -58,9 +54,8 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
 
         activeTasks = new ArrayList<>();
         items = new ArrayList<>();
-        mPrefs = AppSharedPreferences.getInstance(this);
 
-        new Clock().addObserver(this);
+        Clock.getInstance().addObserver(this);
 
         setViews();
         setAdapter();
@@ -74,16 +69,8 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
     protected void onResume() {
         super.onResume();
         mAdapter.clearAdapter();
-        if (isInDebug) {
-            items = mPrefs.getItems();
-            mAdapter.setItemsList(items);
-            mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.getItemAnimator().setChangeDuration(0);
-            mProgressBar.setVisibility(View.GONE);
-            return;
-        }
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
         itemsToUpdate = true;
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
         new FirebaseHelper(this, mDatabase).getItems();
     }
 
