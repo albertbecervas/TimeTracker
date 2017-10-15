@@ -20,7 +20,6 @@
         <activity android:name=".ui.tasks.CreateTaskActivity" />
         <activity android:name=".ui.tasks.TaskDetailActivity" />
         <activity android:name=".ui.projects.ProjectDetailActivity" />
-        <activity android:name=".classesProject.InitActivity"/>
     </application>
 
 </manifest>

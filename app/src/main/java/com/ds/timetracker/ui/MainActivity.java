@@ -2,7 +2,6 @@ package com.ds.timetracker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -11,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,13 +18,12 @@ import android.widget.Toast;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
-import com.ds.timetracker.adapter.viewholder.TaskViewHolder;
 import com.ds.timetracker.callback.FirebaseCallback;
 import com.ds.timetracker.callback.ItemStarted;
-import com.ds.timetracker.callback.TimeCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
+import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Task;
-import com.ds.timetracker.model.Timer;
+import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.ui.projects.CreateProjectActivity;
 import com.ds.timetracker.ui.tasks.CreateTaskActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -35,8 +32,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements FirebaseCallback, TimeCallback, ItemStarted {
+public class MainActivity extends AppCompatActivity implements Observer, FirebaseCallback, ItemStarted {
 
     private RecyclerView mRecyclerView;
     private ViewTypeAdapter mAdapter;
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback,
 
     private CircularProgressView mProgressBar;
 
-    private ArrayList<Integer> activeTasks;
+    private ArrayList<String> activeTasks;
     private ArrayList<Object> tasks;
 
     @Override
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Timer timer = new Timer(this);
+        new Clock().addObserver(this);
 
         activeTasks = new ArrayList<>();
 
@@ -123,38 +122,37 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback,
         tasks = items;
         mAdapter.setItemsList(items);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.getItemAnimator().setChangeDuration(0);
         mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void newSecond(Date date) {
-        for (final int task : activeTasks) {
-            final Task task1 =(Task) tasks.get(task);
-            task1.setFinalWorkingDate(date);
+    public void onIntervalLoaded(ArrayList<Interval> intervals) {
+
+    }
+
+    @Override
+    public void onItemStarted(Integer position) {
+        activeTasks.add(String.valueOf(position));
+    }
+
+    @Override
+    public void onItemRemoved(Integer position) {
+        activeTasks.remove(String.valueOf(position));
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        for (final String task : activeTasks) {
+            final Task task1 =(Task) tasks.get(Integer.valueOf(task));
+            task1.setFinalWorkingDate((Date)o);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mAdapter.setItemsList(tasks);
-                    mAdapter.notifyItemChanged(task);
+                    mAdapter.notifyItemChanged(Integer.valueOf(task));
                 }
             });
         }
-    }
-
-    private int getIndex(String task) {
-        int index = 0;
-        if (task.equals("first")) index = 0;
-        if (task.equals("second")) index = 1;
-        return index;
-    }
-
-    @Override
-    public void onItemStarted(String name, Integer position, Task task, TaskViewHolder holder) {
-        activeTasks.add(position);
-    }
-
-    @Override
-    public void onItemRemoved() {
-
     }
 }

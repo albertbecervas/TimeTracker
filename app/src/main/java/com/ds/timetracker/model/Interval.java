@@ -1,27 +1,31 @@
 package com.ds.timetracker.model;
 
-public class Interval {
+import java.io.Serializable;
+import java.util.Date;
 
-    private String startWorkingLogDate;
-    private String endWorkingLogDate;
+public class Interval implements Serializable {
 
-    public Interval(String startWorkingLogDate) {
+    private Date startWorkingLogDate;
+    private Date endWorkingLogDate;
+
+    public Interval(Date startWorkingLogDate, Date endWorkingLogDate) {
         this.startWorkingLogDate = startWorkingLogDate;
+        this.endWorkingLogDate = endWorkingLogDate;
     }
 
-    public String getStartWorkingLogDate() {
+    public Date getStartWorkingLogDate() {
         return startWorkingLogDate;
     }
 
-    public void setStartWorkingLogDate(String startWorkingLogDate) {
+    public void setStartWorkingLogDate(Date startWorkingLogDate) {
         this.startWorkingLogDate = startWorkingLogDate;
     }
 
-    public String getEndWorkingLogDate() {
+    public Date getEndWorkingLogDate() {
         return endWorkingLogDate;
     }
 
-    public void setEndWorkingLogDate(String endWorkingLogDate) {
+    public void setEndWorkingLogDate(Date endWorkingLogDate) {
         this.endWorkingLogDate = endWorkingLogDate;
     }
 }

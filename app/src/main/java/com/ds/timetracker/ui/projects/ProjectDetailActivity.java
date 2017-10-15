@@ -19,8 +19,10 @@ import android.widget.Toast;
 import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
 import com.ds.timetracker.callback.FirebaseCallback;
+import com.ds.timetracker.callback.ItemStarted;
 import com.ds.timetracker.callback.TimeCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
+import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.ui.tasks.CreateTaskActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.database.DatabaseReference;
@@ -28,8 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
-public class ProjectDetailActivity extends AppCompatActivity implements FirebaseCallback, TimeCallback {
+public class ProjectDetailActivity extends AppCompatActivity implements FirebaseCallback, Observer, ItemStarted{
 
     private RecyclerView mRecyclerView;
     private ViewTypeAdapter mAdapter;
@@ -124,7 +128,22 @@ public class ProjectDetailActivity extends AppCompatActivity implements Firebase
     }
 
     @Override
-    public void newSecond(Date date) {
+    public void onIntervalLoaded(ArrayList<Interval> intervals) {
+
+    }
+
+    @Override
+    public void onItemStarted(Integer position) {
+
+    }
+
+    @Override
+    public void onItemRemoved(Integer position) {
+
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
 
     }
 }

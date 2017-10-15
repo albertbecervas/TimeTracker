@@ -1,22 +1,21 @@
 package com.ds.timetracker.model;
 
-import com.ds.timetracker.callback.TimeCallback;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Task extends Item {
+public class Task extends Item implements Serializable {
 
     private Date initialWorkingDate;
     private Date finalWorkingDate;
-    private ArrayList<Interval> taskLogs;
     private Boolean isStarted;
-    private int time;
+    private ArrayList<Interval> intervals;
 
     public Task() {
-        time = 0;
         initialWorkingDate = new Date();
         finalWorkingDate = new Date();
+        intervals = new ArrayList<>();
+        isStarted = false;
     }
 
     public Date getInitialWorkingDate() {
@@ -35,14 +34,6 @@ public class Task extends Item {
         this.finalWorkingDate = finalWorkingDate;
     }
 
-    public ArrayList<Interval> getTaskLogs() {
-        return taskLogs;
-    }
-
-    public void setTaskLogs(ArrayList<Interval> taskLogs) {
-        this.taskLogs = taskLogs;
-    }
-
     public Boolean getStarted() {
         return isStarted;
     }
@@ -51,21 +42,16 @@ public class Task extends Item {
         isStarted = started;
     }
 
-    public int getTime() {
-        return time;
+    public void setInterval(Date startDate, Date endDate) {
+        intervals.add(new Interval(startDate, endDate));
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void updateInterval(Date endDate) {
+        intervals.get(intervals.size() - 1).setEndWorkingLogDate(endDate);
     }
 
-    //methods
-    public void start(Timer timer) {
-//        timer.startTimer();
-    }
-
-    public void stop() {
-
+    public ArrayList<Interval> getIntervals() {
+        return intervals;
     }
 
 }
