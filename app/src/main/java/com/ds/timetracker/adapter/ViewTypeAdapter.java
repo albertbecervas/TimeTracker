@@ -69,7 +69,9 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
     }
 
     public void setItemsList(ArrayList<Object> items) {
-        itemsList = items;
+        itemsList.clear();
+        itemsList.addAll(items);
+        notifyDataSetChanged();
     }
 
 }

@@ -1,76 +1,73 @@
 package com.ds.timetracker.helpers;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 
 import com.ds.timetracker.callback.FirebaseCallback;
+import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class FirebaseHelper {
 
-    private FirebaseCallback mProjectCallback;
+    private FirebaseCallback mFirebaseCallback;
     private DatabaseReference mDatabase;
 
-    private ArrayList<Object> projectsList;
+    private ArrayList<Object> itemsList;
 
     public FirebaseHelper(Context context, DatabaseReference database) {
-        mProjectCallback = (FirebaseCallback) context;
+        mFirebaseCallback = (FirebaseCallback) context;
         mDatabase = database;
-        projectsList = new ArrayList<>();
+        itemsList = new ArrayList<>();
     }
 
     public FirebaseHelper(DatabaseReference database) {
         mDatabase = database;
-        projectsList = new ArrayList<>();
+        itemsList = new ArrayList<>();
     }
 
-    public FirebaseHelper(){
+    public FirebaseHelper() {
     }
 
-    public void getProjects() {
+    public void getItems() {
 
-        mDatabase.child("/projects").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("/items").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dS : dataSnapshot.getChildren()) {
 
                     String item = dS.child("itemType").getValue(String.class);
-                    if (item == null)return;
+                    if (item == null) return;
                     int itemType = Integer.parseInt(item);
                     String key = dS.getKey();
-                    String name = dS.child("name").getValue(String.class);
-                    String description = dS.child("description").getValue(String.class);
+                    String aux = mDatabase.child("items").child(key).getRef().toString();
+                    String[] reference = aux.split(".com/");
 
                     if (itemType == 0) {
-                        String aux = mDatabase.child("projects").child(key).getRef().toString();
-                        String[] reference = aux.split(".com/");
-                        Project project = new Project(name, description, reference[1], key);
-                        projectsList.add(project);
+                        Project project = dS.getValue(Project.class);
+                        if (project == null) return;
+                        project.setDatabasePath(reference[1]);
+                        itemsList.add(project);
                     }
 
                     if (itemType == 1) {
-                        Task task = new Task();
-                        task.setName(name);
-                        task.setKey(key);
-                        task.setDescription(description);
-                        String aux = mDatabase.child("projects").child(key).getRef().toString();
-                        String[] reference = aux.split(".com/");
+                        Task task = dS.getValue(Task.class);
+                        if (task == null) return;
                         task.setDatabasePath(reference[1]);
-                        projectsList.add(task);
+                        itemsList.add(task);
                     }
 
                 }
 
-                mProjectCallback.onProjectsLoaded(projectsList);
+                mFirebaseCallback.onItemsLoaded(itemsList);
 
                 mDatabase.removeEventListener(this);
             }
@@ -82,11 +79,14 @@ public class FirebaseHelper {
         });
     }
 
-    public void getIntervals(){
+    public void getIntervals() {
         mDatabase.child("intervals").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                GenericTypeIndicator<ArrayList<Interval>> t = new GenericTypeIndicator<ArrayList<Interval>>() {
+                };
+                ArrayList<Interval> intervals = dataSnapshot.getValue(t);
+                mFirebaseCallback.onIntervalLoaded(intervals);
             }
 
             @Override
@@ -96,24 +96,17 @@ public class FirebaseHelper {
         });
     }
 
-    public void setProject(String name, String description) {
-        String key = mDatabase.child("projects").push().getKey();
-        String itemType = "0";
-        mDatabase.child("projects").child(key).child("itemType").setValue(itemType);
-        mDatabase.child("projects").child(key).child("name").setValue(name);
-        mDatabase.child("projects").child(key).child("description").setValue(description);
+    public void setProject(Object project) {
+        mDatabase.child("items").push().setValue(project);
     }
 
-    public void setTasks(String name, String description) {
-        String key = mDatabase.child("projects").push().getKey();
-        mDatabase.child("projects").child(key).child("name").setValue(name);
-        mDatabase.child("projects").child(key).child("description").setValue(description);
-        String itemType = "1";
-        mDatabase.child("projects").child(key).child("itemType").setValue(itemType);
+    public void setTasks(Task task) {
+        mDatabase.child("items").push().setValue(task);
     }
 
-    public void setInterval(Task task){
+    public void setInterval(Task task) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(task.getDatabasePath());
+        databaseReference.child("durada").setValue(task.getDurada());
         databaseReference.child("intervals").setValue(task.getIntervals());
     }
 }

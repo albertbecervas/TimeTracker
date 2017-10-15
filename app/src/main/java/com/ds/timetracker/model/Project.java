@@ -1,17 +1,20 @@
 package com.ds.timetracker.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Project extends Item{
+public class Project extends Item implements Serializable{
 
     private ArrayList<Project> subProjects;
     private ArrayList<Task> tasks;
 
-    public Project(String name, String description, String databasePath, String key) {
+    public Project(){
+        itemType = "0";
+    }
+
+    public Project(String name, String description) {
         this.setName(name);
         this.setDescription(description);
-        this.setDatabasePath(databasePath);
-        this.setKey(key);
     }
 
     public ArrayList<Project> getSubProjects() {
@@ -26,7 +29,7 @@ public class Project extends Item{
         return tasks;
     }
 
-    public void setTasks(ArrayList<Task> tasks) {
-        this.tasks = tasks;
+    public void setTasks(Task task) {
+        tasks.add(task);
     }
 }
