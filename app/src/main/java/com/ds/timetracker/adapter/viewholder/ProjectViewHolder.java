@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.ui.projects.ProjectDetailActivity;
+import com.ds.timetracker.ui.MainActivity;
 
 public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,9 +20,8 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, ProjectDetailActivity.class);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 intent.putExtra("reference", mProject.getDatabasePath());
-                intent.putExtra("projectName", mProject.getName());
                 mContext.startActivity(intent);
             }
         });

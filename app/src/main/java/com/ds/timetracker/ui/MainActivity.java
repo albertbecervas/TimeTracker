@@ -20,12 +20,11 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
 import com.ds.timetracker.callback.FirebaseCallback;
 import com.ds.timetracker.callback.ItemStarted;
+import com.ds.timetracker.helpers.AppSharedPreferences;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.model.observable.Clock;
-import com.ds.timetracker.ui.projects.CreateProjectActivity;
-import com.ds.timetracker.ui.tasks.CreateTaskActivity;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,37 +36,55 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer, FirebaseCallback, ItemStarted {
 
+    private static boolean isInDebug = false;
+    private AppSharedPreferences mPrefs;
+
     private RecyclerView mRecyclerView;
     private ViewTypeAdapter mAdapter;
-
-    private FirebaseHelper mProjects;
 
     private CircularProgressView mProgressBar;
 
     private ArrayList<String> activeTasks;
-    private ArrayList<Object> tasks;
+    private ArrayList<Object> items;
+
+    private String reference = "";
+
+    private Boolean itemsToUpdate = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new Clock().addObserver(this);
-
         activeTasks = new ArrayList<>();
+        items = new ArrayList<>();
+        mPrefs = AppSharedPreferences.getInstance(this);
+
+        new Clock().addObserver(this);
 
         setViews();
         setAdapter();
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mProjects = new FirebaseHelper(this, mDatabase);
+        if (getIntent().hasExtra("reference"))
+            reference = getIntent().getStringExtra("reference");
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mAdapter.clearAdapter();
-        mProjects.getProjects();
+        if (isInDebug) {
+            items = mPrefs.getItems();
+            mAdapter.setItemsList(items);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.getItemAnimator().setChangeDuration(0);
+            mProgressBar.setVisibility(View.GONE);
+            return;
+        }
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        itemsToUpdate = true;
+        new FirebaseHelper(this, mDatabase).getItems();
     }
 
     @Override
@@ -79,14 +96,19 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        String itemType = "";
         switch (item.getItemId()) {
             case R.id.add_project:
-                startActivity(new Intent(this, CreateProjectActivity.class));
+                itemType = "0";
                 break;
             case R.id.add_task:
-                startActivity(new Intent(this, CreateTaskActivity.class));
+                itemType = "1";
                 break;
         }
+        Intent i = new Intent(this, CreateItemActivity.class);
+        i.putExtra("reference", reference);
+        i.putExtra("itemType", itemType);
+        startActivity(i);
         return true;
     }
 
@@ -118,20 +140,6 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
     }
 
     @Override
-    public void onProjectsLoaded(ArrayList<Object> items) {
-        tasks = items;
-        mAdapter.setItemsList(items);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.getItemAnimator().setChangeDuration(0);
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onIntervalLoaded(ArrayList<Interval> intervals) {
-
-    }
-
-    @Override
     public void onItemStarted(Integer position) {
         activeTasks.add(String.valueOf(position));
     }
@@ -144,15 +152,33 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
     @Override
     public void update(Observable observable, Object o) {
         for (final String task : activeTasks) {
-            final Task task1 =(Task) tasks.get(Integer.valueOf(task));
-            task1.setFinalWorkingDate((Date)o);
+            final Task task1 = (Task) items.get(Integer.valueOf(task));
+            task1.setFinalWorkingDate((Date) o);
+            task1.updateInterval((Date) o);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.setItemsList(tasks);
+                    mAdapter.setItemsList(items);
                     mAdapter.notifyItemChanged(Integer.valueOf(task));
                 }
             });
         }
+    }
+
+    //This following method will only be used in case we want to retrieve data from de server
+    @Override
+    public void onItemsLoaded(ArrayList<Object> items) {
+        if (this.items.size() == items.size() && !itemsToUpdate) return;
+        itemsToUpdate = false;
+        this.items = items;
+        mAdapter.setItemsList(items);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.getItemAnimator().setChangeDuration(0);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onIntervalLoaded(ArrayList<Interval> intervals) {
+
     }
 }

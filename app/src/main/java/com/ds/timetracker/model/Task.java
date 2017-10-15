@@ -10,20 +10,30 @@ public class Task extends Item implements Serializable {
     private Date finalWorkingDate;
     private Boolean isStarted;
     private ArrayList<Interval> intervals;
+    private long durada;
 
-    public Task() {
+    public Task(){
         initialWorkingDate = new Date();
         finalWorkingDate = new Date();
         intervals = new ArrayList<>();
         isStarted = false;
+        durada = 0L;
+        this.itemType = "1";
+    }
+
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+        initialWorkingDate = new Date();
+        finalWorkingDate = new Date();
+        intervals = new ArrayList<>();
+        isStarted = false;
+        durada = 0L;
+        this.itemType = "1";
     }
 
     public Date getInitialWorkingDate() {
         return initialWorkingDate;
-    }
-
-    public void setInitialWorkingDate(Date initialWorkingDate) {
-        this.initialWorkingDate = initialWorkingDate;
     }
 
     public Date getFinalWorkingDate() {
@@ -47,11 +57,25 @@ public class Task extends Item implements Serializable {
     }
 
     public void updateInterval(Date endDate) {
-        intervals.get(intervals.size() - 1).setEndWorkingLogDate(endDate);
+        Interval interval = intervals.get(intervals.size() - 1);
+        interval.setEndWorkingLogDatee(endDate);
+    }
+
+    public void closeInterval(Date endDate){
+        Interval interval = intervals.get(intervals.size() - 1);
+        interval.setEndWorkingLogDatee(endDate);
+        setDurada(interval.getDuration());
     }
 
     public ArrayList<Interval> getIntervals() {
         return intervals;
     }
 
+    public long getDurada() {
+        return durada;
+    }
+
+    public void setDurada(long durada) {
+        this.durada += durada;
+    }
 }

@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.callback.ItemStarted;
 import com.ds.timetracker.helpers.FirebaseHelper;
+import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Task;
-import com.ds.timetracker.ui.tasks.TaskDetailActivity;
+import com.ds.timetracker.ui.TaskDetailActivity;
 
 import java.util.Date;
 
@@ -33,7 +35,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, TaskDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Intervals", mTask.getIntervals());
+                bundle.putSerializable("intervals", mTask.getIntervals());
                 intent.putExtras(bundle);
                 intent.putExtra("reference", mTask.getDatabasePath());
                 mContext.startActivity(intent);
@@ -48,8 +50,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mTask.getStarted()) {
+                    Toast.makeText(mContext,"Task already started",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mTask.setStarted(true);
-                mTask.setInitialWorkingDate(new Date());
                 mTask.setInterval(new Date(),new Date());
                 mCallback.onItemStarted(getAdapterPosition());
             }
@@ -58,13 +63,18 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!mTask.getStarted()){
+                    Toast.makeText(mContext,"Task already stopped",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mCallback.onItemRemoved(getAdapterPosition());
                 mTask.setStarted(false);
                 mTask.setFinalWorkingDate(new Date());
-                mTask.updateInterval(new Date());
-                FirebaseHelper mFirebase = new FirebaseHelper();
+                mTask.closeInterval(new Date());
+                mTask.getIntervals().get(mTask.getIntervals().size() - 1).setOpen(false);
 
+                FirebaseHelper mFirebase = new FirebaseHelper();
                 mFirebase.setInterval(mTask);
-                mCallback.onItemRemoved(getAdapterPosition());
             }
         });
     }
@@ -76,14 +86,18 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         int segonsPerHora = 3600;
         int segonsPerMinut = 60;
 
-        long durada = (mTask.getFinalWorkingDate().getTime() - mTask.getInitialWorkingDate().getTime()) / 1000;
+        if (mTask.getIntervals().size() == 0) return;
+        Interval interval = mTask.getIntervals().get(mTask.getIntervals().size()-1);
+
+
+        long durada = mTask.getDurada();
+        if (interval.isOpen()) durada += interval.getDuration();
 
         final long hores = durada / segonsPerHora;
         final long minuts = (durada - hores * segonsPerHora) / segonsPerMinut;
         final long segons = durada - segonsPerHora * hores - segonsPerMinut * minuts;
 
         time.setText(String.valueOf(hores + "h " + minuts + "m " + segons + "s"));
-
     }
 
 }

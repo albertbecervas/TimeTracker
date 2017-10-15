@@ -1,4 +1,4 @@
-package com.ds.timetracker.ui.projects;
+package com.ds.timetracker.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,10 +10,11 @@ import android.widget.EditText;
 import com.ds.timetracker.R;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Project;
+import com.ds.timetracker.model.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CreateProjectActivity extends AppCompatActivity {
+public class CreateItemActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
@@ -22,12 +23,17 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     private String reference = "";
 
+    private String itemType;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_project);
         if (getIntent().hasExtra("reference"))
             reference = getIntent().getStringExtra("reference");
+
+        itemType = getIntent().getStringExtra("itemType");
+
         mDatabase = FirebaseDatabase.getInstance().getReference(reference);
 
         setViews();
@@ -51,7 +57,11 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void setProject(String nameText, String descriptionText) {
-        new FirebaseHelper(mDatabase).setProject(nameText, descriptionText);
+        if (itemType.equals("0")) {
+            new FirebaseHelper(mDatabase).setProject(new Project(nameText, descriptionText));
+        } else {
+            new FirebaseHelper(mDatabase).setProject(new Task(nameText, descriptionText));
+        }
         finish();
     }
 
