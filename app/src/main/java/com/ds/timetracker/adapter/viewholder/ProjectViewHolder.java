@@ -21,7 +21,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ProjectDetailActivity.class);
-                intent.putExtra("reference", mProject.getmDatabase());
+                intent.putExtra("reference", mProject.getDatabasePath());
                 intent.putExtra("projectName", mProject.getName());
                 mContext.startActivity(intent);
             }

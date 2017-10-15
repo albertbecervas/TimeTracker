@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.helpers.FirebaseHelper;
+import com.ds.timetracker.model.Project;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

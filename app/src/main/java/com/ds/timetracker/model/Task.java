@@ -1,61 +1,57 @@
 package com.ds.timetracker.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class Task {
+public class Task extends Item implements Serializable {
 
-    private String key;
-    private String name;
-    private String description;
-    private String initialWorkingDate;
-    private String finalWorkingDate;
-    private ArrayList<TaskLog> taskLogs;
+    private Date initialWorkingDate;
+    private Date finalWorkingDate;
+    private Boolean isStarted;
+    private ArrayList<Interval> intervals;
 
-    public String getKey() {
-        return key;
+    public Task() {
+        initialWorkingDate = new Date();
+        finalWorkingDate = new Date();
+        intervals = new ArrayList<>();
+        isStarted = false;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getInitialWorkingDate() {
+    public Date getInitialWorkingDate() {
         return initialWorkingDate;
     }
 
-    public void setInitialWorkingDate(String initialWorkingDate) {
+    public void setInitialWorkingDate(Date initialWorkingDate) {
         this.initialWorkingDate = initialWorkingDate;
     }
 
-    public String getFinalWorkingDate() {
+    public Date getFinalWorkingDate() {
         return finalWorkingDate;
     }
 
-    public void setFinalWorkingDate(String finalWorkingDate) {
+    public void setFinalWorkingDate(Date finalWorkingDate) {
         this.finalWorkingDate = finalWorkingDate;
     }
 
-    public ArrayList<TaskLog> getTaskLogs() {
-        return taskLogs;
+    public Boolean getStarted() {
+        return isStarted;
     }
 
-    public void setTaskLogs(ArrayList<TaskLog> taskLogs) {
-        this.taskLogs = taskLogs;
+    public void setStarted(Boolean started) {
+        isStarted = started;
     }
+
+    public void setInterval(Date startDate, Date endDate) {
+        intervals.add(new Interval(startDate, endDate));
+    }
+
+    public void updateInterval(Date endDate) {
+        intervals.get(intervals.size() - 1).setEndWorkingLogDate(endDate);
+    }
+
+    public ArrayList<Interval> getIntervals() {
+        return intervals;
+    }
+
 }

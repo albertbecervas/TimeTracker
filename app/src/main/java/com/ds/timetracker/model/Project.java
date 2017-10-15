@@ -2,36 +2,16 @@ package com.ds.timetracker.model;
 
 import java.util.ArrayList;
 
-public class Project {
+public class Project extends Item{
 
-    private String name;
-    private String key;
-    private String description;
-    private String mDatabase;
     private ArrayList<Project> subProjects;
+    private ArrayList<Task> tasks;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public Project(String name, String description, String databasePath, String key) {
+        this.setName(name);
+        this.setDescription(description);
+        this.setDatabasePath(databasePath);
+        this.setKey(key);
     }
 
     public ArrayList<Project> getSubProjects() {
@@ -42,11 +22,11 @@ public class Project {
         this.subProjects = subProjects;
     }
 
-    public String getmDatabase() {
-        return mDatabase;
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 
-    public void setmDatabase(String mDatabase) {
-        this.mDatabase = mDatabase;
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 }
