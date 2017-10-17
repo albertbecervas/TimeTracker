@@ -18,6 +18,8 @@
         </activity>
         <activity android:name=".ui.CreateItemActivity" />
         <activity android:name=".ui.TaskDetailActivity" />
+
+        <receiver  android:process=":remote" android:name=".helpers.Temporitzador"/>
     </application>
 
 </manifest>

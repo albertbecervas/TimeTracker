@@ -1,35 +1,51 @@
 package com.ds.timetracker.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 
 public class Project extends Item implements Serializable {
 
-    private ArrayList<Project> subProjects;
-    private ArrayList<Task> tasks;
+    private long duration;
+    private Date initialWorkingDate;
+    private Date finalWorkingDate;
 
     public Project() {
-        itemType = "0";
+        this.itemType = "0";
+        this.duration = 0L;
+        this.isStarted = false;
     }
 
     public Project(String name, String description) {
         this.setName(name);
         this.setDescription(description);
+        this.itemType = "0";
+        this.duration = 0L;
+        this.isStarted = false;
     }
 
-    public ArrayList<Project> getSubProjects() {
-        return subProjects;
+
+    public long getDuration() {
+        return duration;
     }
 
-    public void setSubProjects(ArrayList<Project> subProjects) {
-        this.subProjects = subProjects;
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
-    public ArrayList<Task> getTasks() {
-        return tasks;
+    public Date getInitialWorkingDate() {
+        return initialWorkingDate;
     }
 
-    public void setTasks(Task task) {
-        tasks.add(task);
+    public void setInitialWorkingDate(Date initialWorkingDate) {
+        this.initialWorkingDate = initialWorkingDate;
+    }
+
+    public Date getFinalWorkingDate() {
+        return finalWorkingDate;
+    }
+
+    public void setFinalWorkingDate(Date finalWorkingDate) {
+        this.finalWorkingDate = finalWorkingDate;
+        duration += (getFinalWorkingDate().getTime() - getInitialWorkingDate().getTime()) / 1000;
     }
 }

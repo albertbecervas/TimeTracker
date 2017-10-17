@@ -8,19 +8,25 @@ import android.view.ViewGroup;
 import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.viewholder.ProjectViewHolder;
 import com.ds.timetracker.adapter.viewholder.TaskViewHolder;
+import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
 public class ViewTypeAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private ArrayList<Object> itemsList;
+    private ArrayList<Item> itemsList;
+    private DatabaseReference itemReference;
+    private Boolean isProject;
 
-    public ViewTypeAdapter(Context context, ArrayList<Object> items) {
+    public ViewTypeAdapter(Context context, ArrayList<Item> items, DatabaseReference itemReference, Boolean isProject) {
         this.mContext = context;
         this.itemsList = items;
+        this.itemReference = itemReference;
+        this.isProject = isProject;
     }
 
     @Override
@@ -30,14 +36,14 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
             case 0:
                 return new ProjectViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_project, parent, false), mContext);
             case 1:
-                return new TaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_task, parent, false), mContext);
+                return new TaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_task, parent, false), mContext, itemReference , isProject);
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Object item = itemsList.get(position);
+        Item item = itemsList.get(position);
 
         if (item instanceof Project) {
             ((ProjectViewHolder) holder).setItem(item);
@@ -56,7 +62,7 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        Object item = itemsList.get(position);
+        Item item = itemsList.get(position);
         if (item instanceof Project) return 0;
         if (item instanceof Task) return 1;
         return 0;
@@ -68,7 +74,7 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
         notifyItemRangeRemoved(0, size);
     }
 
-    public void setItemsList(ArrayList<Object> items) {
+    public void setItemsList(ArrayList<Item> items) {
         itemsList.clear();
         itemsList.addAll(items);
         notifyDataSetChanged();

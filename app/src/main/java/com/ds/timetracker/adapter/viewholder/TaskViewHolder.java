@@ -12,8 +12,10 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.callback.ItemStarted;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
+import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.TaskDetailActivity;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.Date;
 
@@ -25,10 +27,16 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
     private ItemStarted mCallback;
 
-    public TaskViewHolder(View view, final Context mContext) {
+    private FirebaseHelper mFirebase;
+
+    private Boolean isProject;
+
+    public TaskViewHolder(View view, final Context mContext, DatabaseReference reference, final Boolean project) {
         super(view);
 
         mCallback = (ItemStarted) mContext;
+        mFirebase = new FirebaseHelper(reference);
+        this.isProject = project;
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,39 +58,53 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mTask.getStarted()) {
+                if (mTask.isStarted()) {
                     Toast.makeText(mContext, "Task already started", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mTask.setStarted(true);
                 mTask.setInterval(new Date(), new Date());
-                mCallback.onItemStarted(getAdapterPosition());
+                mFirebase.setTaskStarted(mTask);
+                mCallback.onItemStateChanged();
+
+                if (isProject)
+                    mFirebase.setProjectStarted();
+
             }
         });
 
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mTask.getStarted()) {
+                if (!mTask.isStarted()) {
                     Toast.makeText(mContext, "Task already stopped", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mCallback.onItemRemoved(getAdapterPosition());
+                mCallback.onItemStateChanged();
                 mTask.setStarted(false);
                 mTask.setFinalWorkingDate(new Date());
                 mTask.closeInterval(new Date());
                 mTask.getIntervals().get(mTask.getIntervals().size() - 1).setOpen(false);
 
-                FirebaseHelper mFirebase = new FirebaseHelper();
                 mFirebase.setInterval(mTask);
+
+                if (isProject)
+                    mFirebase.setProjectStopped();
+
             }
         });
     }
 
-    public void setItem(Object task) {
+    public void setItem(Item task) {
         mTask = (Task) task;
+
+
         title.setText(mTask.getName());
 
+        setTime();
+    }
+
+    private void setTime() {
         int segonsPerHora = 3600;
         int segonsPerMinut = 60;
 
