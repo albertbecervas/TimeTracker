@@ -6,6 +6,7 @@ public class Item {
     protected String description;
     protected String databasePath;
     protected String itemType;
+    protected boolean isStarted;
 
     public String getName() {
         return name;
@@ -37,5 +38,13 @@ public class Item {
 
     public void setItemType(String itemType) {
         this.itemType = itemType;
+    }
+
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(boolean started) {
+        isStarted = started;
     }
 }

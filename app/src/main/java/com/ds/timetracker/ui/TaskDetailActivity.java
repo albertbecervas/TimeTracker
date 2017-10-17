@@ -10,6 +10,7 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.callback.FirebaseCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
+import com.ds.timetracker.model.Item;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -63,7 +64,7 @@ public class TaskDetailActivity extends AppCompatActivity implements FirebaseCal
     }
 
     @Override
-    public void onItemsLoaded(ArrayList<Object> items) {
+    public void onItemsLoaded(ArrayList<Item> items) {
         //Do nothing
     }
 }

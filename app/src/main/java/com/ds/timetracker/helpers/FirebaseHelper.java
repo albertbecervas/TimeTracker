@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.ds.timetracker.callback.FirebaseCallback;
 import com.ds.timetracker.model.Interval;
+import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -14,13 +15,14 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FirebaseHelper {
 
     private FirebaseCallback mFirebaseCallback;
     private DatabaseReference mDatabase;
 
-    private ArrayList<Object> itemsList;
+    private ArrayList<Item> itemsList;
 
     public FirebaseHelper(Context context, DatabaseReference database) {
         mFirebaseCallback = (FirebaseCallback) context;
@@ -31,9 +33,6 @@ public class FirebaseHelper {
     public FirebaseHelper(DatabaseReference database) {
         mDatabase = database;
         itemsList = new ArrayList<>();
-    }
-
-    public FirebaseHelper() {
     }
 
     public void getItems() {
@@ -51,10 +50,17 @@ public class FirebaseHelper {
                     String aux = mDatabase.child("items").child(key).getRef().toString();
                     String[] reference = aux.split(".com/");
 
+//                    ArrayList<Item> items = new ArrayList<>();
+//                    for (DataSnapshot d : dS.child("items").getChildren()){
+//                        items.add(d.getValue(Item.class));
+//                    }
+
                     if (itemType == 0) {
+
                         Project project = dS.getValue(Project.class);
                         if (project == null) return;
                         project.setDatabasePath(reference[1]);
+//                        project.setItems(items);
                         itemsList.add(project);
                     }
 
@@ -96,13 +102,34 @@ public class FirebaseHelper {
         });
     }
 
-    public void setItem(Object project) {
-        mDatabase.child("items").push().setValue(project);
+    public void setItem(Item item) {
+        mDatabase.child("items").push().setValue(item);
     }
 
     public void setInterval(Task task) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(task.getDatabasePath());
         databaseReference.child("durada").setValue(task.getDurada());
         databaseReference.child("intervals").setValue(task.getIntervals());
+        databaseReference.child("started").setValue(task.isStarted());
     }
+
+    public void setProjectStarted() {
+        mDatabase.child("started").setValue(true);
+        mDatabase.child("initialWorkingDate").setValue(new Date());
+        mDatabase.child("finalWorkingDate").setValue(new Date());
+    }
+
+    public void setProjectStopped() {
+        mDatabase.child("started").setValue(false);
+        mDatabase.child("finalWorkingDate").setValue(new Date());
+//        mDatabase.child("duration").setValue(project.getDuration());
+    }
+
+    public void setTaskStarted(Task task) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(task.getDatabasePath());
+        reference.child("started").setValue(task.isStarted());
+        reference.child("intervals").setValue(task.getIntervals());
+
+    }
+
 }

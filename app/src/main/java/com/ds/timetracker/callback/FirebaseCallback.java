@@ -1,12 +1,13 @@
 package com.ds.timetracker.callback;
 
 import com.ds.timetracker.model.Interval;
+import com.ds.timetracker.model.Item;
 
 import java.util.ArrayList;
 
 public interface FirebaseCallback {
 
-    void onItemsLoaded(ArrayList<Object> items);
+    void onItemsLoaded(ArrayList<Item> items);
 
     void onIntervalLoaded(ArrayList<Interval> intervals);
 

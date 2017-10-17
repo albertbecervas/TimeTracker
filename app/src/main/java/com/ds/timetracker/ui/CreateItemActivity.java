@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.helpers.FirebaseHelper;
@@ -20,6 +21,9 @@ public class CreateItemActivity extends AppCompatActivity {
 
     private EditText name;
     private EditText description;
+
+    private Switch limited;
+    private Switch programmed;
 
     private String reference = "";
 
@@ -51,16 +55,21 @@ public class CreateItemActivity extends AppCompatActivity {
                 String descriptionText = description.getText().toString();
                 if (isEmpty(nameText, descriptionText)) return;
 
-                setProject(nameText, descriptionText);
+                setItem(nameText, descriptionText);
             }
         });
+
+        if (itemType.equals("1")){
+            limited = findViewById(R.id.limited_switch);
+            programmed = findViewById(R.id.programmed_switch);
+        }
     }
 
-    private void setProject(String nameText, String descriptionText) {
+    private void setItem(String nameText, String descriptionText) {
         if (itemType.equals("0")) {
             new FirebaseHelper(mDatabase).setItem(new Project(nameText, descriptionText));
         } else {
-            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText));
+            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText, limited.isChecked(),programmed.isChecked()));
         }
         finish();
     }
