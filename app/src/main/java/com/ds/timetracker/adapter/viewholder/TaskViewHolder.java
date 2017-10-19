@@ -9,7 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.callback.ItemStarted;
+import com.ds.timetracker.callback.ItemCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
@@ -25,7 +25,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public TextView title;
     private TextView time;
 
-    private ItemStarted mCallback;
+    private ItemCallback mCallback;
 
     private FirebaseHelper mFirebase;
 
@@ -34,7 +34,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public TaskViewHolder(View view, final Context mContext, DatabaseReference reference, final Boolean project) {
         super(view);
 
-        mCallback = (ItemStarted) mContext;
+        mCallback = (ItemCallback) mContext;
         mFirebase = new FirebaseHelper(reference);
         this.isProject = project;
 

@@ -1,6 +1,5 @@
 package com.ds.timetracker.ui;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,9 +19,8 @@ import android.widget.Toast;
 import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
 import com.ds.timetracker.callback.FirebaseCallback;
-import com.ds.timetracker.callback.ItemStarted;
+import com.ds.timetracker.callback.ItemCallback;
 import com.ds.timetracker.helpers.FirebaseHelper;
-import com.ds.timetracker.helpers.Temporitzador;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
@@ -37,46 +35,64 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements Observer, FirebaseCallback, ItemStarted {
+/**
+ * MainActivity is the class that shows us the projects arquitecture and containing tasks.
+ * In the first level of the items tree it will display all items(projects and tasks) as if them were
+ * pending from an invisible project.
+ * <p>
+ * In this activity we can also handle the tasks. When a task state is changed, the ItemCallback is called
+ * from the containing adapter in order to set the array of active tasks that this tree level contains.
+ * <p>
+ * In order to know which is the level that is shown using the same activity, we are passing on intents
+ * the reference that that project has on database. This is so optimized because we are only handling
+ * with the data that this level contains which makes the application works faster.
+ */
+public class MainActivity extends AppCompatActivity implements Observer, FirebaseCallback, ItemCallback {
 
-    private RecyclerView mRecyclerView;
-    private ViewTypeAdapter mAdapter;
+    private RecyclerView mRecyclerView; //RecyclerView used to display tasks and projects
+    private ViewTypeAdapter mAdapter; //adapter that handles the items
 
-    private DatabaseReference mDatabase;
+    private String reference = "";//String that contains the reference (path) to the database.
+    private DatabaseReference mDatabase; //database object used to upload/download data from Firebase
+    private FirebaseHelper mHelper; //helper class that has the methods to interact with server
 
-    private CircularProgressView mProgressBar;
+    private CircularProgressView mProgressBar;//ProgressBar that is shown when app is loading data
 
-    private ArrayList<String> activeTasks;
-    private ArrayList<Item> items;
+    private ArrayList<String> activeTasks;//This ArrayList is used to know in every interval of time which items may be updated from the UI
 
-    private String reference = "";
+    private ArrayList<Item> items;//This ArrayList is used to save all items that we must display on RecyclerView. This is setted from the server when FirebaseCallback is called
 
-    private Boolean itemsToUpdate = false;
+    private Boolean itemsToUpdate = false;//this is a door boolean used to know if we have new items to show on the screen or if the callback is being called every second to stop showing new items that are the same in fact.
 
-    private Boolean isProject = false;
-
+    /**
+     * onCreate function is the first one that is called when activity starts.
+     * In this case, these are the very first things that we will do when app is started or when we
+     * click on a project
+     *
+     * We make some initializations of array variables in order to avoid the app crashing for
+     * null pointer and check if we are coming from a project,
+     * then we subscribe the class to the clock in order to recieve the information
+     * every specified interval,
+     * After that, we inflate the activity's views from the layout in order to make them interactable.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intentoLanzar = new Intent(getBaseContext(), Temporitzador.class);
-        PendingIntent pIntent=PendingIntent.getBroadcast(this, 0, intentoLanzar, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
         activeTasks = new ArrayList<>();
         items = new ArrayList<>();
+
+        if (getIntent().hasExtra("reference")) {
+            reference = getIntent().getStringExtra("reference");
+            mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        }
 
         Clock.getInstance().addObserver(this);
 
         setViews();
 
-        if (getIntent().hasExtra("reference")) {
-            reference = getIntent().getStringExtra("reference");
-            mDatabase = FirebaseDatabase.getInstance().getReference(reference);
-
-            isProject = getIntent().getBooleanExtra("isProject", false);
-        }
         setAdapter();
 
     }
@@ -87,7 +103,8 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
         mAdapter.clearAdapter();
         itemsToUpdate = true;
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
-        new FirebaseHelper(this, mDatabase).getItems();
+        mHelper = new FirebaseHelper(this, mDatabase);
+        mHelper.getItems();
     }
 
     @Override
@@ -136,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
 
     private void setAdapter() {
         ArrayList<Item> itemList = new ArrayList<>();
-        mAdapter = new ViewTypeAdapter(this, itemList, mDatabase, isProject);
+        mAdapter = new ViewTypeAdapter(this, itemList, mDatabase, getIntent().getBooleanExtra("isProject", false));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -166,8 +183,23 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
         for (final String task : activeTasks) {
             Item item = items.get(Integer.valueOf(task));
             if (item instanceof Task) {
-                ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
-                ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
+                if (!((Task) item).isLimited()) {
+                    ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
+                    ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
+                } else {
+                    boolean max = ((Task) item).getIntervals().get(((Task) item).getIntervals().size() - 1).getDuration() >= ((Task) item).getMaxDuration();
+                    if (max) {
+                        activeTasks.remove(task);
+                        item.setStarted(false);
+                        ((Task) item).closeInterval((Date) o);
+                        ((Task) item).getIntervals().get(((Task) item).getIntervals().size() - 1).setOpen(false);
+                        mHelper.setInterval((Task) item);
+
+                    } else {
+                        ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
+                        ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
+                    }
+                }
             }
             if (item instanceof Project) {
                 ((Project) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
