@@ -62,6 +62,9 @@ public class CreateItemActivity extends AppCompatActivity {
         if (itemType.equals("1")){
             limited = findViewById(R.id.limited_switch);
             programmed = findViewById(R.id.programmed_switch);
+            limited.setVisibility(View.VISIBLE);
+            programmed.setVisibility(View.VISIBLE);
+
         }
     }
 
