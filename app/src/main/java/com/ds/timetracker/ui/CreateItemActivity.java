@@ -9,9 +9,6 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.helpers.FirebaseHelper;
-import com.ds.timetracker.model.Project;
-import com.ds.timetracker.model.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -70,9 +67,9 @@ public class CreateItemActivity extends AppCompatActivity {
 
     private void setItem(String nameText, String descriptionText) {
         if (itemType.equals("0")) {
-            new FirebaseHelper(mDatabase).setItem(new Project(nameText, descriptionText));
+//            new FirebaseHelper(mDatabase).setItem(new Project(nameText, descriptionText));
         } else {
-            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText, limited.isChecked(),programmed.isChecked()));
+//            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText, limited.isChecked(),programmed.isChecked()));
         }
         finish();
     }

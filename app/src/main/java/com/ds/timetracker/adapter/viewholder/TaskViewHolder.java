@@ -6,18 +6,14 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.callback.ItemCallback;
-import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.TaskDetailActivity;
 import com.google.firebase.database.DatabaseReference;
-
-import java.util.Date;
 
 public class TaskViewHolder extends RecyclerView.ViewHolder {
 
@@ -27,7 +23,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
     private ItemCallback mCallback;
 
-    private FirebaseHelper mFirebase;
+//    private FirebaseHelper mFirebase;
 
     private Boolean isProject;
 
@@ -35,7 +31,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         super(view);
 
         mCallback = (ItemCallback) mContext;
-        mFirebase = new FirebaseHelper(reference);
+//        mFirebase = new FirebaseHelper(reference);
         this.isProject = project;
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +41,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("intervals", mTask.getIntervals());
                 intent.putExtras(bundle);
-                intent.putExtra("reference", mTask.getDatabasePath());
+//                intent.putExtra("reference", mTask.getDatabasePath());
                 mContext.startActivity(intent);
             }
         });
@@ -58,17 +54,17 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mTask.isStarted()) {
-                    Toast.makeText(mContext, "Task already started", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                mTask.setStarted(true);
-                mTask.setInterval(new Date(), new Date());
-                mFirebase.setTaskStarted(mTask);
-                mCallback.onItemStateChanged();
-
-                if (isProject)
-                    mFirebase.setProjectStarted();
+//                if (mTask.isStarted()) {
+//                    Toast.makeText(mContext, "Task already started", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                mTask.setStarted(true);
+//                mTask.setInterval(new Date(), new Date());
+//                mFirebase.setTaskStarted(mTask);
+//                mCallback.onItemStateChanged();
+//
+//                if (isProject)
+//                    mFirebase.setProjectStarted();
 
             }
         });
@@ -76,20 +72,20 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mTask.isStarted()) {
-                    Toast.makeText(mContext, "Task already stopped", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                mCallback.onItemStateChanged();
-                mTask.setStarted(false);
-                mTask.setFinalWorkingDate(new Date());
-                mTask.closeInterval(new Date());
-                mTask.getIntervals().get(mTask.getIntervals().size() - 1).setOpen(false);
-
-                mFirebase.setInterval(mTask);
-
-                if (isProject)
-                    mFirebase.setProjectStopped();
+//                if (!mTask.isStarted()) {
+//                    Toast.makeText(mContext, "Task already stopped", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                mCallback.onItemStateChanged();
+//                mTask.setStarted(false);
+//                mTask.setFinalWorkingDate(new Date());
+//                mTask.closeInterval(new Date());
+//                mTask.getIntervals().get(mTask.getIntervals().size() - 1).setOpen(false);
+//
+//                mFirebase.setInterval(mTask);
+//
+//                if (isProject)
+//                    mFirebase.setProjectStopped();
 
             }
         });
@@ -112,14 +108,14 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         Interval interval = mTask.getIntervals().get(mTask.getIntervals().size() - 1);
 
 
-        long durada = mTask.getDurada();
-        if (interval.isOpen()) durada += interval.getDuration();
-
-        final long hores = durada / segonsPerHora;
-        final long minuts = (durada - hores * segonsPerHora) / segonsPerMinut;
-        final long segons = durada - segonsPerHora * hores - segonsPerMinut * minuts;
-
-        time.setText(String.valueOf(hores + "h " + minuts + "m " + segons + "s"));
+//        long durada = mTask.getDurada();
+//        if (interval.isOpen()) durada += interval.getDuration();
+//
+//        final long hores = durada / segonsPerHora;
+//        final long minuts = (durada - hores * segonsPerHora) / segonsPerMinut;
+//        final long segons = durada - segonsPerHora * hores - segonsPerMinut * minuts;
+//
+//        time.setText(String.valueOf(hores + "h " + minuts + "m " + segons + "s"));
     }
 
 }

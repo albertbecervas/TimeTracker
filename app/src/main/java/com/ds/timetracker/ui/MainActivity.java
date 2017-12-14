@@ -20,18 +20,14 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.adapter.ViewTypeAdapter;
 import com.ds.timetracker.callback.FirebaseCallback;
 import com.ds.timetracker.callback.ItemCallback;
-import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
-import com.ds.timetracker.model.Project;
-import com.ds.timetracker.model.Task;
 import com.ds.timetracker.model.observable.Clock;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
 
     private String reference = "";//String that contains the reference (path) to the database.
     private DatabaseReference mDatabase; //database object used to upload/download data from Firebase
-    private FirebaseHelper mHelper; //helper class that has the methods to interact with server
+//    private FirebaseHelper mHelper; //helper class that has the methods to interact with server
 
     private CircularProgressView mProgressBar;//ProgressBar that is shown when app is loading data
 
@@ -68,12 +64,13 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
      * onCreate function is the first one that is called when activity starts.
      * In this case, these are the very first things that we will do when app is started or when we
      * click on a project
-     *
+     * <p>
      * We make some initializations of array variables in order to avoid the app crashing for
      * null pointer and check if we are coming from a project,
      * then we subscribe the class to the clock in order to recieve the information
      * every specified interval,
      * After that, we inflate the activity's views from the layout in order to make them interactable.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -103,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
         mAdapter.clearAdapter();
         itemsToUpdate = true;
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
-        mHelper = new FirebaseHelper(this, mDatabase);
-        mHelper.getItems();
+//        mHelper = new FirebaseHelper(this, mDatabase);
+//        mHelper.getItems();
     }
 
     @Override
@@ -165,53 +162,53 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
     }
 
     private void setItemsState() {
-        int itemPosition = 0;
-        for (Item item : items) {
-            if (item.isStarted()) {
-                activeTasks.add(String.valueOf(itemPosition));
-            } else {
-                if (activeTasks.contains(String.valueOf(itemPosition)))
-                    activeTasks.remove(String.valueOf(itemPosition));
-            }
-            itemPosition++;
-        }
+//        int itemPosition = 0;
+//        for (Item item : items) {
+//            if (item.isStarted()) {
+//                activeTasks.add(String.valueOf(itemPosition));
+//            } else {
+//                if (activeTasks.contains(String.valueOf(itemPosition)))
+//                    activeTasks.remove(String.valueOf(itemPosition));
+//            }
+//            itemPosition++;
+//        }
     }
 
     @Override
     public void update(Observable observable, Object o) {
 
-        for (final String task : activeTasks) {
-            Item item = items.get(Integer.valueOf(task));
-            if (item instanceof Task) {
-                if (!((Task) item).isLimited()) {
-                    ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
-                    ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
-                } else {
-                    boolean max = ((Task) item).getIntervals().get(((Task) item).getIntervals().size() - 1).getDuration() >= ((Task) item).getMaxDuration();
-                    if (max) {
-                        activeTasks.remove(task);
-                        item.setStarted(false);
-                        ((Task) item).closeInterval((Date) o);
-                        ((Task) item).getIntervals().get(((Task) item).getIntervals().size() - 1).setOpen(false);
-                        mHelper.setInterval((Task) item);
-
-                    } else {
-                        ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
-                        ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
-                    }
-                }
-            }
-            if (item instanceof Project) {
-                ((Project) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
-            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.setItemsList(items);
-                    mAdapter.notifyItemChanged(Integer.valueOf(task));
-                }
-            });
-        }
+//        for (final String task : activeTasks) {
+//            Item item = items.get(Integer.valueOf(task));
+//            if (item instanceof Task) {
+//                if (!((Task) item).isLimited()) {
+//                    ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
+//                    ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
+//                } else {
+//                    boolean max = ((Task) item).getIntervals().get(((Task) item).getIntervals().size() - 1).getDuration() >= ((Task) item).getMaxDuration();
+//                    if (max) {
+//                        activeTasks.remove(task);
+//                        item.setStarted(false);
+//                        ((Task) item).closeInterval((Date) o);
+//                        ((Task) item).getIntervals().get(((Task) item).getIntervals().size() - 1).setOpen(false);
+//                        mHelper.setInterval((Task) item);
+//
+//                    } else {
+//                        ((Task) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
+//                        ((Task) items.get(Integer.valueOf(task))).updateInterval((Date) o);
+//                    }
+//                }
+//            }
+//            if (item instanceof Project) {
+//                ((Project) items.get(Integer.valueOf(task))).setFinalWorkingDate((Date) o);
+//            }
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mAdapter.setItemsList(items);
+//                    mAdapter.notifyItemChanged(Integer.valueOf(task));
+//                }
+//            });
+//        }
     }
 
     //This following method will only be used in case we want to retrieve data from de server
@@ -220,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
         if (this.items.size() == items.size() && !itemsToUpdate) return;
         itemsToUpdate = false;
         this.items = items;
-        mAdapter.setItemsList(items);
+//        mAdapter.setItemsList(items);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.getItemAnimator().setChangeDuration(0);
         mProgressBar.setVisibility(View.GONE);
@@ -229,6 +226,11 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
 
     @Override
     public void onIntervalLoaded(ArrayList<Interval> intervals) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }

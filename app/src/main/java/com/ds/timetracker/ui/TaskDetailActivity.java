@@ -8,11 +8,8 @@ import android.widget.ListView;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.callback.FirebaseCallback;
-import com.ds.timetracker.helpers.FirebaseHelper;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -31,20 +28,20 @@ public class TaskDetailActivity extends AppCompatActivity implements FirebaseCal
 
         setAdapter(intervals);
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(getIntent().getStringExtra("reference"));
-        FirebaseHelper mFirebase = new FirebaseHelper(this, mDatabase);
-        mFirebase.getIntervals();
+//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(getIntent().getStringExtra("reference"));
+//        FirebaseHelper mFirebase = new FirebaseHelper(this, mDatabase);
+//        mFirebase.getIntervals();
 
     }
 
     private void setAdapter(ArrayList<Interval> intervals) {
         ArrayList<String> labels = new ArrayList<>();
 
-        for (Interval interval : intervals) {
-            String label = interval.getStartWorkingLogDate().toString() + "--->" + interval.getEndWorkingLogDate().toString()
-                    + ", duration = " + interval.getFormattedDuration();
-            labels.add(label);
-        }
+//        for (Interval interval : intervals) {
+//            String label = interval.getStartWorkingLogDate().toString() + "--->" + interval.getEndWorkingLogDate().toString()
+//                    + ", duration = " + interval.getFormattedDuration();
+//            labels.add(label);
+//        }
 
         ArrayAdapter itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, labels);
         listView.setAdapter(itemsAdapter);

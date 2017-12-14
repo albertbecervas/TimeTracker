@@ -1,13 +1,25 @@
 package com.ds.timetracker.model;
 
-public class Item {
+import java.io.Serializable;
+
+/**
+ * Item class contains the basic information of a time tracker item whether it is a task or a project.
+ * <p>
+ * Item implements Serializable in order to be saved as object in a file because we want to keep
+ * the item tree state.
+ * <p>
+ * This class is public because will be called from other Classes
+ */
+public class Item implements Serializable {
+
+    protected static final long serialVersionUID = 1L; //Needed version number in order to Serialise the object
 
     protected String name;
     protected String description;
-    protected String databasePath;
-    protected String itemType;
-    protected boolean isStarted;
+    protected boolean isOpen;
+    protected Period period;
 
+    //getters and setters
     public String getName() {
         return name;
     }
@@ -24,27 +36,36 @@ public class Item {
         this.description = description;
     }
 
-    public String getDatabasePath() {
-        return databasePath;
+    public boolean isOpen() {
+        return isOpen;
     }
 
-    public void setDatabasePath(String databasePath) {
-        this.databasePath = databasePath;
+    public void setOpen(boolean isOpen) {
+        this.isOpen = isOpen;
     }
 
-    public String getItemType() {
-        return itemType;
+    public Period getPeriod() {
+        return period;
     }
 
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
+    public void setPeriod(Period period) {
+        this.period = period;
     }
 
-    public boolean isStarted() {
-        return isStarted;
-    }
+    public String getFormattedTable() {
+        if (period == null) return "";
+        int secondsForHour = 3600;
+        int secondsForMinut = 60;
 
-    public void setStarted(boolean started) {
-        isStarted = started;
+        final long hours = period.getDuration() / secondsForHour;
+        final long minuts = (period.getDuration() - hours * secondsForHour) / secondsForMinut;
+        final long seconds = period.getDuration() - secondsForHour * hours - secondsForMinut * minuts;
+				
+        return String.valueOf(getName() + " ---> "
+                + "duration = " + String.valueOf(hours + "h " + minuts + "m " + seconds + "s")) + " |"
+                + "from: " + period.getStartWorkingDate() + " | "
+                + "to: " + period.getFinalWorkingDate() + " |\n ";
+        
     }
 }
+

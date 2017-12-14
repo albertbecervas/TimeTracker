@@ -1,108 +1,57 @@
 package com.ds.timetracker.model;
 
+import com.ds.timetracker.model.observable.Clock;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 public class Task extends Item implements Serializable {
 
-    private Date initialWorkingDate;
-    private Date finalWorkingDate;
+    private Project project;
+
+    private static final long serialVersionUID = 1L;//Needed object identifier
     private ArrayList<Interval> intervals;
-    private long durada; //in seconds
 
-    private boolean isLimited;
-    private boolean isProgrammed;
-    private long maxDuration;
-
-    public Task() {
-        initialWorkingDate = new Date();
-        finalWorkingDate = new Date();
-        intervals = new ArrayList<>();
-        isStarted = false;
-        durada = 0L;
-        this.itemType = "1";
-    }
-
-    public Task(String name, String description, boolean isLimited, boolean isProgrammed) {
+    public Task(String name, String description, Project taskCallback) {
         this.name = name;
         this.description = description;
-        initialWorkingDate = new Date();
-        finalWorkingDate = new Date();
-        intervals = new ArrayList<>();
-        isStarted = false;
-        durada = 0L;
-        this.itemType = "1";
+        this.period = new Period();
+        this.isOpen = false;
+        this.intervals = new ArrayList<>();
 
-        this.isLimited = isLimited;
-        this.isProgrammed = isProgrammed;
-        this.maxDuration = 120L;
+        this.project = taskCallback;
     }
 
-    public Date getInitialWorkingDate() {
-        return initialWorkingDate;
-    }
-
-    public Date getFinalWorkingDate() {
-        return finalWorkingDate;
-    }
-
-    public void setFinalWorkingDate(Date finalWorkingDate) {
-        this.finalWorkingDate = finalWorkingDate;
-    }
-
-    public void setInterval(Date startDate, Date endDate) {
-        intervals.add(new Interval(startDate, endDate));
-    }
-
-    public void updateInterval(Date endDate) {
-
-        Interval interval = intervals.get(intervals.size() - 1);
-        interval.setEndWorkingLogDatee(endDate);
-    }
-
-    public void closeInterval(Date endDate) {
-        Interval interval = intervals.get(intervals.size() - 1);
-        interval.setEndWorkingLogDatee(endDate);
-        setDurada(interval.getDuration());
+    public void setInterval() {
+        intervals.add(new Interval(this));
     }
 
     public ArrayList<Interval> getIntervals() {
         return intervals;
     }
 
-    public long getDurada() {
-        return durada;
+    public void start() {
+        if (period.getDuration() == 0) this.period.setStartWorkingDate(new Date());//The first time we start a task we set it's start working date and it will never be updated
+        this.isOpen = true;
+        if (project != null) project.start();//We check if the task is in the main items list
+        setInterval();
     }
 
-    public void setDurada(long durada) {
-        this.durada += durada;
+    public void stop() {
+        this.isOpen = false;
+        this.period.setFinalWorkingDate(new Date());//Every time we stop an item inside the project, we update the finalWorkingDate
+        if (project != null) project.stop();//We check if the task is in the main items list
+        Interval interval = this.intervals.get(intervals.size() - 1);//getting the last interval
+        interval.setOpen(false);
+    }
+    
+    public void update(Interval interval){
+        period.addDuration(Clock.CLOCK_SECONDS);
+        if (project != null) project.update(this);//We check if the task is in the main items list
     }
 
-
-
-
-    public boolean isLimited() {
-        return isLimited;
-    }
-
-    public void setLimited(boolean limited) {
-        isLimited = limited;
-    }
-
-    public boolean isProgrammed() {
-        return isProgrammed;
-    }
-
-    public void setProgrammed(boolean programmed) {
-        isProgrammed = programmed;
-    }
-
-    public long getMaxDuration() {
-        return maxDuration;
-    }
-
-    public void setMaxDuration(long maxDuration) {
-        this.maxDuration = maxDuration;
-    }
 }
+
+
