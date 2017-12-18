@@ -32,6 +32,7 @@ public class Interval implements Serializable, Observer {
 
     public void setOpen(boolean open) {
         this.isOpen = open;
+//        Clock.getInstance().deleteObserver(this);
     }
 
     public boolean isOpen() {

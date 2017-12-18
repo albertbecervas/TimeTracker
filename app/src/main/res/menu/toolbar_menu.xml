@@ -3,11 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add_project"
-        android:title="NEW PROJECT" />
+        android:id="@+id/settings"
+        android:title="Settings" />
 
     <item
-        android:id="@+id/add_task"
-        android:title="NEW TASK" />
+        android:id="@+id/report"
+        android:icon="@drawable/ic_insert_chart"
+        android:title="report"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_action_search"
+        android:title="search"
+        app:showAsAction="always" />
+
 
 </menu>

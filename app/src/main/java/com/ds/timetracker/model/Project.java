@@ -2,6 +2,7 @@ package com.ds.timetracker.model;
 
 
 import com.ds.timetracker.model.observable.Clock;
+import com.ds.timetracker.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,17 +10,14 @@ import java.util.Date;
 
 public class Project extends Item {
 
-    private static final long serialVersionUID = 1L;//Needed object identifier
-
     //father project
     private Project project;
 
     private ArrayList<Item> items;
 
     public Project(String name, String description, Project project) {
-        this.name = name;
-        this.description = description;
-        this.period = new Period();
+        super(name, description, new Period(), Constants.PROJECT);
+
         this.items = new ArrayList<>();
 
         this.project = project; //callback to update the father
@@ -42,7 +40,7 @@ public class Project extends Item {
     }
 
     public void start() {
-        //The first time we start a task we set it's start working date and it will never be updated
+        //The first time we start a ic_task we set it's start working date and it will never be updated
         if (period.getDuration() == 0) this.period.setStartWorkingDate(new Date());
         this.isOpen = true;
     }

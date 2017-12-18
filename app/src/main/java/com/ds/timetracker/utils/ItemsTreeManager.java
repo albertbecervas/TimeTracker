@@ -1,5 +1,8 @@
 package com.ds.timetracker.utils;
 
+
+import android.content.Context;
+
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 
@@ -11,13 +14,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-
 /**
  * This class is used to manage the persistence of the items tree
  */
-public abstract class ItemsTreeManager {
+public class ItemsTreeManager {
 
     private static String fileName = "itemsTree.dat"; //name of the file where the items tree is saved
+
+    private Context context;
+
+    public ItemsTreeManager(Context context){
+        this.context = context;
+    }
 
     /**
      * Sets the basic given items tree in order to run the tests
@@ -64,8 +72,8 @@ public abstract class ItemsTreeManager {
      *
      * @return ArrayList<Item>
      */
-    public static ArrayList<Item> getItems() {
-        File file = new File(fileName);
+    public ArrayList<Item> getItems() {
+        File file = new File(context.getFilesDir() +"/"+ fileName);
 
         ArrayList<Item> items = new ArrayList<>();
 
@@ -79,6 +87,7 @@ public abstract class ItemsTreeManager {
                 in.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                items = new ArrayList<>();
             }
         }
         return items;
@@ -89,11 +98,13 @@ public abstract class ItemsTreeManager {
      *
      * @param items
      */
-    public static void saveItems(ArrayList<Item> items) {
+    public void saveItems(ArrayList<Item> items) {
+
+        File file = new File(context.getFilesDir() +"/"+ fileName);
 
         // write object to file
         try {
-            FileOutputStream fops = new FileOutputStream(fileName);
+            FileOutputStream fops = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fops);
             out.writeObject(items);
             out.close();
@@ -106,12 +117,12 @@ public abstract class ItemsTreeManager {
     /**
      * Deletes the file where the tree is saved
      */
-    public static void resetItems() {
-        File file = new File(fileName);
+    public void resetItems() {
+        File file = new File(context.getFilesDir() + "/" +fileName);
         if (file.exists()) {
             file.delete();
         }
     }
-
 }
+
 
