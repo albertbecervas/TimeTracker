@@ -1,7 +1,7 @@
 package com.ds.timetracker.ui.reports.format;
 
 
-import com.ds.timetracker.ui.reports.ItemReportDetail;
+import com.ds.timetracker.ui.reports.builders.ItemReportDetail;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

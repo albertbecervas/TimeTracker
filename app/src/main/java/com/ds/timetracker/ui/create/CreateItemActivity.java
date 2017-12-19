@@ -11,8 +11,6 @@ import android.widget.Switch;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.model.Task;
-import com.ds.timetracker.utils.AppSharedPreferences;
 import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
@@ -20,12 +18,13 @@ import java.util.ArrayList;
 
 public class CreateItemActivity extends AppCompatActivity {
 
-    private AppSharedPreferences mPrefs;
-
     private EditText name;
     private EditText description;
 
     private ArrayList<Item> items;
+    private ArrayList<Integer> nodesReference;
+    private ArrayList<Item> treeLevelItems;
+    private Project project;
 
     private String itemType;
 
@@ -34,14 +33,15 @@ public class CreateItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);
 
-        mPrefs = AppSharedPreferences.getInstance(this);
-//        items = mPrefs.getItems();
         items = new ItemsTreeManager(this).getItems();
+        treeLevelItems = items;
 
         if (getIntent().hasExtra("itemType")) {
             itemType = getIntent().getStringExtra("itemType");
+            nodesReference = getIntent().getIntegerArrayListExtra("nodesReference");
         } else {
             itemType = Constants.TASK;
+            nodesReference = new ArrayList<>();
         }
 
         setViews();
@@ -73,17 +73,18 @@ public class CreateItemActivity extends AppCompatActivity {
     }
 
     private void setItem(String nameText, String descriptionText) {
-        if (itemType.equals(Constants.PROJECT)) {
-            Project project = new Project(nameText, descriptionText, null);
-            items.add(project);
-            new ItemsTreeManager(this).saveItems(items);
-//            mPrefs.saveItems(items);
-        } else {
-            Task task = new Task(nameText,descriptionText,null);
-            items.add(task);
-            new ItemsTreeManager(this).saveItems(items);
-//            mPrefs.saveItems(items);
+
+        for (Integer position : nodesReference) {
+            project = ((Project) items.get(position));
         }
+
+        if (itemType.equals(Constants.PROJECT)) {
+            project.newProject(nameText,descriptionText);
+        } else {
+            project.newTask(nameText,descriptionText);
+        }
+        new ItemsTreeManager(this).saveItems(items);
+
         finish();
     }
 

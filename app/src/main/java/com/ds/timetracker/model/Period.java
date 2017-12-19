@@ -4,21 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @invariant duration >=0
  * @author Albert
- *
+ * @invariant duration >=0
  */
-public class Period implements Serializable{
+public class Period implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Date startWorkingDate;
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private Date startWorkingDate;
     private Date finalWorkingDate;
     private long duration;
-    
-    public Period(){
+
+    public Period() {
         duration = 0L;
         this.startWorkingDate = new Date();
     }
@@ -47,7 +46,7 @@ public class Period implements Serializable{
         this.duration = duration;
     }
 
-    public void addDuration(long duration){
+    public void addDuration(long duration) {
         this.duration += duration;
     }
 }

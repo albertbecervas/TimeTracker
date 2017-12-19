@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:gravity="center_vertical"
+            android:background="@color/colorPrimaryDark"
             app:fabSize="normal"
             app:srcCompat="@drawable/ic_add" />
     </LinearLayout>

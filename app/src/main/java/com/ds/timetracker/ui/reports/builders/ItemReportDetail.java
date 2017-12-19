@@ -1,4 +1,4 @@
-package com.ds.timetracker.ui.reports;
+package com.ds.timetracker.ui.reports.builders;
 
 public class ItemReportDetail {
 

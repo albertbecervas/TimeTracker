@@ -38,11 +38,11 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
 
     compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
-
-
-    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
 
 }
+
+
 
 
 

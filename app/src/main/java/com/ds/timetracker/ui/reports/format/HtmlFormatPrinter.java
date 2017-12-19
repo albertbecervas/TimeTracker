@@ -1,7 +1,7 @@
 package com.ds.timetracker.ui.reports.format;
 
-import com.ds.timetracker.ui.reports.BriefReport;
-import com.ds.timetracker.ui.reports.Report;
+import com.ds.timetracker.ui.reports.builders.BriefReport;
+import com.ds.timetracker.ui.reports.builders.Report;
 import com.ds.timetracker.ui.reports.elements.Element;
 import com.ds.timetracker.ui.reports.elements.Paragraph;
 import com.ds.timetracker.ui.reports.elements.Separator;

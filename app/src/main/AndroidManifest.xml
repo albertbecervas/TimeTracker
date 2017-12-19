@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".base.SplashActivity"
+        <activity
+            android:name=".base.SplashActivity"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.create.CreateItemActivity" />
-        <activity android:name=".ui.detail.TaskDetailActivity" />
-        <activity android:name=".ui.timer.ProjectDetailActivity" />
+        <activity android:name=".ui.timer.TaskDetailActivity" />
+        <activity android:name=".ui.timer.ProjectDetailActivity"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".ui.reports.ReportsActivity"
+            android:theme="@style/MyTheme"/>
     </application>
 
 </manifest>

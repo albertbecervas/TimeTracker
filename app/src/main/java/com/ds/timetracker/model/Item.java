@@ -64,6 +64,18 @@ public class Item implements Serializable {
         this.period = period;
     }
 
+    public String getFormattedDuration(){
+        if (period == null) return "";
+        int secondsForHour = 3600;
+        int secondsForMinut = 60;
+
+        final long hours = period.getDuration() / secondsForHour;
+        final long minuts = (period.getDuration() - hours * secondsForHour) / secondsForMinut;
+        final long seconds = period.getDuration() - secondsForHour * hours - secondsForMinut * minuts;
+
+        return   String.valueOf(hours + "h " + minuts + "m " + seconds + "s");
+    }
+
     public String getFormattedTable() {
         if (period == null) return "";
         int secondsForHour = 3600;

@@ -3,6 +3,7 @@ package com.ds.timetracker.utils;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
@@ -18,6 +19,8 @@ public class CustomFabMenu extends ConstraintLayout implements View.OnClickListe
     FloatingActionButton fab, fab1, fab2;
     LinearLayout fabLayout1, fabLayout2;
     View fabBGLayout;
+
+    private CustomFabMenuCallback mCallback;
 
     public CustomFabMenu(Context context) {
         super(context);
@@ -37,6 +40,8 @@ public class CustomFabMenu extends ConstraintLayout implements View.OnClickListe
 
     private void initViews(final Context context) {
         View rootView = inflate(context, R.layout.fab_menu_layout, this);
+
+        mCallback = (CustomFabMenuCallback) context;
 
         fabLayout1 = rootView.findViewById(R.id.fabLayout1);
         fabLayout2 = rootView.findViewById(R.id.fabLayout2);
@@ -109,14 +114,10 @@ public class CustomFabMenu extends ConstraintLayout implements View.OnClickListe
                 closeFABMenu();
                 break;
             case R.id.fabLayout1:
-                Intent taskIntent = new Intent(getContext(), CreateItemActivity.class);
-                taskIntent.putExtra("itemType", Constants.TASK);
-                getContext().startActivity(taskIntent);
+                mCallback.onCreateItemSelected(Constants.TASK);
                 break;
             case R.id.fabLayout2:
-                Intent projectIntent = new Intent(getContext(), CreateItemActivity.class);
-                projectIntent.putExtra("itemType", Constants.PROJECT);
-                getContext().startActivity(projectIntent);
+                mCallback.onCreateItemSelected(Constants.PROJECT);
                 break;
         }
     }

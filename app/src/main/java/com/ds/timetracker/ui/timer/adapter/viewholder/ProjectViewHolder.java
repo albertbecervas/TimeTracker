@@ -2,6 +2,7 @@ package com.ds.timetracker.ui.timer.adapter.viewholder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.ui.timer.ProjectDetailActivity;
+import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
 public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
@@ -17,13 +19,25 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
     public TextView title;
     private TextView time;
 
+    private ItemCallback mCallback;
+
     public ProjectViewHolder(View view, final Context mContext) {
         super(view);
+
+        this.mCallback = (ItemCallback) mContext;
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, ProjectDetailActivity.class);
-                mContext.startActivity(intent);
+                mCallback.onProjectItemSelected(getAdapterPosition());
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                mCallback.onDeleteItem(getAdapterPosition());
+                return false;
             }
         });
 

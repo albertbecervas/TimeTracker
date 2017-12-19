@@ -1,7 +1,7 @@
 package com.ds.timetracker.ui.reports.format;
 
 
-import com.ds.timetracker.ui.reports.Report;
+import com.ds.timetracker.ui.reports.builders.Report;
 
 /**
  * This class will be called when a report is set and needs to be extracted

@@ -1,4 +1,4 @@
-package com.ds.timetracker.ui.reports;
+package com.ds.timetracker.ui.reports.builders;
 
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;

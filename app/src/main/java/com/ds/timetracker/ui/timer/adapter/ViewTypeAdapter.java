@@ -41,7 +41,7 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
         Item item = itemsList.get(position);
 
         if (item.getType().equals(Constants.TASK))
-            ((TaskViewHolder) holder).setItem(item, itemsList);
+            ((TaskViewHolder) holder).setItem(item);
         else
             ((ProjectViewHolder) holder).setItem(item);
 

@@ -3,6 +3,7 @@ package com.ds.timetracker.model;
 import com.ds.timetracker.model.observable.Clock;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,7 +33,7 @@ public class Interval implements Serializable, Observer {
 
     public void setOpen(boolean open) {
         this.isOpen = open;
-//        Clock.getInstance().deleteObserver(this);
+        Clock.getInstance().deleteObserver(this);
     }
 
     public boolean isOpen() {
@@ -53,6 +54,29 @@ public class Interval implements Serializable, Observer {
 
     public Date getInitialDate() {
         return period.getStartWorkingDate();
+    }
+
+    public String getFormattedDuration(){
+        if (period == null) return "";
+        int secondsForHour = 3600;
+        int secondsForMinut = 60;
+
+        final long hours = this.getDuration() / secondsForHour;
+        final long minuts = (period.getDuration() - hours * secondsForHour) / secondsForMinut;
+        final long seconds = period.getDuration() - secondsForHour * hours - secondsForMinut * minuts;
+
+        return   String.valueOf(hours + "h " + minuts + "m " + seconds + "s");
+    }
+
+    @Override
+    public String toString() {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        return dateFormat.format(this.getInitialDate()) +
+                "h to "+
+                dateFormat.format(this.getFinalDate()) +
+                " ->" +
+                this.getFormattedDuration();
     }
 
     @Override
