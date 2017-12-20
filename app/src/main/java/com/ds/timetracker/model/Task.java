@@ -1,5 +1,7 @@
 package com.ds.timetracker.model;
 
+import com.ds.timetracker.helpers.FirebaseHelper;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,9 +26,10 @@ public class Task extends Item implements Serializable {
         this.itemType = "1";
     }
 
-    public Task(String name, String description, boolean isLimited, boolean isProgrammed) {
+    public Task(String name, String description, boolean isLimited, boolean isProgrammed, Project fatherReference) {
         this.name = name;
         this.description = description;
+        this.fatherReference = fatherReference;
         initialWorkingDate = new Date();
         finalWorkingDate = new Date();
         intervals = new ArrayList<>();

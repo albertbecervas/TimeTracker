@@ -15,9 +15,10 @@ public class Project extends Item implements Serializable {
         this.isStarted = false;
     }
 
-    public Project(String name, String description) {
+    public Project(String name, String description, Project fatherReference) {
         this.setName(name);
         this.setDescription(description);
+        this.setFatherReference(fatherReference);
         this.itemType = "0";
         this.duration = 0L;
         this.isStarted = false;

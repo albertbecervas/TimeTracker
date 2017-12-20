@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements Observer, Firebas
         Intent i = new Intent(this, CreateItemActivity.class);
         i.putExtra("reference", reference);
         i.putExtra("itemType", itemType);
+        i.putExtra("fatherProject", items.get(0).getFatherReference());
         startActivity(i);
         return true;
     }

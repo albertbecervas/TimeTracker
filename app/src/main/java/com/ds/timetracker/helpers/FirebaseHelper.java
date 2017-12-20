@@ -122,7 +122,6 @@ public class FirebaseHelper {
     public void setProjectStopped() {
         mDatabase.child("started").setValue(false);
         mDatabase.child("finalWorkingDate").setValue(new Date());
-//        mDatabase.child("duration").setValue(project.getDuration());
     }
 
     public void setTaskStarted(Task task) {

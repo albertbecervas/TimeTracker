@@ -29,12 +29,19 @@ public class CreateItemActivity extends AppCompatActivity {
 
     private String itemType;
 
+    Project project;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_project);
-        if (getIntent().hasExtra("reference"))
+
+        if (getIntent().hasExtra("reference")) {
             reference = getIntent().getStringExtra("reference");
+            Bundle bundle = new Bundle();
+            project = (Project) bundle.getSerializable("fatherProject");
+        }
 
         itemType = getIntent().getStringExtra("itemType");
 
@@ -70,9 +77,9 @@ public class CreateItemActivity extends AppCompatActivity {
 
     private void setItem(String nameText, String descriptionText) {
         if (itemType.equals("0")) {
-            new FirebaseHelper(mDatabase).setItem(new Project(nameText, descriptionText));
+            new FirebaseHelper(mDatabase).setItem(new Project(nameText, descriptionText, project));
         } else {
-            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText, limited.isChecked(),programmed.isChecked()));
+            new FirebaseHelper(mDatabase).setItem(new Task(nameText, descriptionText, limited.isChecked(),programmed.isChecked(), project));
         }
         finish();
     }
