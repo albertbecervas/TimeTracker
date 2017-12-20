@@ -6,6 +6,7 @@
     <color name="colorAccent">#FF6E40</color>
 
     <color name="colorTransBg">#26000000</color>
+    <color name="colorOrangeTranBg">#C6FF6E40</color>
 
     <color name="cds">#00e64d</color>
     <color name="csd">#009933</color>

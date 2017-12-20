@@ -2,6 +2,7 @@ package com.ds.timetracker.ui.timer.adapter.viewholder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,18 +27,45 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
         this.mCallback = (ItemCallback) mContext;
 
+        final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
+        final ConstraintLayout editLayout = view.findViewById(R.id.edit_container);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onProjectItemSelected(getAdapterPosition());
+                if (deleteLayout.getVisibility() == View.VISIBLE){
+                    deleteLayout.setVisibility(View.GONE);
+                    editLayout.setVisibility(View.GONE);
+                } else {
+                    mCallback.onProjectItemSelected(getAdapterPosition());
+                }
             }
         });
 
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                mCallback.onDeleteItem(getAdapterPosition());
+                if (deleteLayout.getVisibility() == View.VISIBLE){
+                    deleteLayout.setVisibility(View.GONE);
+                    editLayout.setVisibility(View.GONE);
+                } else {
+                    deleteLayout.setVisibility(View.VISIBLE);
+                    editLayout.setVisibility(View.VISIBLE);
+                }
                 return false;
+            }
+        });
+
+        deleteLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onDeleteItem(getAdapterPosition());
+            }
+        });
+
+        editLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onEditProject(getAdapterPosition());
             }
         });
 

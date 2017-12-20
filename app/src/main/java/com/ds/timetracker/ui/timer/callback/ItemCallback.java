@@ -8,4 +8,6 @@ public interface ItemCallback {
 
     void onDeleteItem(int position);
 
+    void onEditProject(int position);
+
 }

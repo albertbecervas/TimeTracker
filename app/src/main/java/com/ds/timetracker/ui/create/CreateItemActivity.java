@@ -11,6 +11,7 @@ import android.widget.Switch;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
+import com.ds.timetracker.model.Task;
 import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
@@ -23,7 +24,6 @@ public class CreateItemActivity extends AppCompatActivity {
 
     private ArrayList<Item> items;
     private ArrayList<Integer> nodesReference;
-    private ArrayList<Item> treeLevelItems;
     private Project project;
 
     private String itemType;
@@ -34,7 +34,6 @@ public class CreateItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_item);
 
         items = new ItemsTreeManager(this).getItems();
-        treeLevelItems = items;
 
         if (getIntent().hasExtra("itemType")) {
             itemType = getIntent().getStringExtra("itemType");
@@ -75,14 +74,22 @@ public class CreateItemActivity extends AppCompatActivity {
     private void setItem(String nameText, String descriptionText) {
 
         for (Integer position : nodesReference) {
+            if (items.get(position) instanceof Project)
             project = ((Project) items.get(position));
         }
 
         if (itemType.equals(Constants.PROJECT)) {
-            project.newProject(nameText,descriptionText);
+            if (project != null) {
+                project.newProject(nameText, descriptionText);
+            } else {
+                items.add(new Project(nameText,descriptionText,null));
+            }
         } else {
-            project.newTask(nameText,descriptionText);
-        }
+            if (project != null) {
+                project.newTask(nameText, descriptionText);
+            } else {
+                items.add(new Task(nameText,descriptionText,null));
+            }        }
         new ItemsTreeManager(this).saveItems(items);
 
         finish();

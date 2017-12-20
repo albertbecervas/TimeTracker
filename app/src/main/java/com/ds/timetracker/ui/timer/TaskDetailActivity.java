@@ -25,7 +25,6 @@ public class TaskDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {

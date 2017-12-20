@@ -3,6 +3,7 @@ package com.ds.timetracker.ui.timer.adapter.viewholder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,14 +33,40 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         mCallback = (ItemCallback) mContext;
 
+        final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, TaskDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("task", mTask);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                if (deleteLayout.getVisibility() == View.VISIBLE) {
+                    deleteLayout.setVisibility(View.GONE);
+                } else {
+                    Intent intent = new Intent(mContext, TaskDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("task", mTask);
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
+                }
+
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (deleteLayout.getVisibility() == View.VISIBLE){
+                    deleteLayout.setVisibility(View.GONE);
+                } else {
+                    deleteLayout.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+        });
+
+        deleteLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.onDeleteItem(getAdapterPosition());
             }
         });
 

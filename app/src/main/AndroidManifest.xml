@@ -23,9 +23,14 @@
         </activity>
         <activity android:name=".ui.create.CreateItemActivity" />
         <activity android:name=".ui.timer.TaskDetailActivity" />
-        <activity android:name=".ui.timer.ProjectDetailActivity"
-            android:theme="@style/MyTheme"/>
-        <activity android:name=".ui.reports.ReportsActivity"
+        <activity
+            android:name=".ui.timer.ProjectDetailActivity"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".ui.reports.ReportsActivity"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".ui.edit.EditItemActivity"
             android:theme="@style/MyTheme"/>
     </application>
 

@@ -18,6 +18,7 @@ import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.ui.create.CreateItemActivity;
+import com.ds.timetracker.ui.edit.EditItemActivity;
 import com.ds.timetracker.ui.reports.ReportsActivity;
 import com.ds.timetracker.ui.timer.adapter.ViewTypeAdapter;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
@@ -64,6 +65,8 @@ public class ProjectDetailActivity extends AppCompatActivity implements Observer
 
     private boolean isSearching = false;
     private String query = "";
+
+    private int editPosition;
 
     /**
      * onCreate function is the first one that is called when activity starts.
@@ -127,6 +130,7 @@ public class ProjectDetailActivity extends AppCompatActivity implements Observer
             case R.id.settings:
                 itemsManager.resetItems();
                 items = itemsManager.getItems();
+                nodesReference = new ArrayList<>();
                 mAdapter.setItemsList(treeLevelItems);
                 mAdapter.notifyDataSetChanged();
                 break;
@@ -202,6 +206,7 @@ public class ProjectDetailActivity extends AppCompatActivity implements Observer
         mProgressBar.setVisibility(View.GONE);
     }
 
+    //Item action callbacks
     @Override
     public void onItemStateChanged() {
         itemsManager.saveItems(items);
@@ -226,6 +231,33 @@ public class ProjectDetailActivity extends AppCompatActivity implements Observer
         treeLevelItems.remove(position);
     }
 
+    @Override
+    public void onEditProject(int position) {
+        editPosition = position;
+        Intent intent = new Intent(this, EditItemActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("project", treeLevelItems.get(position));
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 0);
+    }
+
+    //fab Menu action
+    @Override
+    public void onCreateItemSelected(String type) {
+        Intent taskIntent;
+        taskIntent = new Intent(this, CreateItemActivity.class);
+        taskIntent.putIntegerArrayListExtra("nodesReference", nodesReference);
+
+        if (type.equals(Constants.PROJECT)) {
+            taskIntent.putExtra("itemType", Constants.PROJECT);
+        } else {
+            taskIntent.putExtra("itemType", Constants.TASK);
+        }
+
+        startActivity(taskIntent);
+    }
+
+    //Observer
     @Override
     public void update(Observable observable, Object o) {
 
@@ -277,19 +309,19 @@ public class ProjectDetailActivity extends AppCompatActivity implements Observer
         } else super.onBackPressed();
     }
 
-
     @Override
-    public void onCreateItemSelected(String type) {
-        Intent taskIntent;
-        taskIntent = new Intent(this, CreateItemActivity.class);
-        taskIntent.putIntegerArrayListExtra("nodesReference", nodesReference);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (type.equals(Constants.PROJECT)) {
-            taskIntent.putExtra("itemType", Constants.PROJECT);
-        } else {
-            taskIntent.putExtra("itemType", Constants.TASK);
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String name = data.getStringExtra("name");
+                String description = data.getStringExtra("description");
+
+                treeLevelItems.get(editPosition).setName(name);
+                treeLevelItems.get(editPosition).setDescription(description);
+                itemsManager.saveItems(items);
+            }
         }
-
-        startActivity(taskIntent);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
