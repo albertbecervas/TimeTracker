@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/savsfd"
+        android:title="SAVE"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/save"
         android:title="vfsdlv"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_save"/>
+        android:icon="@drawable/ic_action_tick"/>
+
+
 
 </menu>

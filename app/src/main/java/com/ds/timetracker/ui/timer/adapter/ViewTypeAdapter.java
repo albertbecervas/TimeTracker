@@ -9,6 +9,7 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.ui.timer.adapter.viewholder.ProjectViewHolder;
 import com.ds.timetracker.ui.timer.adapter.viewholder.TaskViewHolder;
+import com.ds.timetracker.ui.timer.callback.ItemCallback;
 import com.ds.timetracker.utils.AppSharedPreferences;
 import com.ds.timetracker.utils.Constants;
 
@@ -18,9 +19,11 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
     private ArrayList<Item> itemsList;
+    private ItemCallback mCallback;
 
-    public ViewTypeAdapter(Context context, ArrayList<Item> items) {
+    public ViewTypeAdapter(Context context, ItemCallback callback, ArrayList<Item> items) {
         this.mContext = context;
+        this.mCallback = callback;
         this.itemsList = items;
     }
 
@@ -29,9 +32,9 @@ public class ViewTypeAdapter extends RecyclerView.Adapter {
 
         switch (viewType) {
             case 0:
-                return new ProjectViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_project, parent, false), mContext);
+                return new ProjectViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_project, parent, false), mContext, mCallback);
             case 1:
-                return new TaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_task, parent, false), mContext);
+                return new TaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_task, parent, false), mContext, mCallback);
         }
         return null;
     }

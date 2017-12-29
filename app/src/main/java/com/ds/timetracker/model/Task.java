@@ -14,8 +14,8 @@ public class Task extends Item {
     private static final long serialVersionUID = 1L;//Needed object identifier
     private ArrayList<Interval> intervals;
 
-    public Task(String name, String description, Project project) {
-        super(name, description, new Period(), Constants.TASK);
+    public Task(String name, String description, int color, Project project) {
+        super(name, description, new Period(), Constants.TASK, color);
 
         this.isOpen = false;
         this.intervals = new ArrayList<>();

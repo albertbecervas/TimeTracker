@@ -1,15 +1,19 @@
 package com.ds.timetracker.ui.reports.builders;
 
+import android.content.Context;
+
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
+import com.ds.timetracker.ui.reports.elements.Element;
 import com.ds.timetracker.ui.reports.elements.Paragraph;
 import com.ds.timetracker.ui.reports.elements.Separator;
 import com.ds.timetracker.ui.reports.elements.Title;
 import com.ds.timetracker.ui.reports.format.HtmlFormatPrinter;
 import com.ds.timetracker.ui.reports.format.TextFormatPrinter;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ import java.util.Date;
  *
  * @author Albert
  */
-public class BriefReport extends Report {
+public class BriefReport extends Report implements Serializable{
 
     public ArrayList<ItemReportDetail> mainItems;
 
@@ -30,16 +34,19 @@ public class BriefReport extends Report {
 
     private DateFormat df;
 
-    public BriefReport(ArrayList<Item> items, String format) {
+    public BriefReport(String name,ArrayList<Item> items, String format, String initialDate, String finalDate) {
         this.items = items;
+        this.name = name;
+        this.startDateString = initialDate;
+        this.endDateString = finalDate;
+        this.formatStr = format;
 
-        mainItems = new ArrayList<ItemReportDetail>();
+        mainItems = new ArrayList<>();
 
         this.df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
         setFormat(format);
 
-        generateBriefReport();
     }
 
     /**
@@ -56,15 +63,33 @@ public class BriefReport extends Report {
     }
 
 
-    public void generateBriefReport() {
+    public void generateBriefReport(Context context) {
         for (Item item : items) {
             //calculates all item details and saves them in the projects lists
             setItemDetails(item);
         }
 
+        elements = new ArrayList<>();
         setReportElements();
 
-        format.generateFile(this);
+        format.generateFile(this, context);
+    }
+
+    public String getFormattedElementsToDisplay(){
+        for (Item item : items) {
+            //calculates all item details and saves them in the projects lists
+            setItemDetails(item);
+        }
+
+        elements = new ArrayList<>();
+        setReportElements();
+        StringBuilder formatted = new StringBuilder();
+        for (Element element: elements){
+            String e = element.getElement() + "\n";
+            formatted.append(e);
+        }
+
+        return formatted.toString();
     }
 
     /**
@@ -95,9 +120,8 @@ public class BriefReport extends Report {
      * Iterates through the items in order to calculate every subItem parameters
      *
      * @param item Project or ic_task that we want to calculate the details
-     * @return long The accumulate duration of all items inside
      */
-    private long recursiveTreeSearch(Item item) {
+    private void recursiveTreeSearch(Item item) {
         long itemDuration = 0;
         if (item instanceof Task) { //Basic case
             for (Interval interval : ((Task) item).getIntervals()) {
@@ -112,7 +136,6 @@ public class BriefReport extends Report {
                 recursiveTreeSearch(subItem); //recursive function
             }
         }
-        return duration;
     }
 
 
@@ -122,7 +145,6 @@ public class BriefReport extends Report {
      * @param item         ic_task that we want to calculate the details of the interval
      * @param itemDuration duration of the ic_task to return in the iterative function
      * @param interval     that we want to set details
-     * @return
      */
     private long setIntervalDetails(Item item, long itemDuration, Interval interval) {
         long intervalDuration = 0;

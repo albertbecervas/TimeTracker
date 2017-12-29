@@ -78,18 +78,18 @@ public class CreateItemActivity extends AppCompatActivity {
             project = ((Project) items.get(position));
         }
 
-        if (itemType.equals(Constants.PROJECT)) {
-            if (project != null) {
-                project.newProject(nameText, descriptionText);
-            } else {
-                items.add(new Project(nameText,descriptionText,null));
-            }
-        } else {
-            if (project != null) {
-                project.newTask(nameText, descriptionText);
-            } else {
-                items.add(new Task(nameText,descriptionText,null));
-            }        }
+//        if (itemType.equals(Constants.PROJECT)) {
+//            if (project != null) {
+//                project.newProject(nameText, descriptionText);
+//            } else {
+//                items.add(new Project(nameText,descriptionText,null));
+//            }
+//        } else {
+//            if (project != null) {
+//                project.newTask(nameText, descriptionText);
+//            } else {
+//                items.add(new Task(nameText,descriptionText,null));
+//            }        }
         new ItemsTreeManager(this).saveItems(items);
 
         finish();

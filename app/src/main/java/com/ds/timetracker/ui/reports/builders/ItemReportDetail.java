@@ -1,6 +1,8 @@
 package com.ds.timetracker.ui.reports.builders;
 
-public class ItemReportDetail {
+import java.io.Serializable;
+
+public class ItemReportDetail implements Serializable {
 
     String name;
     String duration;

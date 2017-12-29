@@ -15,8 +15,8 @@ public class Project extends Item {
 
     private ArrayList<Item> items;
 
-    public Project(String name, String description, Project project) {
-        super(name, description, new Period(), Constants.PROJECT);
+    public Project(String name, String description, int color ,Project project) {
+        super(name, description, new Period(), Constants.PROJECT, color);
 
         this.items = new ArrayList<>();
 
@@ -31,12 +31,12 @@ public class Project extends Item {
         this.items = items;
     }
 
-    public void newTask(String name, String description) {
-        items.add(new Task(name, description, this));
+    public void newTask(String name, String description, int color) {
+        items.add(new Task(name, description,color, this));
     }
 
-    public void newProject(String name, String description) {
-        items.add(new Project(name, description, this));
+    public void newProject(String name, String description, int color) {
+        items.add(new Project(name, description, color,this));
     }
 
     public void start() {

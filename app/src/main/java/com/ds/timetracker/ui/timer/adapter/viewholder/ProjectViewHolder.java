@@ -1,9 +1,7 @@
 package com.ds.timetracker.ui.timer.adapter.viewholder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -11,7 +9,6 @@ import android.widget.TextView;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.ui.timer.ProjectDetailActivity;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
 public class ProjectViewHolder extends RecyclerView.ViewHolder {
@@ -22,10 +19,10 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
     private ItemCallback mCallback;
 
-    public ProjectViewHolder(View view, final Context mContext) {
+    public ProjectViewHolder(View view, final Context mContext, final ItemCallback callback) {
         super(view);
 
-        this.mCallback = (ItemCallback) mContext;
+        this.mCallback = callback;
 
         final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
         final ConstraintLayout editLayout = view.findViewById(R.id.edit_container);

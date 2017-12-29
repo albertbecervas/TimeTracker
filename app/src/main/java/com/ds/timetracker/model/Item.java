@@ -20,11 +20,14 @@ public class Item implements Serializable {
     protected boolean isOpen;
     protected Period period;
 
-    public Item(String name, String description, Period period, String type) {
+    protected int color;
+
+    public Item(String name, String description, Period period, String type, int color) {
         this.type = type;
         this.name = name;
         this.description = description;
         this.period = period;
+        this.color = color;
     }
 
     //getters and setters
@@ -62,6 +65,14 @@ public class Item implements Serializable {
 
     public void setPeriod(Period period) {
         this.period = period;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public String getFormattedDuration(){

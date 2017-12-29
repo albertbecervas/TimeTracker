@@ -1,15 +1,19 @@
 package com.ds.timetracker.ui.reports.builders;
 
+import android.content.Context;
+
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
+import com.ds.timetracker.ui.reports.elements.Element;
 import com.ds.timetracker.ui.reports.elements.Paragraph;
 import com.ds.timetracker.ui.reports.elements.Separator;
 import com.ds.timetracker.ui.reports.elements.Title;
 import com.ds.timetracker.ui.reports.format.HtmlFormatPrinter;
 import com.ds.timetracker.ui.reports.format.TextFormatPrinter;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +24,7 @@ import java.util.Date;
  * Generates a detailed report of all items that shows: Duration, initial date, final date
  * and name of every item
  */
-public class DetailedReport extends Report {
+public class DetailedReport extends Report implements Serializable {
 
     private ArrayList<ItemReportDetail> projects;
     private ArrayList<ItemReportDetail> subProjects;
@@ -30,11 +34,15 @@ public class DetailedReport extends Report {
     private long duration = 0;//global variable in order to keep value in recursive function
     long subProjectDuration = 0;
 
-    private DateFormat df;
+    transient private DateFormat df;
 
 
-    public DetailedReport(ArrayList<Item> items, String format) {
+    public DetailedReport(String name, ArrayList<Item> items, String format, String initialDate, String finalDate) {
         this.items = items;
+        this.name = name;
+        this.startDateString = initialDate;
+        this.endDateString = finalDate;
+        this.formatStr = format;
 
         this.df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
@@ -46,7 +54,6 @@ public class DetailedReport extends Report {
             this.format = new TextFormatPrinter();
         }
 
-        generateDetailedReport();
     }
 
     private void initialiseLists() {
@@ -76,7 +83,7 @@ public class DetailedReport extends Report {
 
     }
 
-    public void generateDetailedReport() {
+    public void generateDetailedReport(Context context) {
 
         for (Item item : items) {
             try {
@@ -91,18 +98,45 @@ public class DetailedReport extends Report {
             duration = 0;
         }
 
+        elements = new ArrayList<>();
         setReportElements();
 
-        format.generateFile(this);
+        format.generateFile(this, context);
+    }
+
+    public String getFormattedElementsToDisplay() {
+
+        for (Item item : items) {
+            try {
+                if (item instanceof Project) {
+                    setProjectsDetails(item);
+                } else {
+                    recursiveTreeSearch(item, false);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            duration = 0;
+        }
+
+        elements = new ArrayList<>();
+        setReportElements();
+
+        StringBuilder formatted = new StringBuilder();
+        for (Element element : elements) {
+            String e = element.getElement() + "\n";
+            formatted.append(e);
+        }
+
+        return formatted.toString();
     }
 
     /**
      * Iterates through the items in order to calculate every subItem parameters
      *
      * @param item Project or ic_task that we want to calculate the details
-     * @return long The accumulate duration of all items inside
      */
-    private long recursiveTreeSearch(Item item, boolean isSubProject) throws NullPointerException {
+    private void recursiveTreeSearch(Item item, boolean isSubProject) throws NullPointerException {
         if (item == null) {
             throw new NullPointerException("Item is null.");
         }
@@ -132,7 +166,6 @@ public class DetailedReport extends Report {
                 }
             }
         }
-        return itemDuration;
     }
 
 

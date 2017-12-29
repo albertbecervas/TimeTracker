@@ -4,6 +4,7 @@ import com.ds.timetracker.model.Item;
 import com.ds.timetracker.ui.reports.elements.Element;
 import com.ds.timetracker.ui.reports.format.Format;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,7 @@ import java.util.Date;
  *
  * @author Albert
  */
-public class Report {
+public class Report implements Serializable {
 
     protected String startDateString = "29/11/2017 22:25:16"; //dd/MM/yyyy hh:mm:ss
     protected String endDateString = "29/11/2017 22:29:46";
@@ -27,11 +28,14 @@ public class Report {
 
     protected String generationDate;
 
+    protected String name;
+
     protected ArrayList<Item> items;
 
     protected ArrayList<Element> elements;
 
     protected Format format;
+    protected String formatStr;
 
     public Report() {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -77,5 +81,21 @@ public class Report {
 
     public void setGenerationDate(String generationDate) {
         this.generationDate = generationDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFormatStr() {
+        return formatStr;
+    }
+
+    public void setFormatStr(String formatStr) {
+        this.formatStr = formatStr;
     }
 }

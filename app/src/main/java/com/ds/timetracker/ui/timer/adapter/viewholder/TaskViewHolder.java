@@ -28,10 +28,10 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
     private ItemCallback mCallback;
 
-    public TaskViewHolder(View view, final Context mContext) {
+    public TaskViewHolder(View view, final Context mContext, final ItemCallback callback) {
         super(view);
 
-        mCallback = (ItemCallback) mContext;
+        this.mCallback = callback;
 
         final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
 
@@ -45,7 +45,8 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("task", mTask);
                     intent.putExtras(bundle);
-                    mContext.startActivity(intent);
+                    intent.putExtra("position", getAdapterPosition());
+                    mCallback.onEditTask(getAdapterPosition(),intent);
                 }
 
             }
@@ -78,7 +79,13 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public void setItem(Item task) {
         mTask = (Task) task;
 
-        title.setText(task.getName());
+        title.setText(mTask.getName());
+
+        if (mTask.isOpen()){
+            imageView.setImageResource(R.drawable.ic_action_playback_pause);
+        } else {
+            imageView.setImageResource(R.drawable.ic_action_playback_play);
+        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,8 @@
 package com.ds.timetracker.ui.reports.elements;
 
-public abstract class Element {
+import java.io.Serializable;
+
+public abstract class Element  implements Serializable{
 
 	public abstract String getElement();
 	

@@ -5,10 +5,11 @@ import com.ds.timetracker.ui.reports.builders.ItemReportDetail;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-public class FormatPrinter {
+public class FormatPrinter implements Serializable{
 
     ArrayList<ItemReportDetail> projects;
     ArrayList<ItemReportDetail> subProjects;

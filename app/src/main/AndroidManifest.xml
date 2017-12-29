@@ -13,25 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".base.SplashActivity"
-            android:theme="@style/Theme.Design.NoActionBar">
+            android:name=".ui.main.MainActivity"
+            android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.create.CreateItemActivity" />
         <activity android:name=".ui.timer.TaskDetailActivity" />
         <activity
-            android:name=".ui.timer.ProjectDetailActivity"
-            android:theme="@style/MyTheme" />
-        <activity
-            android:name=".ui.reports.ReportsActivity"
-            android:theme="@style/MyTheme" />
-        <activity
             android:name=".ui.edit.EditItemActivity"
-            android:theme="@style/MyTheme"/>
+            android:theme="@style/MyTheme" />
+        <activity android:name=".ui.create.CreateItemActivity" />
+        <activity android:name=".ui.create.CreateReportActivity" />
+        <activity android:name=".ui.create.CreateTaskActivity" />
+        <activity android:name=".ui.create.CreateProjectActivity" />
+        <activity android:name=".ui.reports.ReportDetailActivity" />
+        <activity android:name=".ui.edit.EditTaskActivity"></activity>
     </application>
 
 </manifest>
