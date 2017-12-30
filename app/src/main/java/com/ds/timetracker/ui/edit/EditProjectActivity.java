@@ -1,7 +1,6 @@
 package com.ds.timetracker.ui.edit;
 
 import android.content.Intent;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +8,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
@@ -23,47 +20,37 @@ import com.ds.timetracker.utils.ItemsTreeManager;
 
 import java.util.ArrayList;
 
-public class EditTaskActivity extends AppCompatActivity {
+public class EditProjectActivity extends AppCompatActivity {
 
     private EditText name;
     private EditText description;
     private Spinner colorPicker;
-    private CheckBox programmed;
-    private CheckBox limited;
-    private ConstraintLayout dateLayout;
-    private ConstraintLayout hourLayout;
 
     private SpinnerAdapter adapter;
 
-    private Task mTask;
-
     private int color = R.drawable.red;
+
+    private Project mProject;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_task);
+        setContentView(R.layout.activity_create_project);
 
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            mTask = (Task) bundle.getSerializable("task");
+            mProject = (Project) bundle.getSerializable("project");
+            position = getIntent().getIntExtra("position", -1);
         }
 
-        setViews();
-    }
-
-    private void setViews() {
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
         colorPicker = findViewById(R.id.spinner);
-        programmed = findViewById(R.id.programmed_switch);
-        limited = findViewById(R.id.limited_switch);
-        dateLayout = findViewById(R.id.from_layout);
-        hourLayout = findViewById(R.id.time_layout);
 
-        name.setText(mTask.getName());
-        description.setText(mTask.getDescription());
+        name.setText(mProject.getName());
+        description.setText(mProject.getDescription());
 
         String[] colorsNames={"Red","Blue","Green"};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
@@ -80,28 +67,6 @@ public class EditTaskActivity extends AppCompatActivity {
 
             }
         });
-
-        programmed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (programmed.isChecked()){
-                    dateLayout.setVisibility(View.VISIBLE);
-                } else {
-                    dateLayout.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        limited.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(limited.isChecked()){
-                    hourLayout.setVisibility(View.VISIBLE);
-                } else {
-                    hourLayout.setVisibility(View.GONE);
-                }
-            }
-        });
     }
 
     @Override
@@ -113,21 +78,21 @@ public class EditTaskActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        createTask();
+        createProject();
         return false;
     }
 
 
-    private void createTask(){
+    private void createProject() {
         String nameStr = name.getText().toString();
         String descriptionStr = description.getText().toString();
 
-        if (nameStr.isEmpty()){
+        if (nameStr.isEmpty()) {
             name.setError("Cannot be empty");
             return;
         }
 
-        if (descriptionStr.isEmpty()){
+        if (descriptionStr.isEmpty()) {
             description.setError("Cannot be empty");
             return;
         }
@@ -135,9 +100,9 @@ public class EditTaskActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         intent.putExtra("name", nameStr);
         intent.putExtra("description", descriptionStr);
+        intent.putExtra("position", position);
         intent.putExtra("color", color);
         setResult(RESULT_OK, intent);
         finish();
     }
 }
-

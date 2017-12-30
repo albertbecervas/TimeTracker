@@ -30,35 +30,18 @@
         app:layout_constraintTop_toBottomOf="@+id/name"
         tools:layout_editor_absoluteY="16dp" />
 
-    <LinearLayout
-        android:id="@+id/edit_description_layout"
-        android:layout_width="wrap_content"
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Lorem ipsum dolor sit amen Lorem ipsum dolor sit amen\nLorem ipsum dolor sit amenLorem ipsum dolor sit amen"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <EditText
-            android:id="@+id/description_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="Type new description"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Lorem ipsum dolor sit amen Lorem ipsum dolor sit amen\nLorem ipsum dolor sit amenLorem ipsum dolor sit amen"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/title_started"
@@ -69,7 +52,7 @@
         android:text="Started"
         android:textColor="@color/md_black_1000"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_description_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <TextView
         android:id="@+id/started"

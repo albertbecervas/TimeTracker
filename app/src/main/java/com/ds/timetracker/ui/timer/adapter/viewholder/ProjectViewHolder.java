@@ -62,7 +62,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
         editLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onEditProject(getAdapterPosition());
+                mCallback.onEditProject(getAdapterPosition(), mProject);
             }
         });
 

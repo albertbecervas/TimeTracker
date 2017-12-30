@@ -25,12 +25,12 @@
         <activity
             android:name=".ui.edit.EditItemActivity"
             android:theme="@style/MyTheme" />
-        <activity android:name=".ui.create.CreateItemActivity" />
         <activity android:name=".ui.create.CreateReportActivity" />
         <activity android:name=".ui.create.CreateTaskActivity" />
         <activity android:name=".ui.create.CreateProjectActivity" />
         <activity android:name=".ui.reports.ReportDetailActivity" />
-        <activity android:name=".ui.edit.EditTaskActivity"></activity>
+        <activity android:name=".ui.edit.EditTaskActivity" />
+        <activity android:name=".ui.edit.EditProjectActivity"></activity>
     </application>
 
 </manifest>

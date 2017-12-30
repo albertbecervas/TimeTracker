@@ -1,13 +1,17 @@
 package com.ds.timetracker.ui.main;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +34,7 @@ import com.ds.timetracker.ui.timer.ProjectFragment;
 import com.ds.timetracker.utils.CustomFabMenu;
 import com.ds.timetracker.utils.CustomFabMenuCallback;
 import com.ds.timetracker.utils.ItemsTreeManager;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
@@ -41,7 +46,8 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
     private final static int CREATE_REPORT_RESULT = 0;
     private final static int CREATE_ITEM_RESULT = 1;
-    public final static int EDIT_TASK_RESULT = 2;
+    public final static int EDIT_ITEM_RESULT = 2;
+    private final static int MY_PERMISSIONS_REQUEST_READ_WRITE = 3;
 
     private ItemsTreeManager itemsTreeManager;
 
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        requestPermissions();
 
         itemsTreeManager = new ItemsTreeManager(this);
 
@@ -81,6 +88,35 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
         setViews();
 
+    }
+
+    private void requestPermissions() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_WRITE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
     }
 
     private void setTabs() {
@@ -212,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                 treeLevelItems = items;
                 projectFragment.setItems(items);
                 break;
+            //TODO: afegir switch opcions sort
         }
         return true;
     }
@@ -276,15 +313,17 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
             }
         }
 
-        if (requestCode == EDIT_TASK_RESULT) {
+        if (requestCode == EDIT_ITEM_RESULT) {
             if (resultCode == RESULT_OK) {
                 String name = data.getStringExtra("name");
                 String description = data.getStringExtra("description");
+                int color = data.getIntExtra("color", R.drawable.red);
                 int position = data.getIntExtra("position", -1);
 
                 if (position != -1) {
                     treeLevelItems.get(position).setName(name);
                     treeLevelItems.get(position).setDescription(description);
+                    treeLevelItems.get(position).setColor(color);
                     itemsTreeManager.saveItems(items);
                 }
                 projectFragment.setItems(treeLevelItems);

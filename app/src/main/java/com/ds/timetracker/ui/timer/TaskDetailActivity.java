@@ -15,12 +15,15 @@ import android.widget.TextView;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Task;
+import com.ds.timetracker.ui.edit.EditTaskActivity;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class TaskDetailActivity extends AppCompatActivity {
+
+    public static final int EDIT_TASK = 0;
 
     private ListView listView;
     private TextView description;
@@ -67,24 +70,14 @@ public class TaskDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit:
-                if (isInEditMode){
-                    edit.setIcon(R.drawable.ic_mode_edit);
-                    name.setVisibility(View.GONE);
-                    descriptionEdit.setVisibility(View.GONE);
-                    description.setVisibility(View.VISIBLE);
-                    mTask.setName(name.getText().toString());
-                    mTask.setDescription(descriptionEdit.getText().toString());
-                    description.setText(mTask.getDescription());
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle(mTask.getName());
-                    isInEditMode = false;
-                } else {
-                    edit.setIcon(R.drawable.ic_action_tick);
-                    description.setVisibility(View.GONE);
-                    name.setVisibility(View.VISIBLE);
-                    descriptionEdit.setVisibility(View.VISIBLE);
-                    isInEditMode = true;
-                }
+                Intent intent = new Intent(this, EditTaskActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("task", mTask);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, EDIT_TASK);
+                break;
+            case android.R.id.home:
+                onBackPressed();
                 break;
         }
         return true;
@@ -102,8 +95,10 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        if (getSupportActionBar() != null)
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(mTask.getName());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         listView = findViewById(R.id.listView);
         description = findViewById(R.id.description);
@@ -115,7 +110,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         String startWd = mTask.getPeriod().getStartWorkingDate().toString();
         String endWd = "-";
-        if (mTask.getPeriod().getFinalWorkingDate() != null){
+        if (mTask.getPeriod().getFinalWorkingDate() != null) {
             endWd = mTask.getPeriod().getFinalWorkingDate().toString();
         }
 
@@ -128,19 +123,32 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isInEditMode){
-            edit.setIcon(R.drawable.ic_mode_edit);
-            name.setVisibility(View.GONE);
-            descriptionEdit.setVisibility(View.GONE);
-            description.setVisibility(View.VISIBLE);
-            isInEditMode = false;
-        } else {
-            Intent intent = this.getIntent();
-            intent.putExtra("name", mTask.getName());
-            intent.putExtra("description", mTask.getDescription());
-            intent.putExtra("position", position);
-            setResult(RESULT_OK, intent);
-            super.onBackPressed();
+        Intent intent = this.getIntent();
+        intent.putExtra("name", mTask.getName());
+        intent.putExtra("description", mTask.getDescription());
+        intent.putExtra("color", mTask.getColor());
+        intent.putExtra("position", position);
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_TASK) {
+            if (resultCode == RESULT_OK) {
+                String nameStr = data.getStringExtra("name");
+                String descriptionStr = data.getStringExtra("description");
+                int color = data.getIntExtra("color", R.drawable.red);
+
+                mTask.setName(nameStr);
+                mTask.setDescription(descriptionStr);
+                mTask.setColor(color);
+
+                getSupportActionBar().setTitle(nameStr);
+                description.setText(descriptionStr);
+            }
         }
     }
 }

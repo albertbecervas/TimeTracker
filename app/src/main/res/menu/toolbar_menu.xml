@@ -11,6 +11,18 @@
         android:title="Pause all"/>
 
     <item
+        android:id="@+id/sortByName"
+        android:title="Sort by name"/>
+
+    <item
+        android:id="@+id/sortByTypes"
+        android:title="Sort by tasks"/>
+
+    <item
+        android:id="@+id/sortByDate"
+        android:title="Sort by date"/>
+
+    <item
         android:id="@+id/search"
         android:icon="@drawable/ic_action_search"
         android:title="search"

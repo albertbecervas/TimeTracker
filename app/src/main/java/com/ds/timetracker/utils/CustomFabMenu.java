@@ -2,8 +2,6 @@ package com.ds.timetracker.utils;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.ui.create.CreateItemActivity;
 
 public class CustomFabMenu extends ConstraintLayout implements View.OnClickListener {
 

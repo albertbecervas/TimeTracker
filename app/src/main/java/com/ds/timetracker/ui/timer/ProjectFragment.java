@@ -15,9 +15,11 @@ import android.widget.TextView;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
+import com.ds.timetracker.ui.edit.EditProjectActivity;
 import com.ds.timetracker.ui.main.MainActivity;
 import com.ds.timetracker.ui.timer.adapter.ViewTypeAdapter;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     private ViewTypeAdapter mAdapter; //adapter that handles the items
 
     private TextView level;
+    private CircularProgressView progressView;
 
     public ProjectFragment() {
         // Required empty public constructor
@@ -53,6 +56,8 @@ public class ProjectFragment extends Fragment implements ItemCallback {
         mRecyclerView = view.findViewById(R.id.projectsRV);
 
         level = view.findViewById(R.id.level_text);
+
+        progressView = view.findViewById(R.id.progress);
 
         setLevelTitle();
 
@@ -88,10 +93,13 @@ public class ProjectFragment extends Fragment implements ItemCallback {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    progressView.setVisibility(View.VISIBLE);
                     setLevelTitle();
                     mAdapter.clearAdapter();
                     mAdapter.setItemsList(items);
                     mAdapter.notifyDataSetChanged();
+                    progressView.setVisibility(View.GONE);
+
                 }
             });
 
@@ -147,13 +155,18 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     @Override
-    public void onEditProject(int position) {
-
+    public void onEditProject(int position, Project project) {
+        Intent intent = new Intent(activity, EditProjectActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("project", project);
+        intent.putExtras(bundle);
+        intent.putExtra("position", position);
+        activity.startActivityForResult(intent, MainActivity.EDIT_ITEM_RESULT);
     }
 
     @Override
     public void onEditTask(int position, Intent intent) {
         //say the position we want to edit
-        activity.startActivityForResult(intent, MainActivity.EDIT_TASK_RESULT);
+        activity.startActivityForResult(intent, MainActivity.EDIT_ITEM_RESULT);
     }
 }
