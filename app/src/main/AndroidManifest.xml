@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,9 +22,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.timer.TaskDetailActivity" />
-        <activity
-            android:name=".ui.edit.EditItemActivity"
-            android:theme="@style/MyTheme" />
         <activity android:name=".ui.create.CreateReportActivity" />
         <activity android:name=".ui.create.CreateTaskActivity" />
         <activity android:name=".ui.create.CreateProjectActivity" />

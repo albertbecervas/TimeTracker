@@ -1,4 +1,4 @@
-package com.ds.timetracker.ui.main;
+package com.ds.timetracker.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -34,7 +34,6 @@ import com.ds.timetracker.ui.timer.ProjectFragment;
 import com.ds.timetracker.utils.CustomFabMenu;
 import com.ds.timetracker.utils.CustomFabMenuCallback;
 import com.ds.timetracker.utils.ItemsTreeManager;
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         requestPermissions();
 
         itemsTreeManager = new ItemsTreeManager(this);
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_WRITE);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -241,16 +241,33 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         switch (item.getItemId()) {
             case R.id.settings:
                 break;
+            case R.id.delete:
+                deleteItems();
+                break;
             case R.id.stop:
-                for (Item item1 : items){
+                for (Item item1 : items) {
                     recursiveTreeSearchToPause(item1);
                 }
                 treeLevelItems = items;
                 projectFragment.setItems(items);
                 break;
+            case R.id.sortByDate:
+                break;
             //TODO: afegir switch opcions sort
         }
         return true;
+    }
+
+    private void deleteItems() {
+        if (nodesReference.size() == 0) {
+            itemsTreeManager.resetItems();
+        } else {
+            father.deleteItems();
+        }
+        itemsTreeManager.saveItems(items);
+        items = itemsTreeManager.getItems();
+        treeLevelItems = items;
+        projectFragment.setItems(treeLevelItems);
     }
 
     private void recursiveTreeSearchToPause(Item item) {

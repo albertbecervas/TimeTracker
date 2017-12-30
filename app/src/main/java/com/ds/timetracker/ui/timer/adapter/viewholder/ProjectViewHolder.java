@@ -74,22 +74,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
         mProject = (Project) project;
         title.setText(project.getName());
 
-        setTime();
+        time.setText(mProject.getFormattedDuration());
 
     }
-
-    private void setTime() {
-        int segonsPerHora = 3600;
-        int segonsPerMinut = 60;
-
-        if (mProject.getPeriod().getFinalWorkingDate() == null) return;
-        long durada = (mProject.getPeriod().getFinalWorkingDate().getTime() - mProject.getPeriod().getStartWorkingDate().getTime()) / 1000;
-
-        final long hores = durada / segonsPerHora;
-        final long minuts = (durada - hores * segonsPerHora) / segonsPerMinut;
-        final long segons = durada - segonsPerHora * hores - segonsPerMinut * minuts;
-
-        time.setText(String.valueOf(hores + "h " + minuts + "m " + segons + "s"));
-    }
-
 }

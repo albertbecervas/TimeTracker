@@ -51,6 +51,10 @@ public class Project extends Item {
         this.isOpen = false;
     }
 
+    public void deleteItems(){
+        items.clear();
+    }
+
     public void update(Item item) {
         period.addDuration(Clock.CLOCK_SECONDS);
 

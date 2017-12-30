@@ -39,6 +39,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private Project fatherProject;
     private ArrayList<Item> items;
+    private ArrayList<Item> treeLevelItems;
     private ArrayList<Integer> nodesReference;
 
     private int color = R.drawable.red;
@@ -49,6 +50,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_task);
 
         items = new ItemsTreeManager(this).getItems();
+        treeLevelItems = items;
 
         if (getIntent().hasExtra("nodesReference")) {
             nodesReference = getIntent().getIntegerArrayListExtra("nodesReference");
@@ -135,10 +137,16 @@ public class CreateTaskActivity extends AppCompatActivity {
             return;
         }
 
-        for (Integer position : nodesReference) {
-            if (items.get(position) instanceof Project)
-                fatherProject = ((Project) items.get(position));
+
+        for (Integer i : nodesReference) {
+            fatherProject = ((Project) treeLevelItems.get(i));
+            treeLevelItems = ((Project) treeLevelItems.get(i)).getItems();
         }
+
+//        for (Integer position : nodesReference) {
+//            if (items.get(position) instanceof Project)
+//                fatherProject = ((Project) items.get(position));
+//        }
 
         if (fatherProject != null) {
             fatherProject.newTask(nameStr, descriptionStr, color);

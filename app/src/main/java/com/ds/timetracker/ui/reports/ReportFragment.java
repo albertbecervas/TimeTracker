@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.ui.main.MainActivity;
+import com.ds.timetracker.ui.MainActivity;
 import com.ds.timetracker.ui.reports.adapter.ReportsAdapter;
 import com.ds.timetracker.ui.reports.builders.Report;
 import com.ds.timetracker.utils.ItemsTreeManager;

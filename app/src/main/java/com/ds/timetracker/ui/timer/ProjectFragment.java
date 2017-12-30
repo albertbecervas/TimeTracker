@@ -16,7 +16,7 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.ui.edit.EditProjectActivity;
-import com.ds.timetracker.ui.main.MainActivity;
+import com.ds.timetracker.ui.MainActivity;
 import com.ds.timetracker.ui.timer.adapter.ViewTypeAdapter;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -82,19 +82,13 @@ public class ProjectFragment extends Fragment implements ItemCallback {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public void resetAdapterItems(ArrayList<Item> items){
-        mAdapter = new ViewTypeAdapter(getActivity(), this, items);
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
     public void setItems(final ArrayList<Item> items) {
         if (mAdapter != null) {
-
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    progressView.setVisibility(View.VISIBLE);
                     setLevelTitle();
+                    progressView.setVisibility(View.VISIBLE);
                     mAdapter.clearAdapter();
                     mAdapter.setItemsList(items);
                     mAdapter.notifyDataSetChanged();
