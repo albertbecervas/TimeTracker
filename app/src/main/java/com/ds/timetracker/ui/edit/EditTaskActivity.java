@@ -65,7 +65,7 @@ public class EditTaskActivity extends AppCompatActivity {
         name.setText(mTask.getName());
         description.setText(mTask.getDescription());
 
-        String[] colorsNames={"Red","Blue","Green"};
+        String[] colorsNames={getString(R.string.red), getString(R.string.blue), getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
         adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
@@ -123,12 +123,12 @@ public class EditTaskActivity extends AppCompatActivity {
         String descriptionStr = description.getText().toString();
 
         if (nameStr.isEmpty()){
-            name.setError("Cannot be empty");
+            name.setError(getString(R.string.emptyError));
             return;
         }
 
         if (descriptionStr.isEmpty()){
-            description.setError("Cannot be empty");
+            description.setError(getString(R.string.emptyError));
             return;
         }
 

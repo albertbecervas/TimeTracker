@@ -88,10 +88,10 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         title.setText(mTask.getName());
 
         if (mTask.isOpen()){
-            startStop.setText("PAUSE");
+            startStop.setText(R.string.pause);
             startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
         } else {
-            startStop.setText("START");
+            startStop.setText(R.string.start);
             startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
         }
 
@@ -100,12 +100,12 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 if (mTask.isOpen()) {
                     mTask.stop();
-                    startStop.setText("START");
+                    startStop.setText(R.string.start);
                     startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
                     mCallback.onItemStateChanged();
                 } else {
                     mTask.start();
-                    startStop.setText("PAUSE");
+                    startStop.setText(R.string.pause);
                     startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
                     mCallback.onItemStateChanged();
                 }

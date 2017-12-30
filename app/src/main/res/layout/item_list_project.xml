@@ -16,7 +16,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="8dp"
-        android:text="project"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -54,7 +53,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginTop="8dp"
-        android:text="0h 0m 0s"
+        android:text="@string/time_0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

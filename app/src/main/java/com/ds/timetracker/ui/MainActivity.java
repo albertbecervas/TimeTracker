@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Add Fragments to adapter one by one
-        adapter.addFragment(projectFragment, "Project");
-        adapter.addFragment(reportFragment, "Reports");
+        adapter.addFragment(projectFragment, getString(R.string.projectsFragment));
+        adapter.addFragment(reportFragment, getString(R.string.reportsFragment));
         viewPager.setAdapter(adapter);
 
         tabLayout = findViewById(R.id.tabs);
@@ -216,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
             projectFragment.setItems(treeLevelItems);
         } else {
             Snackbar snackbar = Snackbar
-                    .make(constraintLayout, "Are you sure you want to exit?\nAll items will be stopped", Snackbar.LENGTH_LONG)
-                    .setAction("EXIT", new View.OnClickListener() {
+                    .make(constraintLayout, R.string.exitMessage, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.exitButton, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             MainActivity.super.onBackPressed();

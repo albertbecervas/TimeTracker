@@ -38,7 +38,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:text="Lorem ipsum dolor sit amen Lorem ipsum dolor sit amen\nLorem ipsum dolor sit amenLorem ipsum dolor sit amen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -49,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Started"
+        android:text="@string/task_started"
         android:textColor="@color/md_black_1000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
@@ -61,7 +60,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="7 December 2017"
+        android:text="@string/default_start_long_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_started" />
@@ -72,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Ended"
+        android:text="@string/ended"
         android:textColor="@color/md_black_1000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/started" />
@@ -84,7 +83,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="8 December 2017"
+        android:text="@string/default_end_long_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_ended" />
@@ -95,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Duration"
+        android:text="@string/duration"
         android:textColor="@color/md_black_1000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ended" />
@@ -107,7 +106,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="7h: 30m: 20s"
+        android:text="@string/default_duration"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_duration" />
@@ -118,7 +117,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Intervals"
+        android:text="@string/intervals"
         android:textColor="@color/md_black_1000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/duration" />

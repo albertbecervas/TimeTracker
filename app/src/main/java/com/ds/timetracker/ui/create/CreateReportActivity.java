@@ -170,7 +170,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
 
         String reportName = nameEditText.getText().toString();
         if (reportName.isEmpty()) {
-            nameEditText.setError("Cannot be empty");
+            nameEditText.setError(getString(R.string.emptyError));
             return;
         }
 
