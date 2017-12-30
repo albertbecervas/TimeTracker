@@ -16,6 +16,8 @@ import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.TaskDetailActivity;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -24,14 +26,18 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public TextView title;
     private TextView time;
 
-    private ImageView imageView;
+    private TextView startStop;
 
     private ItemCallback mCallback;
+
+    private Context mContext;
 
     public TaskViewHolder(View view, final Context mContext, final ItemCallback callback) {
         super(view);
 
         this.mCallback = callback;
+
+        this.mContext = mContext;
 
         final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
 
@@ -73,7 +79,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         title = view.findViewById(R.id.task_title);
         time = view.findViewById(R.id.time);
-        imageView = view.findViewById(R.id.imageView);
+        startStop = view.findViewById(R.id.start_pause);
     }
 
     public void setItem(Item task) {
@@ -82,21 +88,25 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         title.setText(mTask.getName());
 
         if (mTask.isOpen()){
-            imageView.setImageResource(R.drawable.ic_action_playback_pause);
+            startStop.setText("PAUSE");
+            startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
         } else {
-            imageView.setImageResource(R.drawable.ic_action_playback_play);
+            startStop.setText("START");
+            startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
         }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mTask.isOpen()) {
                     mTask.stop();
-                    imageView.setImageResource(R.drawable.ic_action_playback_play);
+                    startStop.setText("START");
+                    startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
                     mCallback.onItemStateChanged();
                 } else {
                     mTask.start();
-                    imageView.setImageResource(R.drawable.ic_action_playback_pause);
+                    startStop.setText("PAUSE");
+                    startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
                     mCallback.onItemStateChanged();
                 }
             }

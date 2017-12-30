@@ -3,6 +3,7 @@ package com.ds.timetracker.ui.timer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
 
     private TextView level;
     private CircularProgressView progressView;
+    private ConstraintLayout emptyLayout;
 
     public ProjectFragment() {
         // Required empty public constructor
@@ -59,6 +61,8 @@ public class ProjectFragment extends Fragment implements ItemCallback {
 
         progressView = view.findViewById(R.id.progress);
 
+        emptyLayout = view.findViewById(R.id.empty_layout);
+
         setLevelTitle();
 
         setAdapter();
@@ -67,7 +71,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     private void setLevelTitle() {
-        if (activity.father == null){
+        if (activity.father == null) {
             level.setText("MAIN");
         } else {
             level.setText(activity.father.getName());
@@ -88,11 +92,20 @@ public class ProjectFragment extends Fragment implements ItemCallback {
                 @Override
                 public void run() {
                     setLevelTitle();
-                    progressView.setVisibility(View.VISIBLE);
-                    mAdapter.clearAdapter();
-                    mAdapter.setItemsList(items);
-                    mAdapter.notifyDataSetChanged();
-                    progressView.setVisibility(View.GONE);
+
+                    if (!items.isEmpty()) {
+                        emptyLayout.setVisibility(View.GONE);
+                        progressView.setVisibility(View.VISIBLE);
+                        mAdapter.clearAdapter();
+                        mAdapter.setItemsList(items);
+                        mAdapter.notifyDataSetChanged();
+                        progressView.setVisibility(View.GONE);
+
+                    } else {
+                        mAdapter.clearAdapter();
+                        emptyLayout.setVisibility(View.VISIBLE);
+                        progressView.setVisibility(View.GONE);
+                    }
 
                 }
             });
@@ -138,9 +151,15 @@ public class ProjectFragment extends Fragment implements ItemCallback {
             activity.treeLevelItems = ((Project) activity.treeLevelItems.get(i)).getItems();
         }
 
-        mAdapter.clearAdapter();
-        mAdapter.setItemsList(activity.treeLevelItems);
-        mAdapter.notifyDataSetChanged();
+        if (!activity.treeLevelItems.isEmpty()) {
+            emptyLayout.setVisibility(View.GONE);
+            mAdapter.clearAdapter();
+            mAdapter.setItemsList(activity.treeLevelItems);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            mAdapter.clearAdapter();
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
