@@ -263,11 +263,13 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
             itemsTreeManager.resetItems();
         } else {
             father.deleteItems();
+            itemsTreeManager.saveItems(items);
         }
-        itemsTreeManager.saveItems(items);
         items = itemsTreeManager.getItems();
+        reports = itemsTreeManager.getReports();
         treeLevelItems = items;
         projectFragment.setItems(treeLevelItems);
+        reportFragment.setReports(reports);
     }
 
     private void recursiveTreeSearchToPause(Item item) {

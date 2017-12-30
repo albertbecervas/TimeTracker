@@ -2,6 +2,7 @@ package com.ds.timetracker.ui.reports;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ public class ReportFragment extends Fragment {
 
     private RecyclerView mRecyclerView; //RecyclerView used to display tasks and projects
     private ReportsAdapter mAdapter; //adapter that handles the items
+    private ConstraintLayout emptyLayout;
 
     public ReportFragment() {
         // Required empty public constructor
@@ -50,6 +52,8 @@ public class ReportFragment extends Fragment {
 
         mRecyclerView = view.findViewById(R.id.reportsRV);
 
+        emptyLayout = view.findViewById(R.id.empty_layout);
+
         setAdapter();
 
         // Inflate the layout for this fragment
@@ -57,16 +61,29 @@ public class ReportFragment extends Fragment {
     }
 
     private void setAdapter() {
-        mAdapter = new ReportsAdapter(reports, getActivity());
+        if (!reports.isEmpty()){
+            mAdapter = new ReportsAdapter(reports, getActivity());
+            emptyLayout.setVisibility(View.GONE);
+        } else {
+            mAdapter = new ReportsAdapter(new ArrayList<Report>(), getActivity());
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     public void setReports(ArrayList<Report> reports) {
-        mAdapter.clearAdapter();
-        mAdapter.setReportsList(reports);
-        mAdapter.notifyDataSetChanged();
+
+        if (!reports.isEmpty()){
+            emptyLayout.setVisibility(View.GONE);
+            mAdapter.clearAdapter();
+            mAdapter.setReportsList(reports);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            mAdapter.clearAdapter();
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
