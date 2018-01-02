@@ -3,6 +3,9 @@ package com.ds.timetracker.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -15,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +34,10 @@ import com.ds.timetracker.ui.create.CreateReportActivity;
 import com.ds.timetracker.ui.create.CreateTaskActivity;
 import com.ds.timetracker.ui.reports.ReportFragment;
 import com.ds.timetracker.ui.reports.builders.Report;
+import com.ds.timetracker.ui.settings.SettingsActivity;
 import com.ds.timetracker.ui.timer.ProjectFragment;
+import com.ds.timetracker.utils.AppSharedPreferences;
+import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.CustomFabMenu;
 import com.ds.timetracker.utils.CustomFabMenuCallback;
 import com.ds.timetracker.utils.ItemsTreeManager;
@@ -38,6 +45,7 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     public final static int EDIT_ITEM_RESULT = 2;
     private final static int MY_PERMISSIONS_REQUEST_READ_WRITE = 3;
 
-    private ItemsTreeManager itemsTreeManager;
+    public ItemsTreeManager itemsTreeManager;
+    public AppSharedPreferences mPrefs;
 
     private ProjectFragment projectFragment;//fragment where all items will be displayed
     private ReportFragment reportFragment;//fragment where all reports will be displayed
@@ -70,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPrefs = AppSharedPreferences.getInstance(this);
+
+        setLocale(new Locale(mPrefs.getLocale()));
 
         requestPermissions();
 
@@ -119,13 +132,21 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         }
     }
 
+    private void setLocale(Locale locale) {
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+    }
+
     private void setTabs() {
         ViewPager viewPager = findViewById(R.id.viewPager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Add Fragments to adapter one by one
-        adapter.addFragment(projectFragment, "Project");
-        adapter.addFragment(reportFragment, "Reports");
+        adapter.addFragment(projectFragment, getString(R.string.project));
+        adapter.addFragment(reportFragment, getString(R.string.reports));
         viewPager.setAdapter(adapter);
 
         tabLayout = findViewById(R.id.tabs);
@@ -240,6 +261,9 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
+                Clock.getInstance().deleteObserver(this);
+                startActivity(new Intent(this, SettingsActivity.class));
+                finish();
                 break;
             case R.id.delete:
                 deleteItems();

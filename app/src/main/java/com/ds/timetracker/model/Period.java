@@ -1,6 +1,7 @@
 package com.ds.timetracker.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -48,5 +49,23 @@ public class Period implements Serializable {
 
     public void addDuration(long duration) {
         this.duration += duration;
+    }
+
+    public String getInitialFormattedDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+
+        return dateFormat.format(startWorkingDate)
+                + " at "
+                + hourFormat.format(startWorkingDate);
+    }
+
+    public String getFinalFormattedDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+
+        return dateFormat.format(finalWorkingDate)
+                + " at "
+                + hourFormat.format(finalWorkingDate);
     }
 }

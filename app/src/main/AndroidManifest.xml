@@ -27,7 +27,8 @@
         <activity android:name=".ui.create.CreateProjectActivity" />
         <activity android:name=".ui.reports.ReportDetailActivity" />
         <activity android:name=".ui.edit.EditTaskActivity" />
-        <activity android:name=".ui.edit.EditProjectActivity"></activity>
+        <activity android:name=".ui.edit.EditProjectActivity" />
+        <activity android:name=".ui.settings.SettingsActivity" />
     </application>
 
 </manifest>

@@ -6,27 +6,23 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.TaskDetailActivity;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 public class TaskViewHolder extends RecyclerView.ViewHolder {
 
     private Task mTask;
+
     public TextView title;
     private TextView time;
-
     private TextView startStop;
+    private LinearLayout color;
 
     private ItemCallback mCallback;
 
@@ -48,11 +44,8 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
                     deleteLayout.setVisibility(View.GONE);
                 } else {
                     Intent intent = new Intent(mContext, TaskDetailActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("task", mTask);
-                    intent.putExtras(bundle);
                     intent.putExtra("position", getAdapterPosition());
-                    mCallback.onEditTask(getAdapterPosition(),intent);
+                    mCallback.onEditTask(getAdapterPosition(), intent);
                 }
 
             }
@@ -61,7 +54,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (deleteLayout.getVisibility() == View.VISIBLE){
+                if (deleteLayout.getVisibility() == View.VISIBLE) {
                     deleteLayout.setVisibility(View.GONE);
                 } else {
                     deleteLayout.setVisibility(View.VISIBLE);
@@ -80,6 +73,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         title = view.findViewById(R.id.task_title);
         time = view.findViewById(R.id.time);
         startStop = view.findViewById(R.id.start_pause);
+        color = view.findViewById(R.id.colorLayout);
     }
 
     public void setItem(Item task) {
@@ -87,7 +81,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         title.setText(mTask.getName());
 
-        if (mTask.isOpen()){
+        if (mTask.isOpen()) {
             startStop.setText("PAUSE");
             startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
         } else {
@@ -112,7 +106,30 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        setColor(mTask);
+
         setTime();
+    }
+
+    private void setColor(Task mTask) {
+
+        int colorId = mTask.getColor();
+
+        switch (colorId) {
+            case R.drawable.red:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_800));
+                break;
+            case R.drawable.blue:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_blue_800));
+                break;
+            case R.drawable.green:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_green_800));
+                break;
+            default:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_800));
+                break;
+        }
+
     }
 
     private void setTime() {

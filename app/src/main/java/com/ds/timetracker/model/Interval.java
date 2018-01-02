@@ -18,11 +18,14 @@ public class Interval implements Serializable, Observer {
     private Period period;
     private boolean isOpen;
 
+    private boolean isUpdating = false;
+
     public Interval(Task task) {
         this.period = new Period();
         this.isOpen = true;
         this.task = task;
         Clock.getInstance().addObserver(this);
+        isUpdating = true;
     }
 
     public void setEndWorkingLogDatee(Date endWorkingLogDate) {
@@ -56,7 +59,31 @@ public class Interval implements Serializable, Observer {
         return period.getStartWorkingDate();
     }
 
+    public String getInitialFormattedDate(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+
+        return "FROM: "
+                + dateFormat.format(period.getStartWorkingDate())
+                + " at "
+                + hourFormat.format(period.getStartWorkingDate());
+    }
+
+    public String getFinalFormattedDate(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+
+        return "TO: "
+                + dateFormat.format(period.getFinalWorkingDate())
+                + " at "
+                + hourFormat.format(period.getFinalWorkingDate());
+    }
+
     public String getFormattedDuration(){
+        if(!isUpdating){
+            Clock.getInstance().addObserver(this);
+        }
+
         if (period == null) return "";
         int secondsForHour = 3600;
         int secondsForMinut = 60;

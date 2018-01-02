@@ -48,6 +48,10 @@ public class CreateProjectActivity extends AppCompatActivity {
             nodesReference = new ArrayList<>();
         }
 
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
         colorPicker = findViewById(R.id.spinner);
@@ -78,7 +82,14 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        createProject();
+        switch (item.getItemId()){
+            case R.id.save:
+                createProject();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
         return false;
     }
 

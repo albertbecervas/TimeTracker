@@ -18,8 +18,9 @@ import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.ui.edit.EditProjectActivity;
 import com.ds.timetracker.ui.MainActivity;
-import com.ds.timetracker.ui.timer.adapter.ViewTypeAdapter;
+import com.ds.timetracker.ui.timer.adapter.ItemsAdapter;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
+import com.ds.timetracker.utils.ItemsTreeManager;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     private MainActivity activity;
 
     private RecyclerView mRecyclerView; //RecyclerView used to display tasks and projects
-    private ViewTypeAdapter mAdapter; //adapter that handles the items
+    private ItemsAdapter mAdapter; //adapter that handles the items
 
     private TextView level;
     private CircularProgressView progressView;
@@ -79,7 +80,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     private void setAdapter() {
-        mAdapter = new ViewTypeAdapter(getActivity(), this, new ArrayList<Item>());
+        mAdapter = new ItemsAdapter(getActivity(), this, new ArrayList<Item>());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -87,7 +88,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     public void setItems(final ArrayList<Item> items) {
-        if (mAdapter != null) {
+        if (mAdapter != null && getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -137,7 +138,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
 
     @Override
     public void onItemStateChanged() {
-
+        activity.itemsTreeManager.saveItems(activity.items);
     }
 
     @Override
@@ -180,6 +181,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     @Override
     public void onEditTask(int position, Intent intent) {
         //say the position we want to edit
+        intent.putIntegerArrayListExtra("nodesReference", activity.nodesReference);
         activity.startActivityForResult(intent, MainActivity.EDIT_ITEM_RESULT);
     }
 }

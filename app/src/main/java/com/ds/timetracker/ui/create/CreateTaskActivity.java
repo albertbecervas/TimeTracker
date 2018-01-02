@@ -1,5 +1,6 @@
 package com.ds.timetracker.ui.create;
 
+import android.app.DatePickerDialog;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.Checkable;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,13 +21,18 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
+import com.ds.timetracker.utils.DatePickerFragment;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
-public class CreateTaskActivity extends AppCompatActivity {
+public class CreateTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     private EditText name;
     private EditText description;
@@ -34,6 +41,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private CheckBox limited;
     private ConstraintLayout dateLayout;
     private ConstraintLayout hourLayout;
+    private TextView fromDate;
 
     private SpinnerAdapter adapter;
 
@@ -62,6 +70,11 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     private void setViews() {
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
         colorPicker = findViewById(R.id.spinner);
@@ -69,6 +82,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         limited = findViewById(R.id.limited_switch);
         dateLayout = findViewById(R.id.from_layout);
         hourLayout = findViewById(R.id.time_layout);
+        fromDate = findViewById(R.id.from_date);
 
         String[] colorsNames={"Red","Blue","Green"};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
@@ -83,6 +97,14 @@ public class CreateTaskActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        fromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerFragment fragmentFrom = new DatePickerFragment();
+                fragmentFrom.show(getSupportFragmentManager(), "initialDate");
             }
         });
 
@@ -118,8 +140,27 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        createTask();
+        switch (item.getItemId()){
+            case R.id.save:
+                createTask();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
         return false;
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar cal = new GregorianCalendar(year, month, day);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+
+        String finalDate = dateFormat.format(cal.getTime());
+
+        fromDate.setText(finalDate);
     }
 
 
@@ -142,11 +183,6 @@ public class CreateTaskActivity extends AppCompatActivity {
             fatherProject = ((Project) treeLevelItems.get(i));
             treeLevelItems = ((Project) treeLevelItems.get(i)).getItems();
         }
-
-//        for (Integer position : nodesReference) {
-//            if (items.get(position) instanceof Project)
-//                fatherProject = ((Project) items.get(position));
-//        }
 
         if (fatherProject != null) {
             fatherProject.newTask(nameStr, descriptionStr, color);

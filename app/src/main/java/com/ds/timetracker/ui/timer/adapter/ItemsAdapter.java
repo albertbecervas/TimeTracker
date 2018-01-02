@@ -15,13 +15,13 @@ import com.ds.timetracker.utils.Constants;
 
 import java.util.ArrayList;
 
-public class ViewTypeAdapter extends RecyclerView.Adapter {
+public class ItemsAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
     private ArrayList<Item> itemsList;
     private ItemCallback mCallback;
 
-    public ViewTypeAdapter(Context context, ItemCallback callback, ArrayList<Item> items) {
+    public ItemsAdapter(Context context, ItemCallback callback, ArrayList<Item> items) {
         this.mContext = context;
         this.mCallback = callback;
         this.itemsList = items;

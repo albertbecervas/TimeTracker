@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:id="@+id/constraintLayout"
     android:elevation="3dp"
-    android:background="@color/md_orange_50"
+    android:background="@color/md_red_100"
     android:orientation="vertical">
 
     <TextView
@@ -18,16 +19,16 @@
         android:layout_marginTop="8dp"
         android:text="project"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/colorLayout"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/colorLayout"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:background="@color/md_green_500"
+        android:background="@color/md_red_600"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

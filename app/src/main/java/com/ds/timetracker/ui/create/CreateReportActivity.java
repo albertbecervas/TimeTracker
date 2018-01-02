@@ -1,13 +1,11 @@
 package com.ds.timetracker.ui.create;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -17,8 +15,11 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.ui.reports.builders.BriefReport;
 import com.ds.timetracker.ui.reports.builders.DetailedReport;
 import com.ds.timetracker.ui.reports.builders.Report;
+import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.DatePickerFragment;
 import com.ds.timetracker.utils.ItemsTreeManager;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,7 +31,7 @@ import static com.ds.timetracker.utils.Constants.BRIEF_REPORT;
 import static com.ds.timetracker.utils.Constants.HTML_FORMAT;
 import static com.ds.timetracker.utils.Constants.TEXT_FORMAT;
 
-public class CreateReportActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
+public class CreateReportActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener {
 
     private ItemsTreeManager itemsTreeManager;
 
@@ -49,6 +50,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     private RadioButton htmlFormat;
 
     private Boolean isInitialDateSelected = false;
+    private Boolean isInitialHourSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,11 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     }
 
     private void setViews() {
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         nameEditText = findViewById(R.id.name_edit);
         spinner = findViewById(R.id.spinner);
         fromDateText = findViewById(R.id.from_date);
@@ -103,13 +110,21 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        createReport();
+        switch (item.getItemId()){
+            case R.id.save:
+                createReport();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
         return false;
     }
 
+
     @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        Calendar cal = new GregorianCalendar(year, month, day);
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar cal = new GregorianCalendar(year, monthOfYear, dayOfMonth);
 
         if (isInitialDateSelected) {
             initialDate = cal.getTime();
@@ -123,10 +138,18 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
             finalDate = cal.getTime();
             toDateText.setText(dateFormat.format(finalDate));
         }
-
-
     }
 
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        String hour = hourOfDay + ":" + minute;
+
+        if (isInitialHourSelected){
+            fromHourText.setText(hour);
+        } else {
+            toHourText.setText(hour);
+        }
+    }
 
     public void onRadioButtonClick(View view) {
 
@@ -148,17 +171,49 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         switch (view.getId()) {
             case R.id.from_date:
                 isInitialDateSelected = true;
-                DatePickerFragment fragmentFrom = new DatePickerFragment();
-                fragmentFrom.show(getSupportFragmentManager(), "initialDate");
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        CreateReportActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "Datepickerdialog");
+//                DatePickerFragment fragmentFrom = new DatePickerFragment();
+//                fragmentFrom.show(getSupportFragmentManager(), "initialDate");
                 break;
             case R.id.to_date:
                 isInitialDateSelected = false;
-                DatePickerFragment fragmentTo = new DatePickerFragment();
-                fragmentTo.show(getSupportFragmentManager(), "finalDate");
+                Calendar time = Calendar.getInstance();
+                DatePickerDialog dpd1 = DatePickerDialog.newInstance(
+                        CreateReportActivity.this,
+                        time.get(Calendar.YEAR),
+                        time.get(Calendar.MONTH),
+                        time.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd1.show(getFragmentManager(), "Datepickerdialog");
                 break;
             case R.id.from_hour:
+                isInitialHourSelected = true;
+                Calendar from = Calendar.getInstance();
+                TimePickerDialog tpd = TimePickerDialog.newInstance(
+                        CreateReportActivity.this,
+                        from.get(Calendar.YEAR),
+                        from.get(Calendar.MONTH),
+                        Constants.IS_24_HOURS
+                );
+                tpd.show(getFragmentManager(), "Datepickerdialog");
                 break;
             case R.id.to_hour:
+                isInitialHourSelected = false;
+                Calendar from2 = Calendar.getInstance();
+                TimePickerDialog tpd2 = TimePickerDialog.newInstance(
+                        CreateReportActivity.this,
+                        from2.get(Calendar.YEAR),
+                        from2.get(Calendar.MONTH),
+                        Constants.IS_24_HOURS
+                );
+                tpd2.show(getFragmentManager(), "Datepickerdialog");
                 break;
         }
     }
@@ -201,4 +256,5 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         setResult(RESULT_CANCELED);
         super.onBackPressed();
     }
+
 }

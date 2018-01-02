@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
+import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
 public class ProjectViewHolder extends RecyclerView.ViewHolder {
@@ -16,6 +18,10 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
     private Project mProject;
     public TextView title;
     private TextView time;
+    private LinearLayout color;
+    private ConstraintLayout layout;
+
+    private Context mContext;
 
     private ItemCallback mCallback;
 
@@ -23,6 +29,8 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
         super(view);
 
         this.mCallback = callback;
+
+        this.mContext = mContext;
 
         final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
         final ConstraintLayout editLayout = view.findViewById(R.id.edit_container);
@@ -68,6 +76,8 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
         title = view.findViewById(R.id.project_title);
         time = view.findViewById(R.id.time);
+        color = view.findViewById(R.id.colorLayout);
+        layout = view.findViewById(R.id.constraintLayout);
     }
 
     public void setItem(Item project) {
@@ -75,6 +85,33 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
         title.setText(project.getName());
 
         time.setText(mProject.getFormattedDuration());
+
+        setColor(mProject);
+
+    }
+
+    private void setColor(Project project) {
+
+        int colorId = project.getColor();
+
+        switch (colorId){
+            case R.drawable.red:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_800));
+                layout.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_50));
+                break;
+            case R.drawable.blue:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_blue_800));
+                layout.setBackgroundColor(mContext.getResources().getColor(R.color.md_blue_50));
+                break;
+            case R.drawable.green:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_green_800));
+                layout.setBackgroundColor(mContext.getResources().getColor(R.color.md_green_50));
+                break;
+            default:
+                color.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_800));
+                layout.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_50));
+                break;
+        }
 
     }
 }

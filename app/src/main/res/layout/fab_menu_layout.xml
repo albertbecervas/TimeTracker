@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/fabBGLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorTransBg"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/fabLayout1"
@@ -29,6 +29,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/md_white_1000"
+            android:padding="5dp"
             android:text="New Task" />
 
         <android.support.design.widget.FloatingActionButton
@@ -58,6 +60,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/md_white_1000"
+            android:padding="5dp"
             android:text="New Project" />
 
         <android.support.design.widget.FloatingActionButton
@@ -87,6 +91,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/md_white_1000"
+            android:padding="5dp"
             android:text="New Report" />
 
         <android.support.design.widget.FloatingActionButton
@@ -118,8 +124,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:gravity="center_vertical"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center_vertical"
             app:fabSize="normal"
             app:srcCompat="@drawable/ic_add" />
     </LinearLayout>

@@ -3,66 +3,72 @@ package com.ds.timetracker.ui.timer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.model.Interval;
+import com.ds.timetracker.model.Item;
+import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
+import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.ui.edit.EditTaskActivity;
-
-import org.w3c.dom.Text;
+import com.ds.timetracker.ui.timer.adapter.IntervalsAdapter;
+import com.ds.timetracker.utils.ItemsTreeManager;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class TaskDetailActivity extends AppCompatActivity {
+public class TaskDetailActivity extends AppCompatActivity implements Observer {
 
     public static final int EDIT_TASK = 0;
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private TextView description;
     private TextView started;
     private TextView ended;
     private TextView duration;
-    private EditText name;
-    private EditText descriptionEdit;
+
+    private IntervalsAdapter mAdapter;
 
     private Task mTask;
     private int position;
-
-    private ArrayList<Interval> intervals;
-
-    MenuItem edit;
-    private boolean isInEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        Bundle bundle = getIntent().getExtras();
+        ArrayList<Item> treeLevelItems = new ItemsTreeManager(this).getItems();
 
-        if (bundle != null) {
-            mTask = (Task) bundle.getSerializable("task");
-            position = getIntent().getIntExtra("position", -1);
-            intervals = mTask != null ? mTask.getIntervals() : new ArrayList<Interval>();
+        position = getIntent().getIntExtra("position", -1);
 
-            setViews();
-            setAdapter();
+        ArrayList<Integer> nodesReference;
+        if (getIntent().hasExtra("nodesReference")) {
+            nodesReference = getIntent().getIntegerArrayListExtra("nodesReference");
+        } else {
+            nodesReference = new ArrayList<>();
         }
+
+        for (Integer i : nodesReference) {
+            treeLevelItems = ((Project) treeLevelItems.get(i)).getItems();
+        }
+
+        mTask = (Task) treeLevelItems.get(position);
+
+        setViews();
+        setAdapter();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_detail_menu, menu);
-        edit = menu.findItem(R.id.edit);
         return true;
     }
 
@@ -84,14 +90,12 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        ArrayList<String> labels = new ArrayList<>();
+        mAdapter = new IntervalsAdapter(this, mTask.getIntervals());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(mAdapter);
 
-        for (Interval interval : intervals) {
-            labels.add(interval.toString());
-        }
-
-        ArrayAdapter itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, labels);
-        listView.setAdapter(itemsAdapter);
+        Clock.getInstance().addObserver(this);
     }
 
     private void setViews() {
@@ -100,18 +104,16 @@ public class TaskDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        listView = findViewById(R.id.listView);
+        recyclerView = findViewById(R.id.recyclerView);
         description = findViewById(R.id.description);
         started = findViewById(R.id.started);
         ended = findViewById(R.id.ended);
         duration = findViewById(R.id.duration);
-        name = findViewById(R.id.name);
-        descriptionEdit = findViewById(R.id.description_edit);
 
-        String startWd = mTask.getPeriod().getStartWorkingDate().toString();
+        String startWd = mTask.getPeriod().getInitialFormattedDate();
         String endWd = "-";
         if (mTask.getPeriod().getFinalWorkingDate() != null) {
-            endWd = mTask.getPeriod().getFinalWorkingDate().toString();
+            endWd = mTask.getPeriod().getFinalFormattedDate();
         }
 
         description.setText(mTask.getDescription());
@@ -149,6 +151,20 @@ public class TaskDetailActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(nameStr);
                 description.setText(descriptionStr);
             }
+        }
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (mTask != null && mAdapter != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    duration.setText(mTask.getFormattedDuration());
+                    mAdapter.setIntervalsList(mTask.getIntervals());
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
         }
     }
 }
