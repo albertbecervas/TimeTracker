@@ -40,7 +40,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
-            android:hint="Report name"
+            android:hint="@string/report_name_hint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -145,7 +145,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="12/12/2017"
+            android:text="@string/default_start_date"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
             app:layout_constraintTop_toTopOf="parent" />
@@ -158,7 +158,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="18:49"
+            android:text="@string/default_start_time"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/from_date"
@@ -212,7 +212,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="12/12/2017"
+            android:text="@string/default_end_date"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView6"
             app:layout_constraintTop_toTopOf="parent" />
@@ -225,7 +225,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="18:49"
+            android:text="@string/default_end_time"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/to_date"
@@ -253,7 +253,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Report format"
+        android:text="@string/report_format"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/to_layout" />
 
@@ -265,7 +265,7 @@
         android:layout_marginTop="8dp"
         android:checked="true"
         android:onClick="onRadioButtonClick"
-        android:text="text"
+        android:text="@string/text_format"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/format_title" />
 
@@ -276,7 +276,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="onRadioButtonClick"
-        android:text="web"
+        android:text="@string/web_format"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_rb" />
 

@@ -31,7 +31,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
-        android:text="task"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,9 +45,9 @@
         android:layout_marginStart="68dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="0h 0m 0s"
+        android:text="@string/time_0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/task_title"
+        app:layout_constraintStart_toEndOf="@id/task_title"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -59,7 +58,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="PAUSE"
+        android:text="@string/pause"
         android:textColor="@color/md_orange_600"
         android:textSize="20sp"
         android:textStyle="bold"

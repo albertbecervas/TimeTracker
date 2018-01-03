@@ -29,9 +29,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:background="@color/md_white_1000"
             android:padding="5dp"
-            android:text="New Task" />
+            android:text="@string/new_task" />
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab1"
@@ -62,7 +64,8 @@
             android:layout_height="wrap_content"
             android:background="@color/md_white_1000"
             android:padding="5dp"
-            android:text="New Project" />
+
+            android:text="@string/new_project" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab2"
@@ -93,7 +96,7 @@
             android:layout_height="wrap_content"
             android:background="@color/md_white_1000"
             android:padding="5dp"
-            android:text="New Report" />
+            android:text="@string/new_report" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab3"

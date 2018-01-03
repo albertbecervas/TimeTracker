@@ -2,7 +2,6 @@ package com.ds.timetracker.ui.timer.adapter.viewholder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -82,10 +81,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         title.setText(mTask.getName());
 
         if (mTask.isOpen()) {
-            startStop.setText("PAUSE");
+            startStop.setText(R.string.pause);
+
             startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
         } else {
-            startStop.setText("START");
+            startStop.setText(R.string.start);
             startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
         }
 
@@ -94,12 +94,12 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 if (mTask.isOpen()) {
                     mTask.stop();
-                    startStop.setText("START");
+                    startStop.setText(R.string.start);
                     startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
                     mCallback.onItemStateChanged();
                 } else {
                     mTask.start();
-                    startStop.setText("PAUSE");
+                    startStop.setText(R.string.pause);
                     startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
                     mCallback.onItemStateChanged();
                 }

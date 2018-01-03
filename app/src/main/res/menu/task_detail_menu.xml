@@ -5,6 +5,5 @@
     <item
         android:id="@+id/edit"
         app:showAsAction="always"
-        android:title="vfds"
         android:icon="@drawable/ic_mode_edit"/>
 </menu>

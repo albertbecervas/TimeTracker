@@ -1,17 +1,15 @@
 package com.ds.timetracker.ui.create;
 
 import android.app.DatePickerDialog;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -24,13 +22,12 @@ import com.ds.timetracker.model.Task;
 import com.ds.timetracker.utils.DatePickerFragment;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
 
 public class CreateTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -84,7 +81,7 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         hourLayout = findViewById(R.id.time_layout);
         fromDate = findViewById(R.id.from_date);
 
-        String[] colorsNames={"Red","Blue","Green"};
+        String[] colorsNames={getString(R.string.red),getString(R.string.blue),getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
         adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
@@ -169,12 +166,12 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         String descriptionStr = description.getText().toString();
 
         if (nameStr.isEmpty()){
-            name.setError("Cannot be empty");
+            name.setError(getString(R.string.emptyError));
             return;
         }
 
         if (descriptionStr.isEmpty()){
-            description.setError("Cannot be empty");
+            description.setError(getString(R.string.emptyError));
             return;
         }
 

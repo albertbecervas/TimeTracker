@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class CreateProjectActivity extends AppCompatActivity {
         description = findViewById(R.id.description_edit);
         colorPicker = findViewById(R.id.spinner);
 
-        String[] colorsNames={"Red","Blue","Green"};
+        String[] colorsNames={getString(R.string.red),getString(R.string.blue),getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
         adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
@@ -99,12 +98,12 @@ public class CreateProjectActivity extends AppCompatActivity {
         String descriptionStr = description.getText().toString();
 
         if (nameStr.isEmpty()) {
-            name.setError("Cannot be empty");
+            name.setError(getString(R.string.emptyError));
             return;
         }
 
         if (descriptionStr.isEmpty()) {
-            description.setError("Cannot be empty");
+            description.setError(getString(R.string.emptyError));
             return;
         }
 
