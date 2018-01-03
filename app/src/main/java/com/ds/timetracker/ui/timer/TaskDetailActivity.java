@@ -17,15 +17,18 @@ import com.ds.timetracker.model.Task;
 import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.ui.edit.EditTaskActivity;
 import com.ds.timetracker.ui.timer.adapter.IntervalsAdapter;
+import com.ds.timetracker.ui.timer.callback.IntervalCallback;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class TaskDetailActivity extends AppCompatActivity implements Observer {
+public class TaskDetailActivity extends AppCompatActivity implements Observer, IntervalCallback {
 
     public static final int EDIT_TASK = 0;
+
+    private ItemsTreeManager itemsTreeManager;
 
     private RecyclerView recyclerView;
     private TextView description;
@@ -38,12 +41,17 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer {
     private Task mTask;
     private int position;
 
+    boolean delete = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        ArrayList<Item> treeLevelItems = new ItemsTreeManager(this).getItems();
+        itemsTreeManager = new ItemsTreeManager(this);
+
+
+        ArrayList<Item> treeLevelItems = itemsTreeManager.getItems();
 
         position = getIntent().getIntExtra("position", -1);
 
@@ -82,6 +90,10 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer {
                 intent.putExtras(bundle);
                 startActivityForResult(intent, EDIT_TASK);
                 break;
+            case R.id.delete:
+                delete = true;
+                onBackPressed();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -110,10 +122,10 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer {
         ended = findViewById(R.id.ended);
         duration = findViewById(R.id.duration);
 
-        String startWd = mTask.getPeriod().getInitialFormattedDate();
+        String startWd = mTask.getPeriod().getInitialFormattedDate() + getString(R.string.at) + mTask.getPeriod().getInitialFormattedHour();
         String endWd = "-";
         if (mTask.getPeriod().getFinalWorkingDate() != null) {
-            endWd = mTask.getPeriod().getFinalFormattedDate();
+            endWd = mTask.getPeriod().getFinalFormattedDate() + getString(R.string.at) + mTask.getPeriod().getFinalFormattedHour();
         }
 
         description.setText(mTask.getDescription());
@@ -130,6 +142,7 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer {
         intent.putExtra("description", mTask.getDescription());
         intent.putExtra("color", mTask.getColor());
         intent.putExtra("position", position);
+        intent.putExtra("delete", delete);
         setResult(RESULT_OK, intent);
         super.onBackPressed();
     }
@@ -166,5 +179,10 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer {
                 }
             });
         }
+    }
+
+    @Override
+    public void onIntervalDeleted(int position) {
+        mTask.getIntervals().remove(position);
     }
 }

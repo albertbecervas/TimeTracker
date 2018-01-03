@@ -14,6 +14,8 @@ public class Task extends Item {
     private static final long serialVersionUID = 1L;//Needed object identifier
     private ArrayList<Interval> intervals;
 
+    private boolean isPausedWithAll = false;
+
     public Task(String name, String description, int color, Project project) {
         super(name, description, new Period(), Constants.TASK, color);
 
@@ -29,6 +31,14 @@ public class Task extends Item {
 
     public ArrayList<Interval> getIntervals() {
         return intervals;
+    }
+
+    public void setPausedWithAll(boolean isPausedWithAll){
+        this.isPausedWithAll = isPausedWithAll;
+    }
+
+    public boolean isPausedWithAll(){
+        return isPausedWithAll;
     }
 
     public void start() {

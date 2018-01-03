@@ -19,8 +19,8 @@ import java.util.Date;
  */
 public class Report implements Serializable {
 
-    protected String startDateString = "29/11/2017 22:25:16"; //dd/MM/yyyy hh:mm:ss
-    protected String endDateString = "29/11/2017 22:29:46";
+    protected String startDateString = ""; //dd/MM/yyyy hh:mm:ss
+    protected String endDateString = "";
     protected long startPeriodTime;
     protected long endPeriodTime;
     protected Date startPeriodDate;
@@ -37,8 +37,11 @@ public class Report implements Serializable {
     protected Format format;
     protected String formatStr;
 
-    public Report() {
+    public Report(String startDateString, String endDateString) {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+
+        this.startDateString = startDateString;
+        this.endDateString = endDateString;
 
         try {
             startPeriodDate = df.parse(startDateString);

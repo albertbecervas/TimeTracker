@@ -16,6 +16,7 @@ import com.ds.timetracker.ui.reports.builders.Report;
 public class DetailedReportViewHolder extends RecyclerView.ViewHolder {
 
     private TextView title;
+    private TextView generationDate;
 
     private DetailedReport mReport;
 
@@ -26,6 +27,7 @@ public class DetailedReportViewHolder extends RecyclerView.ViewHolder {
         this.mContext = context;
 
         title = itemView.findViewById(R.id.title);
+        generationDate = itemView.findViewById(R.id.date);
         ImageView download = itemView.findViewById(R.id.download);
 
         download.setOnClickListener(new View.OnClickListener() {
@@ -55,5 +57,6 @@ public class DetailedReportViewHolder extends RecyclerView.ViewHolder {
         String titleStr = report.getName() + "." + report.getFormatStr();
 
         title.setText(titleStr);
+        generationDate.setText(mReport.getGenerationDate());
     }
 }

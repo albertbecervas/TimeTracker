@@ -59,28 +59,28 @@ public class Interval implements Serializable, Observer {
         return period.getStartWorkingDate();
     }
 
-    public String getInitialFormattedDate(){
+    public String getInitialFormattedDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
-
-        return "FROM: "
-                + dateFormat.format(period.getStartWorkingDate())
-                + " at "
-                + hourFormat.format(period.getStartWorkingDate());
+        return dateFormat.format(period.getStartWorkingDate());
     }
 
-    public String getFinalFormattedDate(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+    public String getInitialFormattedHour() {
         SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
-
-        return "TO: "
-                + dateFormat.format(period.getFinalWorkingDate())
-                + " at "
-                + hourFormat.format(period.getFinalWorkingDate());
+        return hourFormat.format(period.getStartWorkingDate());
     }
 
-    public String getFormattedDuration(){
-        if(!isUpdating){
+    public String getFinalFormattedDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        return  dateFormat.format(period.getFinalWorkingDate());
+    }
+
+    public String getFinalFormattedHour() {
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+        return hourFormat.format(period.getFinalWorkingDate());
+    }
+
+    public String getFormattedDuration() {
+        if (!isUpdating) {
             Clock.getInstance().addObserver(this);
         }
 
@@ -92,7 +92,7 @@ public class Interval implements Serializable, Observer {
         final long minuts = (period.getDuration() - hours * secondsForHour) / secondsForMinut;
         final long seconds = period.getDuration() - secondsForHour * hours - secondsForMinut * minuts;
 
-        return   String.valueOf(hours + "h " + minuts + "m " + seconds + "s");
+        return String.valueOf(hours + "h " + minuts + "m " + seconds + "s");
     }
 
     @Override
@@ -100,7 +100,7 @@ public class Interval implements Serializable, Observer {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         return dateFormat.format(this.getInitialDate()) +
-                "h to "+
+                "h to " +
                 dateFormat.format(this.getFinalDate()) +
                 " ->" +
                 this.getFormattedDuration();

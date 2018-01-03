@@ -39,4 +39,14 @@ public class AppSharedPreferences {
     public int getClockSeconds(){
         return mPrefs.getInt("seconds", 1);
     }
+
+    public void set24HFormat(boolean is24HFormat){
+        mPrefs.edit()
+                .putBoolean("is24", is24HFormat)
+                .apply();
+    }
+
+    public boolean is24HFormat(){
+        return mPrefs.getBoolean("is24", false);
+    }
 }

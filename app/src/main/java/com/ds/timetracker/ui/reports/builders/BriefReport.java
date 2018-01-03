@@ -35,10 +35,9 @@ public class BriefReport extends Report implements Serializable{
     private DateFormat df;
 
     public BriefReport(String name,ArrayList<Item> items, String format, String initialDate, String finalDate) {
+        super(initialDate,finalDate);
         this.items = items;
         this.name = name;
-        this.startDateString = initialDate;
-        this.endDateString = finalDate;
         this.formatStr = format;
 
         mainItems = new ArrayList<>();

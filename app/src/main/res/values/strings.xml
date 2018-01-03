@@ -6,7 +6,7 @@
     <string name="hello">hello</string>
     <string name="project">Project</string>
     <string name="reports">Reports</string>
-    <string name="projectsFragment">Project</string>
+    <string name="projectsFragment">Projects</string>
     <string name="reportsFragment">Reports</string>
     <string name="exitMessage">Are you sure you want to exit? All activities will be stopped.</string>
     <string name="exitButton">EXIT</string>
@@ -55,4 +55,14 @@
     <string name="search">Search</string>
     <string name="pause">PAUSE</string>
     <string name="start">START</string>
+    <string name="am">am</string>
+    <string name="pm">pm</string>
+    <string name="h">h</string>
+    <string name="at">" at "</string>
+    <string name="to">TO: </string>
+    <string name="from">FROM: </string>
+    <string name="english">ENGLISH</string>
+    <string name="catalan">CATALAN</string>
+    <string name="spanish">SPANISH</string>
+    <string name="start_all">Resume all</string>
 </resources>

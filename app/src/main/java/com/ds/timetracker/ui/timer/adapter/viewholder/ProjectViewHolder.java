@@ -1,6 +1,7 @@
 package com.ds.timetracker.ui.timer.adapter.viewholder;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,13 +14,15 @@ import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
-public class ProjectViewHolder extends RecyclerView.ViewHolder {
+public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener,View.OnClickListener {
 
     private Project mProject;
     public TextView title;
     private TextView time;
     private LinearLayout color;
     private ConstraintLayout layout;
+    final ConstraintLayout deleteLayout;
+    final ConstraintLayout editLayout;
 
     private Context mContext;
 
@@ -32,33 +35,10 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
 
         this.mContext = mContext;
 
-        final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
-        final ConstraintLayout editLayout = view.findViewById(R.id.edit_container);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (deleteLayout.getVisibility() == View.VISIBLE){
-                    deleteLayout.setVisibility(View.GONE);
-                    editLayout.setVisibility(View.GONE);
-                } else {
-                    mCallback.onProjectItemSelected(getAdapterPosition());
-                }
-            }
-        });
-
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (deleteLayout.getVisibility() == View.VISIBLE){
-                    deleteLayout.setVisibility(View.GONE);
-                    editLayout.setVisibility(View.GONE);
-                } else {
-                    deleteLayout.setVisibility(View.VISIBLE);
-                    editLayout.setVisibility(View.VISIBLE);
-                }
-                return false;
-            }
-        });
+        deleteLayout = view.findViewById(R.id.delete_container);
+        editLayout = view.findViewById(R.id.edit_container);
+        view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
 
         deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,5 +93,32 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder {
                 break;
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (deleteLayout.getVisibility() == View.VISIBLE){
+            deleteLayout.setVisibility(View.GONE);
+            editLayout.setVisibility(View.GONE);
+        } else {
+            mCallback.onProjectItemSelected(getAdapterPosition());
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        assert vibe != null;
+        vibe.vibrate(50);
+
+//        if (deleteLayout.getVisibility() == View.VISIBLE){
+//            deleteLayout.setVisibility(View.GONE);
+//            editLayout.setVisibility(View.GONE);
+//        } else {
+            deleteLayout.setVisibility(View.VISIBLE);
+            editLayout.setVisibility(View.VISIBLE);
+//        }
+        return false;
     }
 }

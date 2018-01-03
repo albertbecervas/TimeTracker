@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -18,11 +16,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
@@ -37,7 +35,6 @@ import com.ds.timetracker.ui.reports.builders.Report;
 import com.ds.timetracker.ui.settings.SettingsActivity;
 import com.ds.timetracker.ui.timer.ProjectFragment;
 import com.ds.timetracker.utils.AppSharedPreferences;
-import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.CustomFabMenu;
 import com.ds.timetracker.utils.CustomFabMenuCallback;
 import com.ds.timetracker.utils.ItemsTreeManager;
@@ -78,11 +75,9 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         mPrefs = AppSharedPreferences.getInstance(this);
-
         setLocale(new Locale(mPrefs.getLocale()));
+        setContentView(R.layout.activity_main);
 
         requestPermissions();
 
@@ -104,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     }
 
     private void requestPermissions() {
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -113,21 +107,13 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_CONTACTS)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                Toast.makeText(this, "you need to accept", Toast.LENGTH_LONG).show();
 
             } else {
-
-                // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_WRITE);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
     }
@@ -269,11 +255,22 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                 deleteItems();
                 break;
             case R.id.stop:
-                for (Item item1 : items) {
-                    recursiveTreeSearchToPause(item1);
+                if (item.getTitle().equals(getString(R.string.pause_all))){
+                    for (Item item1 : items) {
+                        recursiveTreeSearchToPause(item1);
+                    }
+                    treeLevelItems = items;
+                    projectFragment.setItems(items);
+                    item.setTitle(R.string.start_all);
+                } else {
+                    for (Item item1 : items) {
+                        recursiveTreeSearchToStart(item1);
+                    }
+                    treeLevelItems = items;
+                    projectFragment.setItems(items);
+                    item.setTitle(R.string.pause_all);
                 }
-                treeLevelItems = items;
-                projectFragment.setItems(items);
+
                 break;
             case R.id.sortByDate:
                 break;
@@ -298,8 +295,24 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
     private void recursiveTreeSearchToPause(Item item) {
         if (item instanceof Task) {//Basic case
-            if (item.isOpen())
+            if (item.isOpen()) {
                 ((Task) item).stop();
+                ((Task) item).setPausedWithAll(true);
+            }
+
+        } else {
+            for (Item subItem : ((Project) item).getItems()) {
+                recursiveTreeSearchToPause(subItem); //recursive function
+            }
+        }
+    }
+
+    private void recursiveTreeSearchToStart(Item item) {
+        if (item instanceof Task) {//Basic case
+            if (((Task) item).isPausedWithAll()){
+                ((Task) item).start();
+                ((Task) item).setPausedWithAll(false);
+            }
         } else {
             for (Item subItem : ((Project) item).getItems()) {
                 recursiveTreeSearchToPause(subItem); //recursive function
@@ -362,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                 String description = data.getStringExtra("description");
                 int color = data.getIntExtra("color", R.drawable.red);
                 int position = data.getIntExtra("position", -1);
+                boolean delete = data.getBooleanExtra("delete", false);
 
                 if (position != -1) {
                     treeLevelItems.get(position).setName(name);
@@ -369,6 +383,12 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                     treeLevelItems.get(position).setColor(color);
                     itemsTreeManager.saveItems(items);
                 }
+
+                if (delete){
+                    treeLevelItems.remove(position);
+                    itemsTreeManager.saveItems(items);
+                }
+
                 projectFragment.setItems(treeLevelItems);
             }
         }

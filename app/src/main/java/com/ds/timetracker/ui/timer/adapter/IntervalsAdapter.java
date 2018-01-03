@@ -23,7 +23,7 @@ public class IntervalsAdapter extends RecyclerView.Adapter<IntervalViewHolder> {
 
     @Override
     public IntervalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new IntervalViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_interval, parent, false));
+        return new IntervalViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_interval, parent, false), mContext);
     }
 
     @Override
@@ -36,16 +36,7 @@ public class IntervalsAdapter extends RecyclerView.Adapter<IntervalViewHolder> {
         return intervals.size();
     }
 
-    public void clearAdapter() {
-        int size = this.intervals.size();
-        this.intervals.clear();
-        notifyItemRangeRemoved(0, size);
-    }
-
     public void setIntervalsList(ArrayList<Interval> intervalsList) {
-//        intervals.clear();
-//        intervals.addAll(intervalsList);
         intervals = intervalsList;
-//        notifyItemRangeInserted(0, intervals.size());
     }
 }

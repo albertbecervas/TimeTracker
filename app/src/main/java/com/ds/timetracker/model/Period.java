@@ -21,6 +21,8 @@ public class Period implements Serializable {
     public Period() {
         duration = 0L;
         this.startWorkingDate = new Date();
+        //TODO check if works
+        this.finalWorkingDate = new Date();
     }
 
     public Date getStartWorkingDate() {
@@ -53,19 +55,21 @@ public class Period implements Serializable {
 
     public String getInitialFormattedDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+        return dateFormat.format(startWorkingDate);
+    }
 
-        return dateFormat.format(startWorkingDate)
-                + " at "
-                + hourFormat.format(startWorkingDate);
+    public String getInitialFormattedHour() {
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+        return hourFormat.format(startWorkingDate);
     }
 
     public String getFinalFormattedDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+        return dateFormat.format(finalWorkingDate);
+    }
 
-        return dateFormat.format(finalWorkingDate)
-                + " at "
-                + hourFormat.format(finalWorkingDate);
+    public String getFinalFormattedHour(){
+        SimpleDateFormat hourFormat = new SimpleDateFormat("hh:mm:ss");
+        return hourFormat.format(finalWorkingDate);
     }
 }

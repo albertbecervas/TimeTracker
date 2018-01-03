@@ -150,6 +150,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView5"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <TextView
             android:id="@+id/from_hour"
             android:layout_width="wrap_content"
@@ -158,10 +159,24 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/default_start_time"
+            android:text="6:49"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/format_from"
+            app:layout_constraintHorizontal_bias="0.971"
+            app:layout_constraintStart_toEndOf="@+id/from_date"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/format_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="76dp"
+            android:layout_marginTop="8dp"
+            android:text="h"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/from_date"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -225,10 +240,24 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/default_end_time"
+            android:text="6:49"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/format_to"
+            app:layout_constraintHorizontal_bias="0.971"
+            app:layout_constraintStart_toEndOf="@+id/to_date"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/format_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="76dp"
+            android:layout_marginTop="8dp"
+            android:text="h"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/to_date"
             app:layout_constraintTop_toTopOf="parent" />
 
 

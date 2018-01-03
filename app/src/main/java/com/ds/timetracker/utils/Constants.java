@@ -2,7 +2,6 @@ package com.ds.timetracker.utils;
 
 public abstract class Constants {
 
-    public static final boolean IS_24_HOURS = true;
     public static String TASK = "task";
     public static String PROJECT = "project";
     public static String REPORT = "report";

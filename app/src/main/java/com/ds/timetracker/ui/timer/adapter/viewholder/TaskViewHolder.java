@@ -2,6 +2,7 @@ package com.ds.timetracker.ui.timer.adapter.viewholder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +15,7 @@ import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.TaskDetailActivity;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
-public class TaskViewHolder extends RecyclerView.ViewHolder {
+public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
     private Task mTask;
 
@@ -22,6 +23,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     private TextView time;
     private TextView startStop;
     private LinearLayout color;
+    final ConstraintLayout deleteLayout;
 
     private ItemCallback mCallback;
 
@@ -34,33 +36,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         this.mContext = mContext;
 
-        final ConstraintLayout deleteLayout = view.findViewById(R.id.delete_container);
+        deleteLayout = view.findViewById(R.id.delete_container);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (deleteLayout.getVisibility() == View.VISIBLE) {
-                    deleteLayout.setVisibility(View.GONE);
-                } else {
-                    Intent intent = new Intent(mContext, TaskDetailActivity.class);
-                    intent.putExtra("position", getAdapterPosition());
-                    mCallback.onEditTask(getAdapterPosition(), intent);
-                }
+        view.setOnClickListener(this);
 
-            }
-        });
-
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (deleteLayout.getVisibility() == View.VISIBLE) {
-                    deleteLayout.setVisibility(View.GONE);
-                } else {
-                    deleteLayout.setVisibility(View.VISIBLE);
-                }
-                return false;
-            }
-        });
+        view.setOnLongClickListener(this);
 
         deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,22 +69,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
         }
 
-        startStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mTask.isOpen()) {
-                    mTask.stop();
-                    startStop.setText(R.string.start);
-                    startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
-                    mCallback.onItemStateChanged();
-                } else {
-                    mTask.start();
-                    startStop.setText(R.string.pause);
-                    startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
-                    mCallback.onItemStateChanged();
-                }
-            }
-        });
+        startStop.setOnClickListener(this);
 
         setColor(mTask);
 
@@ -137,4 +102,48 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         time.setText(mTask.getFormattedDuration());
     }
 
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+            case R.id.start_pause:
+                if (mTask.isOpen()) {
+                    mTask.stop();
+                    startStop.setText(R.string.start);
+                    startStop.setTextColor(mContext.getResources().getColor(R.color.md_green_600));
+                    mCallback.onItemStateChanged();
+                } else {
+                    mTask.start();
+                    startStop.setText(R.string.pause);
+                    startStop.setTextColor(mContext.getResources().getColor(R.color.md_orange_600));
+                    mCallback.onItemStateChanged();
+                }
+                break;
+            default:
+                if (deleteLayout.getVisibility() == View.VISIBLE) {
+                    deleteLayout.setVisibility(View.GONE);
+                } else {
+                    Intent intent = new Intent(mContext, TaskDetailActivity.class);
+                    intent.putExtra("position", getAdapterPosition());
+                    mCallback.onEditTask(getAdapterPosition(), intent);
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        assert vibe != null;
+        vibe.vibrate(50);
+
+
+        if (deleteLayout.getVisibility() == View.VISIBLE) {
+            deleteLayout.setVisibility(View.GONE);
+        } else {
+            deleteLayout.setVisibility(View.VISIBLE);
+        }
+        return false;
+    }
 }

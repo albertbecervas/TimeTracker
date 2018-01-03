@@ -14,7 +14,6 @@ import com.ds.timetracker.ui.reports.format.HtmlFormatPrinter;
 import com.ds.timetracker.ui.reports.format.TextFormatPrinter;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,19 +31,14 @@ public class DetailedReport extends Report implements Serializable {
     private ArrayList<ItemReportDetail> intervals;
 
     private long duration = 0;//global variable in order to keep value in recursive function
-    long subProjectDuration = 0;
-
-    transient private DateFormat df;
+    private long subProjectDuration = 0;
 
 
     public DetailedReport(String name, ArrayList<Item> items, String format, String initialDate, String finalDate) {
+        super(initialDate, finalDate);
         this.items = items;
         this.name = name;
-        this.startDateString = initialDate;
-        this.endDateString = finalDate;
         this.formatStr = format;
-
-        this.df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
         initialiseLists();
         try {
@@ -175,6 +169,7 @@ public class DetailedReport extends Report implements Serializable {
      * @param item Project that we want to calculate the details
      */
     private void setProjectsDetails(Item item) {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         if (item == null) {
             throw new NullPointerException("Item is null.");
         }
@@ -201,6 +196,7 @@ public class DetailedReport extends Report implements Serializable {
      * @param subItem Project that we want to calculate the details
      */
     private void setSubProjectDetails(Item subItem) {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         Date initialDate = calculateInitialDate(subItem);
         Date endDate = calculateFinalDate(subItem);
 
@@ -225,6 +221,7 @@ public class DetailedReport extends Report implements Serializable {
      * @param itemDuration duration of the ic_task to return in the iterative function
      */
     private void setTaskDetails(Item item, boolean isSubProject, long itemDuration) {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         Date initialDate = calculateInitialDate(item);
         Date endDate = calculateFinalDate(item);
         duration += itemDuration;//update the projects time
@@ -254,6 +251,7 @@ public class DetailedReport extends Report implements Serializable {
      * @return
      */
     private long setIntervalDetails(Item item, long itemDuration, Interval interval) {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         long intervalDuration = 0;
         Date initialDate = calculateInitialDate(interval);
         Date endDate = calculateFinalDate(interval);

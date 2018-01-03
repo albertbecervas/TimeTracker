@@ -38,29 +38,35 @@ public class SettingsActivity extends AppCompatActivity {
         languagePicker = findViewById(R.id.spinner);
         clockPicker = findViewById(R.id.spinner_clock);
 
-        final String[] languagesNames={"USA","CAT","ESP"};
-        final int languages[] = {R.drawable.usa, R.drawable.spain, R.drawable.spain};
+        final String[] languagesNames={getString(R.string.english),getString(R.string.catalan),getString(R.string.spanish)};
+        final int languages[] = {R.drawable.usa, R.drawable.catalunya, R.drawable.spain};
         languageAdapter = new SpinnerAdapter(this, languages, languagesNames);
         languagePicker.setAdapter(languageAdapter);
         languagePicker.setSelection(getPosition());
         languagePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String language = languagesNames[i];
-                String locale = "en";
-                switch (language){
-                    case "USA":
+                String locale;
+                boolean is24h = true;
+                switch (i){
+                    case 0:
                         locale = "en";
+                        is24h = false;
                         break;
-                    case "CAT":
+                    case 1:
                         locale = "ca";
                         break;
-                    case "ESP":
+                    case 2:
                         locale = "es";
+                        break;
+                    default:
+                        locale = "en";
+                        is24h = true;
                         break;
                 }
 
                 mPrefs.setLocale(locale);
+                mPrefs.set24HFormat(is24h);
             }
 
             @Override

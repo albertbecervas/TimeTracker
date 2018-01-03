@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TimeTracker</string>
-    <string name="projectsFragment">Proyecto</string>
+    <string name="projectsFragment">Proyectos</string>
     <string name="reportsFragment">Informes</string>
     <string name="exitMessage">¿Está seguro de querer salir? Todas las actividades se pararan.</string>
     <string name="exitButton">SALIR</string>
@@ -50,4 +50,14 @@
     <string name="search">Buscar</string>
     <string name="pause">PAUSAR</string>
     <string name="start">INICIAR</string>
+    <string name="at">" a las "</string>
+    <string name="h">h</string>
+    <string name="pm">pm</string>
+    <string name="am">am</string>
+    <string name="to">"HASTA: "</string>
+    <string name="from">"DESDE: "</string>
+    <string name="english">INGLÉS</string>
+    <string name="catalan">CATALAN</string>
+    <string name="spanish">ESPAÑOL</string>
+    <string name="start_all">Reanudar Todas</string>
 </resources>

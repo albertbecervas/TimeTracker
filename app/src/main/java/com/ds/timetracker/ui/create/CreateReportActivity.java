@@ -15,6 +15,7 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.ui.reports.builders.BriefReport;
 import com.ds.timetracker.ui.reports.builders.DetailedReport;
 import com.ds.timetracker.ui.reports.builders.Report;
+import com.ds.timetracker.utils.AppSharedPreferences;
 import com.ds.timetracker.utils.Constants;
 import com.ds.timetracker.utils.DatePickerFragment;
 import com.ds.timetracker.utils.ItemsTreeManager;
@@ -34,8 +35,10 @@ import static com.ds.timetracker.utils.Constants.TEXT_FORMAT;
 public class CreateReportActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener {
 
     private ItemsTreeManager itemsTreeManager;
+    private AppSharedPreferences mPrefs;
 
     SimpleDateFormat dateFormat;
+    SimpleDateFormat hourFormat;
 
     private Date initialDate;
     private Date finalDate;
@@ -46,11 +49,16 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     private TextView toDateText;
     private TextView fromHourText;
     private TextView toHourText;
+    private TextView fromFormat;
+    private TextView toFormat;
     private RadioButton textFormat;
     private RadioButton htmlFormat;
 
     private Boolean isInitialDateSelected = false;
     private Boolean isInitialHourSelected = false;
+
+    String initialHourStr;
+    String finalHourStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +67,10 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
 
         itemsTreeManager = new ItemsTreeManager(this);
 
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        mPrefs = AppSharedPreferences.getInstance(this);
+
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", new Locale(mPrefs.getLocale()));
+        hourFormat = new SimpleDateFormat("h:m", new Locale(mPrefs.getLocale()));
 
         setDefaultDates();
 
@@ -88,6 +99,8 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         toHourText = findViewById(R.id.to_hour);
         textFormat = findViewById(R.id.txt_rb);
         htmlFormat = findViewById(R.id.html_rb);
+        fromFormat = findViewById(R.id.format_from);
+        toFormat = findViewById(R.id.format_to);
 
         fromDateText.setOnClickListener(this);
         toDateText.setOnClickListener(this);
@@ -97,8 +110,19 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         String initialDateStr = dateFormat.format(initialDate);
         String finalDateStr = dateFormat.format(finalDate);
 
+        initialHourStr = "08:00";
+        finalHourStr = "08:00";
+
         fromDateText.setText(initialDateStr);
         toDateText.setText(finalDateStr);
+
+        fromHourText.setText(initialHourStr);
+        toHourText.setText(finalHourStr);
+
+        if (!mPrefs.is24HFormat()){
+            fromFormat.setText(R.string.am);
+            toFormat.setText(R.string.am);
+        }
     }
 
     @Override
@@ -142,13 +166,39 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        String hour = hourOfDay + ":" + minute;
+
+        String h = "0";
+        if (hourOfDay < 10){
+            h += hourOfDay;
+        } else {
+            h = String.valueOf(hourOfDay);
+        }
+
+        String m = "0";
+        if (minute < 10){
+            m += minute;
+        } else {
+            m = String.valueOf(minute);
+        }
 
         if (isInitialHourSelected){
-            fromHourText.setText(hour);
+            initialHourStr = h + ":" + m;
+            fromHourText.setText(initialHourStr);
+            fromFormat.setText(getFormat(view));
         } else {
-            toHourText.setText(hour);
+            finalHourStr = h + ":" + m;
+            toHourText.setText(finalHourStr);
+            toFormat.setText(getFormat(view));
         }
+
+    }
+
+    public String getFormat(TimePickerDialog view){
+        if (!mPrefs.is24HFormat()){
+            if (view.getSelectedTime().isAM())
+                return getString(R.string.am);
+            else return getString(R.string.pm);
+        } else return getString(R.string.h);
     }
 
     public void onRadioButtonClick(View view) {
@@ -200,7 +250,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
                         CreateReportActivity.this,
                         from.get(Calendar.YEAR),
                         from.get(Calendar.MONTH),
-                        Constants.IS_24_HOURS
+                        mPrefs.is24HFormat()
                 );
                 tpd.show(getFragmentManager(), "Datepickerdialog");
                 break;
@@ -211,7 +261,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
                         CreateReportActivity.this,
                         from2.get(Calendar.YEAR),
                         from2.get(Calendar.MONTH),
-                        Constants.IS_24_HOURS
+                        mPrefs.is24HFormat()
                 );
                 tpd2.show(getFragmentManager(), "Datepickerdialog");
                 break;
@@ -236,8 +286,8 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
             format = TEXT_FORMAT;
         }
 
-        String initialDateStr = dateFormat.format(initialDate) + " " + fromHourText.getText() + ":00";
-        String finalDateStr = dateFormat.format(finalDate) + " " + toHourText.getText() + ":00";
+        String initialDateStr = dateFormat.format(initialDate) + " " + initialHourStr + ":00";
+        String finalDateStr = dateFormat.format(finalDate) + " " + finalHourStr + ":00";
 
         if (type.equals(BRIEF_REPORT)) {
             report = new BriefReport(reportName, itemsTreeManager.getItems(), format, initialDateStr, finalDateStr);
