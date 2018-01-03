@@ -21,16 +21,13 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     private EditText name;
     private EditText description;
-    private Spinner colorPicker;
-
-    private SpinnerAdapter adapter;
 
     private Project fatherProject;
-    private ArrayList<Item> items;
-    private ArrayList<Item> treeLevelItems;
-    private ArrayList<Integer> nodesReference;
+    private ArrayList<Item> items;//entire tree of items
+    private ArrayList<Item> treeLevelItems;//lists of items that father project has
+    private ArrayList<Integer> nodesReference;//lists of reference of searched nodes positions
 
-    private int color = R.drawable.red;
+    private int color = R.drawable.red;//default item color
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +41,25 @@ public class CreateProjectActivity extends AppCompatActivity {
         if (getIntent().hasExtra("nodesReference")) {
             nodesReference = getIntent().getIntegerArrayListExtra("nodesReference");
         } else {
+            //we are on the top level of the tree
             nodesReference = new ArrayList<>();
         }
 
+        setViews();
+    }
+
+    private void setViews() {
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
-        colorPicker = findViewById(R.id.spinner);
+        Spinner colorPicker = findViewById(R.id.spinner);
 
         String[] colorsNames={getString(R.string.red),getString(R.string.blue),getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
-        adapter = new SpinnerAdapter(this, colors, colorsNames);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
         colorPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

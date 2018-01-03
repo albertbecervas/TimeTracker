@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Interval;
 import com.ds.timetracker.ui.timer.callback.IntervalCallback;
-import com.ds.timetracker.utils.Constants;
 
 public class IntervalViewHolder extends RecyclerView.ViewHolder {
 
@@ -40,7 +39,7 @@ public class IntervalViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (deleteContainer.getVisibility() == View.VISIBLE){
+                if (deleteContainer.getVisibility() == View.VISIBLE) {
                     deleteContainer.setVisibility(View.GONE);
                 } else {
                     deleteContainer.setVisibility(View.VISIBLE);

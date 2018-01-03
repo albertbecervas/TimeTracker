@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import java.util.Locale;
 
+/**
+ * This is a helper class in order to save and get from Android Shared Preferences
+ */
 public class AppSharedPreferences {
 
     private static AppSharedPreferences instance;

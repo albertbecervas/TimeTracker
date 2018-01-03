@@ -18,6 +18,10 @@ import com.ds.timetracker.utils.ItemsTreeManager;
 
 import java.util.ArrayList;
 
+/**
+ * Reports fragment is one of the two main fragment displayed on the viewPager
+ * Here we can see all reports and download them on internal phone storage
+ */
 public class ReportFragment extends Fragment {
 
     private MainActivity activity;
@@ -26,7 +30,7 @@ public class ReportFragment extends Fragment {
 
     private RecyclerView mRecyclerView; //RecyclerView used to display tasks and projects
     private ReportsAdapter mAdapter; //adapter that handles the items
-    private ConstraintLayout emptyLayout;
+    private ConstraintLayout emptyLayout;//layout shown when there are no reports
 
     public ReportFragment() {
         // Required empty public constructor
@@ -65,6 +69,7 @@ public class ReportFragment extends Fragment {
             mAdapter = new ReportsAdapter(reports, getActivity());
             emptyLayout.setVisibility(View.GONE);
         } else {
+            //setting the no items screen
             mAdapter = new ReportsAdapter(new ArrayList<Report>(), getActivity());
             emptyLayout.setVisibility(View.VISIBLE);
         }
@@ -81,6 +86,7 @@ public class ReportFragment extends Fragment {
             mAdapter.setReportsList(reports);
             mAdapter.notifyDataSetChanged();
         } else {
+            //setting the no items screen
             mAdapter.clearAdapter();
             emptyLayout.setVisibility(View.VISIBLE);
         }

@@ -15,7 +15,7 @@ import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.TaskDetailActivity;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
-public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
     private Task mTask;
 
@@ -105,7 +105,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.start_pause:
                 if (mTask.isOpen()) {
                     mTask.stop();
@@ -134,16 +134,12 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     @Override
     public boolean onLongClick(View view) {
-        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         assert vibe != null;
         vibe.vibrate(50);
 
+        deleteLayout.setVisibility(View.VISIBLE);
 
-        if (deleteLayout.getVisibility() == View.VISIBLE) {
-            deleteLayout.setVisibility(View.GONE);
-        } else {
-            deleteLayout.setVisibility(View.VISIBLE);
-        }
         return false;
     }
 }

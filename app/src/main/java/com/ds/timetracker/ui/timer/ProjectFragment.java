@@ -16,16 +16,19 @@ import android.widget.TextView;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.ui.edit.EditProjectActivity;
 import com.ds.timetracker.ui.MainActivity;
+import com.ds.timetracker.ui.edit.EditProjectActivity;
 import com.ds.timetracker.ui.timer.adapter.ItemsAdapter;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
-import com.ds.timetracker.utils.ItemsTreeManager;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.util.ArrayList;
 
-
+/**
+ * Projects fragment is one of the two main fragment displayed on the viewPager
+ * Here we can see all items, start and stop tasks and se the items details.
+ * In addition, we have some options for the user in the menu
+ */
 public class ProjectFragment extends Fragment implements ItemCallback {
 
     private MainActivity activity;
@@ -73,7 +76,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
 
     private void setLevelTitle() {
         if (activity.father == null) {
-            level.setText("MAIN");
+            level.setText(R.string.main);
         } else {
             level.setText(activity.father.getName());
         }
@@ -145,7 +148,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     public void onProjectItemSelected(int position) {
         activity.nodesReference.add(position);
 
-
+        //itearates over all projects in order to show the children.
         activity.treeLevelItems = activity.items;
         for (Integer i : activity.nodesReference) {
             activity.father = ((Project) activity.treeLevelItems.get(i));

@@ -46,6 +46,10 @@ import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * In this activity we will have the main of the App.
+ * We have all items displayed and all reports.
+ */
 public class MainActivity extends AppCompatActivity implements Observer, CustomFabMenuCallback {
 
     private final static int CREATE_REPORT_RESULT = 0;
@@ -64,11 +68,12 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     private TabLayout tabLayout;
     private ConstraintLayout constraintLayout;
 
-    public ArrayList<Item> items; //list of tasks and projects that we have created
     public ArrayList<Report> reports;
-    public ArrayList<Integer> nodesReference;
-    public ArrayList<Item> treeLevelItems;
+
     public Project father;
+    private ArrayList<Item> items;//entire tree of items
+    private ArrayList<Item> treeLevelItems;//lists of items that father project has
+    private ArrayList<Integer> nodesReference;//lists of reference of searched nodes positions
 
     private boolean isSearching = false;//control boolean in order not to update RecyclerView
 
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         setLocale(new Locale(mPrefs.getLocale()));
         setContentView(R.layout.activity_main);
 
+        //In order to have the permission to store data on internal Storage
         requestPermissions();
 
         itemsTreeManager = new ItemsTreeManager(this);
@@ -90,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         reports = itemsTreeManager.getReports();
         nodesReference = new ArrayList<>();
 
+        //Starts the viewHolder fragments
         setTabs();
 
         Clock.getInstance().addObserver(this);
@@ -212,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
             return;
         }
 
+        //if we are not in the first level of the tree we show a level before
+        //else we alert the user that all tasks will be stopped.
         if (nodesReference.size() > 0) {
             nodesReference.remove(nodesReference.size() - 1);
             treeLevelItems = items;
@@ -293,6 +302,10 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         reportFragment.setReports(reports);
     }
 
+    /**
+     * iterates all tree and stops every task that is started
+     * @param item that we want to stop
+     */
     private void recursiveTreeSearchToPause(Item item) {
         if (item instanceof Task) {//Basic case
             if (item.isOpen()) {
@@ -307,6 +320,10 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         }
     }
 
+    /**
+     * iterates all tree and starts every task that we have stopped
+     * @param item that we want to start
+     */
     private void recursiveTreeSearchToStart(Item item) {
         if (item instanceof Task) {//Basic case
             if (((Task) item).isPausedWithAll()){

@@ -1,8 +1,8 @@
 package com.ds.timetracker.ui.settings;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,14 +15,7 @@ import com.ds.timetracker.utils.AppSharedPreferences;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private Spinner languagePicker;
-    private Spinner clockPicker;
-
-    private SpinnerAdapter languageAdapter;
-    private SpinnerAdapter clockAdapter;
-
     private AppSharedPreferences mPrefs;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +24,21 @@ public class SettingsActivity extends AppCompatActivity {
 
         mPrefs = AppSharedPreferences.getInstance(this);
 
-        if (getSupportActionBar() != null){
+        setViews();
+
+    }
+
+    private void setViews() {
+        final String[] languagesNames = {getString(R.string.english), getString(R.string.catalan), getString(R.string.spanish)};
+        final int languages[] = {R.drawable.usa, R.drawable.catalunya, R.drawable.spain};
+
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        languagePicker = findViewById(R.id.spinner);
-        clockPicker = findViewById(R.id.spinner_clock);
-
-        final String[] languagesNames={getString(R.string.english),getString(R.string.catalan),getString(R.string.spanish)};
-        final int languages[] = {R.drawable.usa, R.drawable.catalunya, R.drawable.spain};
-        languageAdapter = new SpinnerAdapter(this, languages, languagesNames);
+        //spinner that sets the Locale of the phone in order to change the language
+        Spinner languagePicker = findViewById(R.id.spinner);
+        SpinnerAdapter languageAdapter = new SpinnerAdapter(this, languages, languagesNames);
         languagePicker.setAdapter(languageAdapter);
         languagePicker.setSelection(getPosition());
         languagePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -48,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String locale;
                 boolean is24h = true;
-                switch (i){
+                switch (i) {
                     case 0:
                         locale = "en";
                         is24h = false;
@@ -74,11 +72,10 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private int getPosition() {
-        switch (mPrefs.getLocale()){
+        switch (mPrefs.getLocale()) {
             case "en":
                 return 0;
             case "ca":

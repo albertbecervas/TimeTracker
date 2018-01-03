@@ -29,8 +29,10 @@ public class HtmlFormatPrinter extends Format implements Serializable {
 
     @Override
     public void generateFile(Report report, Context context) {
+
+        //The directory where the file will be created
         String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        String fileName = report.getName() + ".html";
+        String fileName = report.getName() + ".html"; // name with extension
         PrintWriter writer = null;
 
         File file = new File(directory + File.separator + fileName);
@@ -63,18 +65,6 @@ public class HtmlFormatPrinter extends Format implements Serializable {
         }
 
         writer.close();
-
-//        Uri uri = Uri.fromFile(file);
-//
-//        DownloadManager.Request request = new DownloadManager.Request(uri);
-//        request.setDescription("file downloading");
-//        request.setTitle(report.getName());
-//        request.allowScanningByMediaScanner();
-//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-//        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, report.getName() + ".html");
-//
-//        DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-//        manager.enqueue(request);
     }
 
 

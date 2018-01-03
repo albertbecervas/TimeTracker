@@ -14,26 +14,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.ds.timetracker.R;
-import com.ds.timetracker.model.Interval;
-import com.ds.timetracker.model.Item;
-import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.create.SpinnerAdapter;
-import com.ds.timetracker.utils.ItemsTreeManager;
-
-import java.util.ArrayList;
 
 public class EditTaskActivity extends AppCompatActivity {
 
     private EditText name;
     private EditText description;
-    private Spinner colorPicker;
     private CheckBox programmed;
     private CheckBox limited;
     private ConstraintLayout dateLayout;
     private ConstraintLayout hourLayout;
-
-    private SpinnerAdapter adapter;
 
     private Task mTask;
 
@@ -56,7 +47,7 @@ public class EditTaskActivity extends AppCompatActivity {
     private void setViews() {
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
-        colorPicker = findViewById(R.id.spinner);
+        Spinner colorPicker = findViewById(R.id.spinner);
         programmed = findViewById(R.id.programmed_switch);
         limited = findViewById(R.id.limited_switch);
         dateLayout = findViewById(R.id.from_layout);
@@ -67,7 +58,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
         String[] colorsNames={getString(R.string.red), getString(R.string.blue), getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
-        adapter = new SpinnerAdapter(this, colors, colorsNames);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
         colorPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -113,12 +104,12 @@ public class EditTaskActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        createTask();
+        editTask();
         return false;
     }
 
 
-    private void createTask(){
+    private void editTask(){
         String nameStr = name.getText().toString();
         String descriptionStr = description.getText().toString();
 

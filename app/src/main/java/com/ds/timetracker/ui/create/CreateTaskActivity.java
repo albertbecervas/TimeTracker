@@ -29,18 +29,15 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
-public class CreateTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class CreateTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private EditText name;
     private EditText description;
-    private Spinner colorPicker;
     private CheckBox programmed;
     private CheckBox limited;
     private ConstraintLayout dateLayout;
     private ConstraintLayout hourLayout;
     private TextView fromDate;
-
-    private SpinnerAdapter adapter;
 
     private Project fatherProject;
     private ArrayList<Item> items;
@@ -68,22 +65,22 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
 
     private void setViews() {
 
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
-        colorPicker = findViewById(R.id.spinner);
+        Spinner colorPicker = findViewById(R.id.spinner);
         programmed = findViewById(R.id.programmed_switch);
         limited = findViewById(R.id.limited_switch);
         dateLayout = findViewById(R.id.from_layout);
         hourLayout = findViewById(R.id.time_layout);
         fromDate = findViewById(R.id.from_date);
 
-        String[] colorsNames={getString(R.string.red),getString(R.string.blue),getString(R.string.green)};
+        String[] colorsNames = {getString(R.string.red), getString(R.string.blue), getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
-        adapter = new SpinnerAdapter(this, colors, colorsNames);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
         colorPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -108,7 +105,7 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         programmed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (programmed.isChecked()){
+                if (programmed.isChecked()) {
                     dateLayout.setVisibility(View.VISIBLE);
                 } else {
                     dateLayout.setVisibility(View.GONE);
@@ -119,7 +116,7 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         limited.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(limited.isChecked()){
+                if (limited.isChecked()) {
                     hourLayout.setVisibility(View.VISIBLE);
                 } else {
                     hourLayout.setVisibility(View.GONE);
@@ -137,7 +134,7 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.save:
                 createTask();
                 break;
@@ -152,8 +149,8 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
 
+        //formatting the date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-
 
         String finalDate = dateFormat.format(cal.getTime());
 
@@ -161,16 +158,16 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
     }
 
 
-    private void createTask(){
+    private void createTask() {
         String nameStr = name.getText().toString();
         String descriptionStr = description.getText().toString();
 
-        if (nameStr.isEmpty()){
+        if (nameStr.isEmpty()) {
             name.setError(getString(R.string.emptyError));
             return;
         }
 
-        if (descriptionStr.isEmpty()){
+        if (descriptionStr.isEmpty()) {
             description.setError(getString(R.string.emptyError));
             return;
         }
@@ -184,7 +181,7 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         if (fatherProject != null) {
             fatherProject.newTask(nameStr, descriptionStr, color);
         } else {
-            items.add(new Task(nameStr,descriptionStr,color,null));
+            items.add(new Task(nameStr, descriptionStr, color, null));
         }
 
         new ItemsTreeManager(this).saveItems(items);

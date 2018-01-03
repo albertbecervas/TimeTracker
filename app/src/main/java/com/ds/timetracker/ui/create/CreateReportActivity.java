@@ -1,6 +1,7 @@
 package com.ds.timetracker.ui.create;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +17,6 @@ import com.ds.timetracker.ui.reports.builders.BriefReport;
 import com.ds.timetracker.ui.reports.builders.DetailedReport;
 import com.ds.timetracker.ui.reports.builders.Report;
 import com.ds.timetracker.utils.AppSharedPreferences;
-import com.ds.timetracker.utils.Constants;
-import com.ds.timetracker.utils.DatePickerFragment;
 import com.ds.timetracker.utils.ItemsTreeManager;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -37,8 +36,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     private ItemsTreeManager itemsTreeManager;
     private AppSharedPreferences mPrefs;
 
-    SimpleDateFormat dateFormat;
-    SimpleDateFormat hourFormat;
+    private SimpleDateFormat dateFormat;
 
     private Date initialDate;
     private Date finalDate;
@@ -57,8 +55,8 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     private Boolean isInitialDateSelected = false;
     private Boolean isInitialHourSelected = false;
 
-    String initialHourStr;
-    String finalHourStr;
+    private String initialHourStr;
+    private String finalHourStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +68,6 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         mPrefs = AppSharedPreferences.getInstance(this);
 
         dateFormat = new SimpleDateFormat("dd/MM/yyyy", new Locale(mPrefs.getLocale()));
-        hourFormat = new SimpleDateFormat("h:m", new Locale(mPrefs.getLocale()));
 
         setDefaultDates();
 
@@ -78,6 +75,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     }
 
     private void setDefaultDates() {
+        //we set the actual date from the beginning
         initialDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(initialDate);
@@ -87,7 +85,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
 
     private void setViews() {
 
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -110,6 +108,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         String initialDateStr = dateFormat.format(initialDate);
         String finalDateStr = dateFormat.format(finalDate);
 
+        //these are the default hours in the format: hh:mm
         initialHourStr = "08:00";
         finalHourStr = "08:00";
 
@@ -119,7 +118,8 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         fromHourText.setText(initialHourStr);
         toHourText.setText(finalHourStr);
 
-        if (!mPrefs.is24HFormat()){
+        //if local chosen is 12H format
+        if (!mPrefs.is24HFormat()) {
             fromFormat.setText(R.string.am);
             toFormat.setText(R.string.am);
         }
@@ -134,7 +134,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.save:
                 createReport();
                 break;
@@ -151,6 +151,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         Calendar cal = new GregorianCalendar(year, monthOfYear, dayOfMonth);
 
         if (isInitialDateSelected) {
+            //we set the initial report date
             initialDate = cal.getTime();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(initialDate);
@@ -159,6 +160,7 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
             fromDateText.setText(dateFormat.format(initialDate));
             toDateText.setText(dateFormat.format(finalDate));
         } else {
+            //we set the final report date
             finalDate = cal.getTime();
             toDateText.setText(dateFormat.format(finalDate));
         }
@@ -167,34 +169,44 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
 
-        String h = "0";
-        if (hourOfDay < 10){
-            h += hourOfDay;
-        } else {
-            h = String.valueOf(hourOfDay);
-        }
+        String hour = getStringDate(hourOfDay);
+        String min = getStringDate(minute);
 
-        String m = "0";
-        if (minute < 10){
-            m += minute;
-        } else {
-            m = String.valueOf(minute);
-        }
-
-        if (isInitialHourSelected){
-            initialHourStr = h + ":" + m;
+        if (isInitialHourSelected) {
+            initialHourStr = hour + ":" + min;
             fromHourText.setText(initialHourStr);
             fromFormat.setText(getFormat(view));
         } else {
-            finalHourStr = h + ":" + m;
+            finalHourStr = hour + ":" + min;
             toHourText.setText(finalHourStr);
             toFormat.setText(getFormat(view));
         }
 
     }
 
-    public String getFormat(TimePickerDialog view){
-        if (!mPrefs.is24HFormat()){
+    /**
+     * This function sets the correct format of hours and minutes
+     * @param dateHour is an hour or a minute that we want to format as: hh or mm
+     * @return String formatted
+     */
+    @NonNull
+    private String getStringDate(int dateHour) {
+        String h = "0";
+        if (dateHour < 10) {
+            h += dateHour;
+        } else {
+            h = String.valueOf(dateHour);
+        }
+        return h;
+    }
+
+    /**
+     * This function returns the Locale format
+     * @param view in order to get selected date
+     * @return String with format of the date (am/pm or 24h)
+     */
+    public String getFormat(TimePickerDialog view) {
+        if (!mPrefs.is24HFormat()) {
             if (view.getSelectedTime().isAM())
                 return getString(R.string.am);
             else return getString(R.string.pm);
@@ -221,51 +233,43 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         switch (view.getId()) {
             case R.id.from_date:
                 isInitialDateSelected = true;
-                Calendar now = Calendar.getInstance();
-                DatePickerDialog dpd = DatePickerDialog.newInstance(
-                        CreateReportActivity.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
-                );
-                dpd.show(getFragmentManager(), "Datepickerdialog");
-//                DatePickerFragment fragmentFrom = new DatePickerFragment();
-//                fragmentFrom.show(getSupportFragmentManager(), "initialDate");
+                showDatePickerDialog();
                 break;
             case R.id.to_date:
                 isInitialDateSelected = false;
-                Calendar time = Calendar.getInstance();
-                DatePickerDialog dpd1 = DatePickerDialog.newInstance(
-                        CreateReportActivity.this,
-                        time.get(Calendar.YEAR),
-                        time.get(Calendar.MONTH),
-                        time.get(Calendar.DAY_OF_MONTH)
-                );
-                dpd1.show(getFragmentManager(), "Datepickerdialog");
+                showDatePickerDialog();
                 break;
             case R.id.from_hour:
                 isInitialHourSelected = true;
-                Calendar from = Calendar.getInstance();
-                TimePickerDialog tpd = TimePickerDialog.newInstance(
-                        CreateReportActivity.this,
-                        from.get(Calendar.YEAR),
-                        from.get(Calendar.MONTH),
-                        mPrefs.is24HFormat()
-                );
-                tpd.show(getFragmentManager(), "Datepickerdialog");
+                showTimePickerDialog();
                 break;
             case R.id.to_hour:
                 isInitialHourSelected = false;
-                Calendar from2 = Calendar.getInstance();
-                TimePickerDialog tpd2 = TimePickerDialog.newInstance(
-                        CreateReportActivity.this,
-                        from2.get(Calendar.YEAR),
-                        from2.get(Calendar.MONTH),
-                        mPrefs.is24HFormat()
-                );
-                tpd2.show(getFragmentManager(), "Datepickerdialog");
+                showTimePickerDialog();
                 break;
         }
+    }
+
+    private void showTimePickerDialog() {
+        Calendar from = Calendar.getInstance();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                CreateReportActivity.this,
+                from.get(Calendar.YEAR),
+                from.get(Calendar.MONTH),
+                mPrefs.is24HFormat()
+        );
+        tpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    private void showDatePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                CreateReportActivity.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 
     public void createReport() {

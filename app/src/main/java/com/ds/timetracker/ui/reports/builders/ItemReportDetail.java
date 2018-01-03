@@ -2,6 +2,9 @@ package com.ds.timetracker.ui.reports.builders;
 
 import java.io.Serializable;
 
+/**
+ * Helper class in order to keep the important data that we want to show on report
+ */
 public class ItemReportDetail implements Serializable {
 
     String name;

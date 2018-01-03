@@ -19,9 +19,6 @@ public class EditProjectActivity extends AppCompatActivity {
 
     private EditText name;
     private EditText description;
-    private Spinner colorPicker;
-
-    private SpinnerAdapter adapter;
 
     private int color = R.drawable.red;
 
@@ -37,19 +34,24 @@ public class EditProjectActivity extends AppCompatActivity {
 
         if (bundle != null) {
             mProject = (Project) bundle.getSerializable("project");
+            //position of the project on the list
             position = getIntent().getIntExtra("position", -1);
         }
 
+        setViews();
+    }
+
+    private void setViews() {
         name = findViewById(R.id.name_edit);
         description = findViewById(R.id.description_edit);
-        colorPicker = findViewById(R.id.spinner);
+        Spinner colorPicker = findViewById(R.id.spinner);
 
         name.setText(mProject.getName());
         description.setText(mProject.getDescription());
 
         String[] colorsNames={getString(R.string.red),getString(R.string.blue),getString(R.string.green)};
         final int colors[] = {R.drawable.red, R.drawable.blue, R.drawable.green};
-        adapter = new SpinnerAdapter(this, colors, colorsNames);
+        SpinnerAdapter adapter = new SpinnerAdapter(this, colors, colorsNames);
         colorPicker.setAdapter(adapter);
         colorPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -73,12 +75,12 @@ public class EditProjectActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        createProject();
+        editProject();
         return false;
     }
 
 
-    private void createProject() {
+    private void editProject() {
         String nameStr = name.getText().toString();
         String descriptionStr = description.getText().toString();
 

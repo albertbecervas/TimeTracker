@@ -11,18 +11,17 @@ import android.widget.TextView;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
-import com.ds.timetracker.model.Task;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
 
-public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener,View.OnClickListener {
+public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
 
     private Project mProject;
     public TextView title;
     private TextView time;
     private LinearLayout color;
     private ConstraintLayout layout;
-    final ConstraintLayout deleteLayout;
-    final ConstraintLayout editLayout;
+    private final ConstraintLayout deleteLayout;
+    private final ConstraintLayout editLayout;
 
     private Context mContext;
 
@@ -74,7 +73,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
 
         int colorId = project.getColor();
 
-        switch (colorId){
+        switch (colorId) {
             case R.drawable.red:
                 color.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_800));
                 layout.setBackgroundColor(mContext.getResources().getColor(R.color.md_red_50));
@@ -97,7 +96,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
 
     @Override
     public void onClick(View view) {
-        if (deleteLayout.getVisibility() == View.VISIBLE){
+        if (deleteLayout.getVisibility() == View.VISIBLE) {
             deleteLayout.setVisibility(View.GONE);
             editLayout.setVisibility(View.GONE);
         } else {
@@ -107,18 +106,12 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
 
     @Override
     public boolean onLongClick(View view) {
-
-        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         assert vibe != null;
         vibe.vibrate(50);
 
-//        if (deleteLayout.getVisibility() == View.VISIBLE){
-//            deleteLayout.setVisibility(View.GONE);
-//            editLayout.setVisibility(View.GONE);
-//        } else {
-            deleteLayout.setVisibility(View.VISIBLE);
-            editLayout.setVisibility(View.VISIBLE);
-//        }
+        deleteLayout.setVisibility(View.VISIBLE);
+        editLayout.setVisibility(View.VISIBLE);
         return false;
     }
 }

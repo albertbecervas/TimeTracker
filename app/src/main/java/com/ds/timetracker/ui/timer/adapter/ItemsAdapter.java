@@ -15,6 +15,9 @@ import com.ds.timetracker.utils.Constants;
 
 import java.util.ArrayList;
 
+/**
+ * This is the adapter in order to display in the correct way all items that we have
+ */
 public class ItemsAdapter extends RecyclerView.Adapter {
 
     private Context mContext;

@@ -14,6 +14,9 @@ import com.ds.timetracker.ui.reports.builders.Report;
 
 import java.util.ArrayList;
 
+/**
+ * This is the adapter in order to display in the correct way all reports that we have
+ */
 public class ReportsAdapter extends RecyclerView.Adapter {
 
     private ArrayList<Report> reports;

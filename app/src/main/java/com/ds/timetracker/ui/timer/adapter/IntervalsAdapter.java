@@ -11,6 +11,9 @@ import com.ds.timetracker.ui.timer.adapter.viewholder.IntervalViewHolder;
 
 import java.util.ArrayList;
 
+/**
+ * This is the adapter that shows in the correct way all the intervals
+ */
 public class IntervalsAdapter extends RecyclerView.Adapter<IntervalViewHolder> {
 
     private Context mContext;
