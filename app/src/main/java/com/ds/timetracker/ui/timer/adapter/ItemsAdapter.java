@@ -10,7 +10,6 @@ import com.ds.timetracker.model.Item;
 import com.ds.timetracker.ui.timer.adapter.viewholder.ProjectViewHolder;
 import com.ds.timetracker.ui.timer.adapter.viewholder.TaskViewHolder;
 import com.ds.timetracker.ui.timer.callback.ItemCallback;
-import com.ds.timetracker.utils.AppSharedPreferences;
 import com.ds.timetracker.utils.Constants;
 
 import java.util.ArrayList;

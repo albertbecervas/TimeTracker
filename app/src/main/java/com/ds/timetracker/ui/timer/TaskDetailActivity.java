@@ -28,12 +28,8 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
 
     public static final int EDIT_TASK = 0;
 
-    private ItemsTreeManager itemsTreeManager;
-
     private RecyclerView recyclerView;
     private TextView description;
-    private TextView started;
-    private TextView ended;
     private TextView duration;
 
     private IntervalsAdapter mAdapter;
@@ -48,7 +44,7 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        itemsTreeManager = new ItemsTreeManager(this);
+        ItemsTreeManager itemsTreeManager = new ItemsTreeManager(this);
 
 
         ArrayList<Item> treeLevelItems = itemsTreeManager.getItems();
@@ -118,8 +114,8 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
 
         recyclerView = findViewById(R.id.recyclerView);
         description = findViewById(R.id.description);
-        started = findViewById(R.id.started);
-        ended = findViewById(R.id.ended);
+        TextView started = findViewById(R.id.started);
+        TextView ended = findViewById(R.id.ended);
         duration = findViewById(R.id.duration);
 
         String startWd = mTask.getPeriod().getInitialFormattedDate() + getString(R.string.at) + mTask.getPeriod().getInitialFormattedHour();
@@ -161,7 +157,8 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
                 mTask.setDescription(descriptionStr);
                 mTask.setColor(color);
 
-                getSupportActionBar().setTitle(nameStr);
+                if (getSupportActionBar() != null)
+                    getSupportActionBar().setTitle(nameStr);
                 description.setText(descriptionStr);
             }
         }
