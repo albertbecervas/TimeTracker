@@ -2,6 +2,7 @@ package com.ds.timetracker.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
+import com.ds.timetracker.model.Settings;
 import com.ds.timetracker.model.Task;
 import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.ui.create.CreateProjectActivity;
@@ -71,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     public ArrayList<Report> reports;
 
     public Project father;
-    private ArrayList<Item> items;//entire tree of items
-    private ArrayList<Item> treeLevelItems;//lists of items that father project has
-    private ArrayList<Integer> nodesReference;//lists of reference of searched nodes positions
+    public ArrayList<Item> items;//entire tree of items
+    public ArrayList<Item> treeLevelItems;//lists of items that father project has
+    public ArrayList<Integer> nodesReference;//lists of reference of searched nodes positions
 
     private boolean isSearching = false;//control boolean in order not to update RecyclerView
 
@@ -82,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         super.onCreate(savedInstanceState);
         mPrefs = AppSharedPreferences.getInstance(this);
         setLocale(new Locale(mPrefs.getLocale()));
+
+        Settings.getInstance().setSortBy(mPrefs.getSortBy());
+
         setContentView(R.layout.activity_main);
 
         //In order to have the permission to store data on internal Storage
@@ -279,11 +284,22 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                     projectFragment.setItems(items);
                     item.setTitle(R.string.pause_all);
                 }
-
                 break;
             case R.id.sortByDate:
+                mPrefs.setSortBy("date");
+                Settings.getInstance().setSortBy("date");
+                projectFragment.setItems(treeLevelItems);
                 break;
-            //TODO: afegir switch opcions sort
+            case R.id.sortByName:
+                mPrefs.setSortBy("name");
+                Settings.getInstance().setSortBy("name");
+                projectFragment.setItems(treeLevelItems);
+                break;
+            case R.id.sortByTypes:
+                mPrefs.setSortBy("type");
+                Settings.getInstance().setSortBy("type");
+                projectFragment.setItems(treeLevelItems);
+                break;
         }
         return true;
     }

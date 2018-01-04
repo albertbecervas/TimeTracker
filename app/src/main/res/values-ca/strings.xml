@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TimeTracker</string>
-    <string name="hello">hola</string>
     <string name="project">Projectes</string>
     <string name="reports">Informes</string>
     <string name="projectsFragment">Projectes</string>
@@ -63,4 +62,7 @@
     <string name="catalan">CATALÀ</string>
     <string name="spanish">ESPANYOL</string>
     <string name="start_all">Començar totes</string>
+    <string name="language">IDIOMA</string>
+    <string name="minimum_clock_time">TEMPS MÍNIM DE RELLOTGE</string>
+    <string name="there_are_no_items_yet">Encara no hi ha cap activitat</string>
 </resources>

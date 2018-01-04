@@ -52,4 +52,14 @@ public class AppSharedPreferences {
     public boolean is24HFormat(){
         return mPrefs.getBoolean("is24", false);
     }
+
+    public void setSortBy(String sortBy){
+        mPrefs.edit()
+                .putString("sortBy", sortBy)
+                .apply();
+    }
+
+    public String getSortBy(){
+        return mPrefs.getString("sortBy", "name");
+    }
 }

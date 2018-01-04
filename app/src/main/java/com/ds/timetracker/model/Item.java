@@ -1,6 +1,12 @@
 package com.ds.timetracker.model;
 
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
+import java.util.Date;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Item class contains the basic information of a time tracker item whether it is a ic_task or a project.
@@ -11,7 +17,7 @@ import java.io.Serializable;
  * This class is public because will be called from other Classes
  */
 
-public class Item implements Serializable {
+public class Item implements Serializable, Comparable {
 
     protected final String type;
 
@@ -101,6 +107,32 @@ public class Item implements Serializable {
                 + "from: " + period.getStartWorkingDate() + " | "
                 + "to: " + period.getFinalWorkingDate() + " |\n ";
 
+    }
+
+    @Override
+    public int compareTo(@NonNull Object other) {
+        String option = Settings.getInstance().getSortBy();
+        int res = 0;
+        switch (option){
+            case "name":
+                res = this.name.compareToIgnoreCase(((Item) other).getName()); //case insensitive comparison
+                break;
+            case "type":
+                res = this.type.compareToIgnoreCase(((Item) other).getType()); //case insensitive comparison
+                break;
+            case "date":
+                Date thisDate = this.period.getStartWorkingDate();
+                Date otherDate = ((Item) other).getPeriod().getStartWorkingDate();
+                if (thisDate.before(otherDate)){
+                    res = -1;
+                }else if (thisDate.after(otherDate)){
+                    res = 1;
+                }else{
+                    res = 0;
+                }
+                break;
+        }
+        return res;
     }
 }
 

@@ -60,4 +60,9 @@
     <string name="catalan">CATALAN</string>
     <string name="spanish">ESPAÑOL</string>
     <string name="start_all">Reanudar Todas</string>
+    <string name="language">IDIOMA</string>
+    <string name="minimum_clock_time">TIEMPO MÍNIMO DE RELOJ</string>
+    <string name="there_are_no_items_yet">Aún no hay actividades</string>
+    <string name="project">Proyectos</string>
+    <string name="reports">Informes</string>
 </resources>

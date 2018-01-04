@@ -23,6 +23,7 @@ import com.ds.timetracker.ui.timer.callback.ItemCallback;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Projects fragment is one of the two main fragment displayed on the viewPager
@@ -98,9 +99,11 @@ public class ProjectFragment extends Fragment implements ItemCallback {
                     setLevelTitle();
 
                     if (!items.isEmpty()) {
+                        //TODO: funcio sort items que ordeni segons el sort seeccionat
                         emptyLayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.VISIBLE);
                         mAdapter.clearAdapter();
+                        Collections.sort(items);
                         mAdapter.setItemsList(items);
                         mAdapter.notifyDataSetChanged();
                         progressView.setVisibility(View.GONE);
