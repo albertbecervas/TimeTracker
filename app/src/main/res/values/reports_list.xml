@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="reports_array">
-        <item>Brief</item>
-        <item>Detailed</item>
+        <item>@string/brief</item>
+        <item>@string/detailed</item>
     </string-array>
 
     <string-array name="seconds_array">
-        <item>1s</item>
-        <item>5s</item>
-        <item>1min</item>
-        <item>5min</item>
-        <item>1h</item>
+        <item>@string/_1s</item>
+        <item>@string/_5s</item>
+        <item>@string/_1min</item>
+        <item>@string/_5min</item>
+        <item>@string/_1h</item>
     </string-array>
 </resources>

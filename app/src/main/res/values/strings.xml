@@ -64,4 +64,11 @@
     <string name="language">LANGUAGE</string>
     <string name="minimum_clock_time">MINIMUM CLOCK TIME</string>
     <string name="there_are_no_items_yet">There are no activities yet</string>
+    <string name="brief">Brief</string>
+    <string name="detailed">Detailed</string>
+    <string name="_1s">1 second</string>
+    <string name="_5s">5 seconds</string>
+    <string name="_1min">1 minute</string>
+    <string name="_5min">5 minutes</string>
+    <string name="_1h">1 hour</string>
 </resources>

@@ -65,4 +65,11 @@
     <string name="there_are_no_items_yet">Aún no hay actividades</string>
     <string name="project">Proyectos</string>
     <string name="reports">Informes</string>
+    <string name="brief">Breve</string>
+    <string name="detailed">Detallado</string>
+    <string name="_1s">1 segundo</string>
+    <string name="_5s">5 segundos</string>
+    <string name="_1min">1 minuto</string>
+    <string name="_5min">5 minutos</string>
+    <string name="_1h">1 hora</string>
 </resources>
