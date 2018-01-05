@@ -1,5 +1,7 @@
 package com.ds.timetracker.model;
 
+import android.support.annotation.NonNull;
+
 import com.ds.timetracker.model.observable.Clock;
 
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class Interval implements Serializable, Observer {
+public class Interval implements Serializable, Observer, Comparable {
 
     private static final long serialVersionUID = 1L;//Needed object identifier
 
@@ -116,5 +118,18 @@ public class Interval implements Serializable, Observer {
             }
         }
 
+    }
+
+    @Override
+    public int compareTo(@NonNull Object other) {
+        Date thisDate = this.getFinalDate();
+        Date otherDate = ((Interval) other).getFinalDate();
+        if (thisDate.before(otherDate)){
+            return 1;
+        }else if (thisDate.after(otherDate)){
+            return -1;
+        }else{
+            return 0;
+        }
     }
 }

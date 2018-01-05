@@ -121,12 +121,12 @@ public class Item implements Serializable, Comparable {
                 res = this.type.compareToIgnoreCase(((Item) other).getType()); //case insensitive comparison
                 break;
             case "date":
-                Date thisDate = this.period.getStartWorkingDate();
-                Date otherDate = ((Item) other).getPeriod().getStartWorkingDate();
+                Date thisDate = this.period.getFinalWorkingDate();
+                Date otherDate = ((Item) other).getPeriod().getFinalWorkingDate();
                 if (thisDate.before(otherDate)){
-                    res = -1;
-                }else if (thisDate.after(otherDate)){
                     res = 1;
+                }else if (thisDate.after(otherDate)){
+                    res = -1;
                 }else{
                     res = 0;
                 }

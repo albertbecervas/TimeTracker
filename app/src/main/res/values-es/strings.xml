@@ -26,7 +26,7 @@
     <string name="time_format_hint">hh:mm</string>
     <string name="options">Opciones</string>
     <string name="programmed">Programada</string>
-    <string name="limited_time">Tiempo limitado</string>
+    <string name="limited_time">Duración limitada</string>
     <string name="task_started">Iniciada</string>
     <string name="default_start_long_date">7 de diciembre de 2017</string>
     <string name="ended">Finalizada</string>
