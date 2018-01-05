@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
@@ -40,6 +41,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     private TextView level;
     private CircularProgressView progressView;
     private ConstraintLayout emptyLayout;
+    private ImageButton backButton;
 
     public ProjectFragment() {
         // Required empty public constructor
@@ -67,6 +69,14 @@ public class ProjectFragment extends Fragment implements ItemCallback {
         progressView = view.findViewById(R.id.progress);
 
         emptyLayout = view.findViewById(R.id.empty_layout);
+
+        backButton = view.findViewById(R.id.back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.onBackPressed();
+            }
+        });
 
         setLevelTitle();
 
@@ -99,7 +109,6 @@ public class ProjectFragment extends Fragment implements ItemCallback {
                     setLevelTitle();
 
                     if (!items.isEmpty()) {
-                        //TODO: funcio sort items que ordeni segons el sort seeccionat
                         emptyLayout.setVisibility(View.GONE);
                         progressView.setVisibility(View.VISIBLE);
                         mAdapter.clearAdapter();
