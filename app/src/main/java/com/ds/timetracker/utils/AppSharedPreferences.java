@@ -33,16 +33,6 @@ public class AppSharedPreferences {
         return mPrefs.getString("locale", "en");
     }
 
-    public void setClockInterval(int seconds){
-        mPrefs.edit()
-                .putInt("seconds", seconds)
-                .apply();
-    }
-
-    public int getClockSeconds(){
-        return mPrefs.getInt("seconds", 1);
-    }
-
     public void set24HFormat(boolean is24HFormat){
         mPrefs.edit()
                 .putBoolean("is24", is24HFormat)
@@ -61,5 +51,15 @@ public class AppSharedPreferences {
 
     public String getSortBy(){
         return mPrefs.getString("sortBy", "name");
+    }
+
+    public void setClockSeconds(int clockSeconds){
+        mPrefs.edit()
+                .putInt("clockSeconds", clockSeconds)
+                .apply();
+    }
+
+    public int getClockSeconds(){
+        return mPrefs.getInt("clockSeconds", 0);
     }
 }

@@ -1,14 +1,11 @@
 package com.ds.timetracker.model;
 
-/**
- * Created by arnau on 04/01/2018.
- */
-
 public class Settings {
 
     private static Settings instance = null;
 
     private String sortBy = "name";
+    private int clockSeconds = 1;
 
     private Settings() {
 
@@ -25,5 +22,13 @@ public class Settings {
 
     public String getSortBy(){
         return sortBy;
+    }
+
+    public void setClockSeconds(int clockSeconds){
+        this.clockSeconds = clockSeconds;
+    }
+
+    public int getClockSeconds(){
+        return clockSeconds;
     }
 }

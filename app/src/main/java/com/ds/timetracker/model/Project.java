@@ -56,7 +56,7 @@ public class Project extends Item {
     }
 
     public void update(Item item) {
-        period.addDuration(Clock.CLOCK_SECONDS);
+        period.addDuration(Settings.getInstance().getClockSeconds());
 
         if (project != null) {
             project.update(this);//updating the father

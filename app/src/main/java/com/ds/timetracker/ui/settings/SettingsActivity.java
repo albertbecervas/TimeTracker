@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ds.timetracker.R;
+import com.ds.timetracker.model.Settings;
 import com.ds.timetracker.ui.MainActivity;
 import com.ds.timetracker.ui.create.SpinnerAdapter;
 import com.ds.timetracker.utils.AppSharedPreferences;
@@ -23,8 +24,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView titleLanguage;
     private TextView titleClock;
-    Spinner languagePicker;
-    SpinnerAdapter languageAdapter;
+    private Spinner languagePicker;
+    private Spinner clockSecondsPicker;
+    private SpinnerAdapter languageAdapter;
+
+    private String[] secondsArray;
+    private int clockSeconds = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,47 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        secondsArray = getResources().getStringArray(R.array.seconds_array);
+
         titleLanguage = findViewById(R.id.title);
         titleClock = findViewById(R.id.title_clock);
+
+        clockSecondsPicker = findViewById(R.id.spinner_clock);
+        clockSecondsPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String seconds = secondsArray[i];
+
+                if (seconds.equals(getString(R.string._1s))){
+                    clockSeconds = 1;
+                }
+
+                if (seconds.equals(getString(R.string._5s))){
+                    clockSeconds = 5;
+                }
+
+                if (seconds.equals(getString(R.string._1min))){
+                    clockSeconds = 60;
+                }
+
+                if (seconds.equals(getString(R.string._5min))){
+                    clockSeconds = 300;
+                }
+
+                if (seconds.equals(getString(R.string._1h))){
+                    clockSeconds = 3600;
+                }
+
+                mPrefs.setClockSeconds(clockSeconds);
+                Settings.getInstance().setClockSeconds(mPrefs.getClockSeconds());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //spinner that sets the Locale of the phone in order to change the language
         setSpinnerAdapter();
@@ -87,13 +131,13 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mPrefs.setLocale(locale);
                 mPrefs.set24HFormat(is24h);
-
-                /*setLocale(new Locale(mPrefs.getLocale()));
-
-                setSpinnerAdapter();
+//
+//                setLocale(new Locale(mPrefs.getLocale()));
+//
+//                setSpinnerAdapter();
 
                 titleLanguage.setText(getString(R.string.language));
-                titleClock.setText(getString(R.string.minimum_clock_time));*/
+                titleClock.setText(getString(R.string.minimum_clock_time));
 
             }
 

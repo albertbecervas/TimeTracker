@@ -57,7 +57,7 @@ public class Task extends Item {
     }
     
     public void update(Interval interval){
-        period.addDuration(Clock.CLOCK_SECONDS);
+        period.addDuration(Settings.getInstance().getClockSeconds());
         if (project != null) project.update(this);//We check if the ic_task is in the main items list
     }
 }

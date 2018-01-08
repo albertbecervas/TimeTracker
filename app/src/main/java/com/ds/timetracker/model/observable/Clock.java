@@ -1,5 +1,7 @@
 package com.ds.timetracker.model.observable;
 
+import com.ds.timetracker.model.Settings;
+
 import java.util.Date;
 import java.util.Observable;
 import java.util.Timer;
@@ -13,13 +15,11 @@ import java.util.TimerTask;
  */
 public class Clock extends Observable {
 
-    public static final int CLOCK_SECONDS = 1;
-
     private static Clock instance = null;
 
     private Clock() {
         Timer timer = new Timer();
-        timer.schedule(new Thread(this), new Date(), CLOCK_SECONDS * 1000); //schedule the time in mills.
+        timer.schedule(new Thread(this), new Date(), Settings.getInstance().getClockSeconds() * 1000); //schedule the time in mills.
     }
 
     /**

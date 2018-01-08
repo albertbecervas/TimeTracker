@@ -2,7 +2,6 @@ package com.ds.timetracker.ui;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -79,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
     private boolean isSearching = false;//control boolean in order not to update RecyclerView
 
+    public String path = "";//path of projects travelled
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         setLocale(new Locale(mPrefs.getLocale()));
 
         Settings.getInstance().setSortBy(mPrefs.getSortBy());
+        Settings.getInstance().setClockSeconds(mPrefs.getClockSeconds());
 
         setContentView(R.layout.activity_main);
 
@@ -203,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
         for (Integer position : nodesReference) {
             father = (Project) treeLevelItems.get(position);
             treeLevelItems = ((Project) treeLevelItems.get(position)).getItems();
+            path += "/" + father.getName();
         }
         projectFragment.setItems(treeLevelItems);
         super.onResume();
@@ -219,9 +222,16 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
     public void onBackPressed() {
         fabMenu.closeFABMenu();
 
+        path = "";//reset path
+
         if (searchView.isSearchOpen()) {
             searchView.closeSearch();
             return;
+        }
+
+        //if we will go to main level we set the back button visibility to gone.
+        if (nodesReference.size() == 1) {
+            projectFragment.setBackButtonVisible(View.GONE);
         }
 
         //if we are not in the first level of the tree we show a level before
@@ -232,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
             for (Integer position : nodesReference) {
                 father = (Project) treeLevelItems.get(position);
                 treeLevelItems = ((Project) treeLevelItems.get(position)).getItems();
+                path += "/" + father.getName();
             }
             if (nodesReference.size() == 0) father = null;
             projectFragment.setItems(treeLevelItems);
@@ -269,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                 deleteItems();
                 break;
             case R.id.stop:
-                if (item.getTitle().equals(getString(R.string.pause_all))){
+                if (item.getTitle().equals(getString(R.string.pause_all))) {
                     for (Item item1 : items) {
                         recursiveTreeSearchToPause(item1);
                     }
@@ -320,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
     /**
      * iterates all tree and stops every task that is started
+     *
      * @param item that we want to stop
      */
     private void recursiveTreeSearchToPause(Item item) {
@@ -338,11 +350,12 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
     /**
      * iterates all tree and starts every task that we have stopped
+     *
      * @param item that we want to start
      */
     private void recursiveTreeSearchToStart(Item item) {
         if (item instanceof Task) {//Basic case
-            if (((Task) item).isPausedWithAll()){
+            if (((Task) item).isPausedWithAll()) {
                 ((Task) item).start();
                 ((Task) item).setPausedWithAll(false);
             }
@@ -376,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
         startActivityForResult(i, requestCode);
     }
+
 
     //Clock update
     @Override
@@ -417,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                     itemsTreeManager.saveItems(items);
                 }
 
-                if (delete){
+                if (delete) {
                     treeLevelItems.remove(position);
                     itemsTreeManager.saveItems(items);
                 }

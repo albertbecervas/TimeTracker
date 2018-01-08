@@ -65,6 +65,7 @@
     <string name="language">IDIOMA</string>
     <string name="minimum_clock_time">TEMPS MÍNIM DE RELLOTGE</string>
     <string name="there_are_no_items_yet">Encara no hi ha cap activitat</string>
+    <string name="there_are_no_reports_yet">Encara no hi ha cap informe</string>
     <string name="brief">Breu</string>
     <string name="detailed">Detallat</string>
     <string name="_1s">1 segon</string>

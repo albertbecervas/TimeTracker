@@ -86,10 +86,11 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     private void setLevelTitle() {
+//        level.setText(activity.path);
         if (activity.father == null) {
             level.setText(R.string.main);
         } else {
-            level.setText(activity.father.getName());
+            level.setText(activity.path);
         }
     }
 
@@ -158,6 +159,8 @@ public class ProjectFragment extends Fragment implements ItemCallback {
 
     @Override
     public void onProjectItemSelected(int position) {
+
+        activity.path = "";
         activity.nodesReference.add(position);
 
         //itearates over all projects in order to show the children.
@@ -165,6 +168,8 @@ public class ProjectFragment extends Fragment implements ItemCallback {
         for (Integer i : activity.nodesReference) {
             activity.father = ((Project) activity.treeLevelItems.get(i));
             activity.treeLevelItems = ((Project) activity.treeLevelItems.get(i)).getItems();
+            activity.path += "/" + activity.father.getName();
+
         }
 
         if (!activity.treeLevelItems.isEmpty()) {
@@ -176,6 +181,12 @@ public class ProjectFragment extends Fragment implements ItemCallback {
             mAdapter.clearAdapter();
             emptyLayout.setVisibility(View.VISIBLE);
         }
+
+        setBackButtonVisible(View.VISIBLE);
+    }
+
+    public void setBackButtonVisible(int visibility) {
+        backButton.setVisibility(visibility);
     }
 
     @Override
