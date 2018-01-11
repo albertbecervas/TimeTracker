@@ -1,7 +1,6 @@
 package com.ds.timetracker.ui.settings;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -16,17 +15,14 @@ import com.ds.timetracker.ui.MainActivity;
 import com.ds.timetracker.ui.create.SpinnerAdapter;
 import com.ds.timetracker.utils.AppSharedPreferences;
 
-import java.util.Locale;
-
+/**
+ * This activity will display the settings of language and time for the user
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     private AppSharedPreferences mPrefs;
 
-    private TextView titleLanguage;
-    private TextView titleClock;
     private Spinner languagePicker;
-    private Spinner clockSecondsPicker;
-    private SpinnerAdapter languageAdapter;
 
     private String[] secondsArray;
     private int clockSeconds = 1;
@@ -34,26 +30,13 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onCreateMethod();
-
-    }
-
-    private void onCreateMethod() {
 
         setContentView(R.layout.activity_settings);
 
         mPrefs = AppSharedPreferences.getInstance(this);
 
         setViews();
-    }
 
-
-    private void setLocale(Locale locale) {
-        Locale.setDefault(locale);
-        Configuration config = getBaseContext().getResources().getConfiguration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
     }
 
     private void setViews() {
@@ -64,32 +47,29 @@ public class SettingsActivity extends AppCompatActivity {
 
         secondsArray = getResources().getStringArray(R.array.seconds_array);
 
-        titleLanguage = findViewById(R.id.title);
-        titleClock = findViewById(R.id.title_clock);
-
-        clockSecondsPicker = findViewById(R.id.spinner_clock);
+        Spinner clockSecondsPicker = findViewById(R.id.spinner_clock);
         clockSecondsPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String seconds = secondsArray[i];
 
-                if (seconds.equals(getString(R.string._1s))){
+                if (seconds.equals(getString(R.string._1s))) {
                     clockSeconds = 1;
                 }
 
-                if (seconds.equals(getString(R.string._5s))){
+                if (seconds.equals(getString(R.string._5s))) {
                     clockSeconds = 5;
                 }
 
-                if (seconds.equals(getString(R.string._1min))){
+                if (seconds.equals(getString(R.string._1min))) {
                     clockSeconds = 60;
                 }
 
-                if (seconds.equals(getString(R.string._5min))){
+                if (seconds.equals(getString(R.string._5min))) {
                     clockSeconds = 300;
                 }
 
-                if (seconds.equals(getString(R.string._1h))){
+                if (seconds.equals(getString(R.string._1h))) {
                     clockSeconds = 3600;
                 }
 
@@ -114,16 +94,20 @@ public class SettingsActivity extends AppCompatActivity {
                 boolean is24h = true;
                 switch (i) {
                     case 0:
+                        //selected english locale
                         locale = "en";
                         is24h = false;
                         break;
                     case 1:
                         locale = "ca";
+                        //selected catalan locale
                         break;
                     case 2:
+                        //selected spanish locale
                         locale = "es";
                         break;
                     default:
+                        //selected english locale
                         locale = "en";
                         is24h = true;
                         break;
@@ -131,13 +115,6 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mPrefs.setLocale(locale);
                 mPrefs.set24HFormat(is24h);
-//
-//                setLocale(new Locale(mPrefs.getLocale()));
-//
-//                setSpinnerAdapter();
-
-                titleLanguage.setText(getString(R.string.language));
-                titleClock.setText(getString(R.string.minimum_clock_time));
 
             }
 
@@ -153,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
         final String[] languagesNames = {getString(R.string.english), getString(R.string.catalan), getString(R.string.spanish)};
         final int languages[] = {R.drawable.usa, R.drawable.catalunya, R.drawable.spain};
         languagePicker = findViewById(R.id.spinner);
-        languageAdapter = new SpinnerAdapter(this, languages, languagesNames);
+        SpinnerAdapter languageAdapter = new SpinnerAdapter(this, languages, languagesNames);
         languagePicker.setAdapter(languageAdapter);
     }
 
@@ -172,8 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        onBackPressed();
         return super.onOptionsItemSelected(item);
     }
 

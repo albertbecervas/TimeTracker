@@ -5,6 +5,7 @@ import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
     private Project mProject;
     public TextView title;
     private TextView time;
+    private ImageView started;
     private LinearLayout color;
     private ConstraintLayout layout;
     private final ConstraintLayout deleteLayout;
@@ -57,6 +59,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
         time = view.findViewById(R.id.time);
         color = view.findViewById(R.id.colorLayout);
         layout = view.findViewById(R.id.constraintLayout);
+        started = view.findViewById(R.id.started);
     }
 
     public void setItem(Item project) {
@@ -66,6 +69,12 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
         time.setText(mProject.getFormattedDuration());
 
         setColor(mProject);
+
+        if (mProject.isOpen()){
+            started.setVisibility(View.VISIBLE);
+        } else {
+            started.setVisibility(View.GONE);
+        }
 
     }
 

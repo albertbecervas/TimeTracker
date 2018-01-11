@@ -418,12 +418,14 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
 
         if (requestCode == EDIT_ITEM_RESULT) {
             if (resultCode == RESULT_OK) {
+                //we set the new data of the item
                 String name = data.getStringExtra("name");
                 String description = data.getStringExtra("description");
                 int color = data.getIntExtra("color", R.drawable.red);
                 int position = data.getIntExtra("position", -1);
                 boolean delete = data.getBooleanExtra("delete", false);
 
+                //if we know the position of the item in the list
                 if (position != -1) {
                     treeLevelItems.get(position).setName(name);
                     treeLevelItems.get(position).setDescription(description);
@@ -431,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements Observer, CustomF
                     itemsTreeManager.saveItems(items);
                 }
 
+                //in case we want to delete the item
                 if (delete) {
                     treeLevelItems.remove(position);
                     itemsTreeManager.saveItems(items);

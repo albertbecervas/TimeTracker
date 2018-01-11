@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import com.ds.timetracker.R;
 
+/**
+ * Shows the generated report in a text format in order to have a preview
+ */
 public class ReportDetailActivity extends AppCompatActivity {
 
     @Override

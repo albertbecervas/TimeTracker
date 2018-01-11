@@ -213,6 +213,10 @@ public class CreateReportActivity extends AppCompatActivity implements DatePicke
         } else return getString(R.string.h);
     }
 
+    /**
+     * Function linked to the checkbox views in activity layout
+     * @param view view clicked
+     */
     public void onRadioButtonClick(View view) {
 
         switch (view.getId()) {

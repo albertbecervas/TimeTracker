@@ -34,6 +34,15 @@ public class CreateProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_project);
 
+        getStoredItems();
+
+        setViews();
+    }
+
+    /**
+     * gets all stored items and the position of the tree where we want to create the project
+     */
+    private void getStoredItems() {
         items = new ItemsTreeManager(this).getItems();
 
         treeLevelItems = items;
@@ -44,8 +53,6 @@ public class CreateProjectActivity extends AppCompatActivity {
             //we are on the top level of the tree
             nodesReference = new ArrayList<>();
         }
-
-        setViews();
     }
 
     private void setViews() {

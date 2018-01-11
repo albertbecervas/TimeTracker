@@ -14,23 +14,19 @@ import com.ds.timetracker.R;
 import com.ds.timetracker.model.Item;
 import com.ds.timetracker.model.Project;
 import com.ds.timetracker.model.Task;
-import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.ui.edit.EditTaskActivity;
 import com.ds.timetracker.ui.timer.adapter.IntervalsAdapter;
 import com.ds.timetracker.ui.timer.callback.IntervalCallback;
 import com.ds.timetracker.utils.ItemsTreeManager;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-public class TaskDetailActivity extends AppCompatActivity implements Observer, IntervalCallback {
+public class TaskDetailActivity extends AppCompatActivity implements IntervalCallback {
 
     public static final int EDIT_TASK = 0;
 
     private RecyclerView recyclerView;
     private TextView description;
-    private TextView duration;
 
     private IntervalsAdapter mAdapter;
 
@@ -103,7 +99,6 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
 
-        Clock.getInstance().addObserver(this);
     }
 
     private void setViews() {
@@ -116,7 +111,7 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
         description = findViewById(R.id.description);
         TextView started = findViewById(R.id.started);
         TextView ended = findViewById(R.id.ended);
-        duration = findViewById(R.id.duration);
+        TextView duration = findViewById(R.id.duration);
 
         String startWd = mTask.getPeriod().getInitialFormattedDate() + getString(R.string.at) + mTask.getPeriod().getInitialFormattedHour();
         String endWd = "-";
@@ -164,22 +159,11 @@ public class TaskDetailActivity extends AppCompatActivity implements Observer, I
         }
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        if (mTask != null && mAdapter != null) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    duration.setText(mTask.getFormattedDuration());
-                    mAdapter.setIntervalsList(mTask.getIntervals());
-                    mAdapter.notifyDataSetChanged();
-                }
-            });
-        }
-    }
 
     @Override
     public void onIntervalDeleted(int position) {
         mTask.getIntervals().remove(position);
+        mAdapter.setIntervalsList(mTask.getIntervals());
+        mAdapter.notifyDataSetChanged();
     }
 }

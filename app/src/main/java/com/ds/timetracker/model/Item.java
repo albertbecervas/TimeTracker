@@ -1,12 +1,9 @@
 package com.ds.timetracker.model;
 
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Item class contains the basic information of a time tracker item whether it is a ic_task or a project.
@@ -81,7 +78,7 @@ public class Item implements Serializable, Comparable {
         this.color = color;
     }
 
-    public String getFormattedDuration(){
+    public String getFormattedDuration() {
         if (period == null) return "";
         int secondsForHour = 3600;
         int secondsForMinut = 60;
@@ -90,7 +87,7 @@ public class Item implements Serializable, Comparable {
         final long minuts = (period.getDuration() - hours * secondsForHour) / secondsForMinut;
         final long seconds = period.getDuration() - secondsForHour * hours - secondsForMinut * minuts;
 
-        return   String.valueOf(hours + "h " + minuts + "m " + seconds + "s");
+        return String.valueOf(hours + "h " + minuts + "m " + seconds + "s");
     }
 
     public String getFormattedTable() {
@@ -113,7 +110,7 @@ public class Item implements Serializable, Comparable {
     public int compareTo(@NonNull Object other) {
         String option = Settings.getInstance().getSortBy();
         int res = 0;
-        switch (option){
+        switch (option) {
             case "name":
                 res = this.name.compareToIgnoreCase(((Item) other).getName()); //case insensitive comparison
                 break;
@@ -123,11 +120,11 @@ public class Item implements Serializable, Comparable {
             case "date":
                 Date thisDate = this.period.getFinalWorkingDate();
                 Date otherDate = ((Item) other).getPeriod().getFinalWorkingDate();
-                if (thisDate.before(otherDate)){
+                if (thisDate.before(otherDate)) {
                     res = 1;
-                }else if (thisDate.after(otherDate)){
+                } else if (thisDate.after(otherDate)) {
                     res = -1;
-                }else{
+                } else {
                     res = 0;
                 }
                 break;

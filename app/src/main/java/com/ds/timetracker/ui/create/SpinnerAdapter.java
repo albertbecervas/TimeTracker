@@ -11,15 +11,18 @@ import android.widget.TextView;
 
 import com.ds.timetracker.R;
 
+/**
+ * Adapter used to show a colors list
+ */
 public class SpinnerAdapter extends BaseAdapter {
     private int colors[];
     private String[] colorNames;
-    private LayoutInflater inflter;
+    private LayoutInflater inflater;
 
     public SpinnerAdapter(Context applicationContext, int[] flags, String[] countryNames) {
         this.colors = flags;
         this.colorNames = countryNames;
-        inflter = (LayoutInflater.from(applicationContext));
+        inflater = (LayoutInflater.from(applicationContext));
     }
 
     @Override
@@ -40,7 +43,7 @@ public class SpinnerAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = inflter.inflate(R.layout.item_list_color, null);
+        view = inflater.inflate(R.layout.item_list_color, null);
         ImageView icon = view.findViewById(R.id.imageView);
         TextView names = view.findViewById(R.id.textView);
         icon.setImageResource(colors[i]);

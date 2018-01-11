@@ -1,5 +1,8 @@
 package com.ds.timetracker.model;
 
+/**
+ * Helper class to keep the settings active in runtime
+ */
 public class Settings {
 
     private static Settings instance = null;

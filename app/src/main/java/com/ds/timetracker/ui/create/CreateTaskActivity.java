@@ -51,6 +51,12 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
 
+        getStoredItems();
+
+        setViews();
+    }
+
+    private void getStoredItems() {
         items = new ItemsTreeManager(this).getItems();
         treeLevelItems = items;
 
@@ -59,8 +65,6 @@ public class CreateTaskActivity extends AppCompatActivity implements DatePickerD
         } else {
             nodesReference = new ArrayList<>();
         }
-
-        setViews();
     }
 
     private void setViews() {

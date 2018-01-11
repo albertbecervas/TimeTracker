@@ -21,7 +21,6 @@ public class Period implements Serializable {
     public Period() {
         duration = 0L;
         this.startWorkingDate = new Date();
-        //TODO check if works
         this.finalWorkingDate = new Date();
     }
 

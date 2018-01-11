@@ -10,7 +10,10 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
-
+/**
+ * An interval will be started and finished every time the user plays/pauses a task
+ * This class is observing the clock in order to update the time of its father task
+ */
 public class Interval implements Serializable, Observer, Comparable {
 
     private static final long serialVersionUID = 1L;//Needed object identifier

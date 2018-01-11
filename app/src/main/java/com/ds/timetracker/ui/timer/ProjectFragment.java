@@ -3,6 +3,7 @@ package com.ds.timetracker.ui.timer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -33,14 +34,14 @@ import java.util.Collections;
  */
 public class ProjectFragment extends Fragment implements ItemCallback {
 
-    private MainActivity activity;
+    private MainActivity activity;//reference to the activity in order to access methods.
 
     private RecyclerView mRecyclerView; //RecyclerView used to display tasks and projects
     private ItemsAdapter mAdapter; //adapter that handles the items
 
-    private TextView level;
+    private TextView level; //textView where the level of the items will be displayed
     private CircularProgressView progressView;
-    private ConstraintLayout emptyLayout;
+    private ConstraintLayout emptyLayout;//layout of no items in order not to make an empty screen
     private ImageButton backButton;
 
     public ProjectFragment() {
@@ -57,7 +58,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_project, container, false);
@@ -86,7 +87,6 @@ public class ProjectFragment extends Fragment implements ItemCallback {
     }
 
     private void setLevelTitle() {
-//        level.setText(activity.path);
         if (activity.father == null) {
             level.setText(R.string.main);
         } else {
@@ -152,6 +152,7 @@ public class ProjectFragment extends Fragment implements ItemCallback {
         activity = null;
     }
 
+    //Callbacks from the ViewHolder
     @Override
     public void onItemStateChanged() {
         activity.itemsTreeManager.saveItems(activity.items);

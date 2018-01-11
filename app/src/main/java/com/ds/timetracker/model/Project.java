@@ -1,7 +1,6 @@
 package com.ds.timetracker.model;
 
 
-import com.ds.timetracker.model.observable.Clock;
 import com.ds.timetracker.utils.Constants;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class Project extends Item {
 
     private ArrayList<Item> items;
 
-    public Project(String name, String description, int color ,Project project) {
+    public Project(String name, String description, int color, Project project) {
         super(name, description, new Period(), Constants.PROJECT, color);
 
         this.items = new ArrayList<>();
@@ -32,11 +31,11 @@ public class Project extends Item {
     }
 
     public void newTask(String name, String description, int color) {
-        items.add(new Task(name, description,color, this));
+        items.add(new Task(name, description, color, this));
     }
 
     public void newProject(String name, String description, int color) {
-        items.add(new Project(name, description, color,this));
+        items.add(new Project(name, description, color, this));
     }
 
     public void start() {
@@ -51,7 +50,7 @@ public class Project extends Item {
         this.isOpen = false;
     }
 
-    public void deleteItems(){
+    public void deleteItems() {
         items.clear();
     }
 

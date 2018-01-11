@@ -94,6 +94,7 @@ public class EditProjectActivity extends AppCompatActivity {
             return;
         }
 
+        //Set the data that we want to give back to the activity in order to edit the project
         Intent intent = this.getIntent();
         intent.putExtra("name", nameStr);
         intent.putExtra("description", descriptionStr);
