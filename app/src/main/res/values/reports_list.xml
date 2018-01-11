@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="reports_array">
+        <item>@string/brief</item>
+        <item>@string/detailed</item>
+    </string-array>
+
+    <string-array name="seconds_array">
+        <item>@string/_1s</item>
+        <item>@string/_5s</item>
+        <item>@string/_1min</item>
+        <item>@string/_5min</item>
+        <item>@string/_1h</item>
+    </string-array>
+</resources>
